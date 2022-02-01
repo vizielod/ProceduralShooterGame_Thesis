@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1904
     height: 981
   m_ShowMode: 4
-  m_Title: Inspector
+  m_Title: Hierarchy
   m_RootView: {fileID: 7}
   m_MinSize: {x: 875, y: 542}
   m_MaxSize: {x: 10000, y: 10000}
@@ -39,9 +39,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 1604
+    x: 1603
     y: 0
-    width: 300
+    width: 301
     height: 931
   m_MinSize: {x: 300, y: 380}
   m_MaxSize: {x: 4000, y: 4000}
@@ -72,8 +72,8 @@ MonoBehaviour:
     y: 30
     width: 1904
     height: 931
-  m_MinSize: {x: 978, y: 492}
-  m_MaxSize: {x: 18001, y: 14042}
+  m_MinSize: {x: 978, y: 380}
+  m_MaxSize: {x: 16003, y: 8042}
   vertical: 0
   controlID: 76
 --- !u!114 &4
@@ -91,9 +91,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 1329
+    x: 1326
     y: 0
-    width: 275
+    width: 277
     height: 931
   m_MinSize: {x: 275, y: 50}
   m_MaxSize: {x: 4000, y: 4000}
@@ -139,23 +139,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
+  m_Name: ConsoleWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
     x: 0
     y: 596
-    width: 1329
+    width: 1326
     height: 335
-  m_MinSize: {x: 231, y: 271}
-  m_MaxSize: {x: 10001, y: 10021}
-  m_ActualView: {fileID: 16}
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
+  m_ActualView: {fileID: 21}
   m_Panes:
   - {fileID: 16}
   - {fileID: 21}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -248,10 +248,10 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1329
+    width: 1326
     height: 931
-  m_MinSize: {x: 403, y: 492}
-  m_MaxSize: {x: 10001, y: 14042}
+  m_MinSize: {x: 403, y: 342}
+  m_MaxSize: {x: 8003, y: 8042}
   vertical: 1
   controlID: 77
 --- !u!114 &11
@@ -273,7 +273,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1329
+    width: 1326
     height: 596
   m_MinSize: {x: 403, y: 221}
   m_MaxSize: {x: 8003, y: 4021}
@@ -296,7 +296,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 201
     y: 0
-    width: 1128
+    width: 1125
     height: 596
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
@@ -353,9 +353,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1612
+    x: 1611
     y: 81
-    width: 299
+    width: 300
     height: 910
   m_ViewDataDictionary: {fileID: 0}
   m_AllParagraphs: []
@@ -412,11 +412,11 @@ MonoBehaviour:
     serializedVersion: 2
     x: 8
     y: 677
-    width: 1328
+    width: 1325
     height: 314
   m_ViewDataDictionary: {fileID: 0}
   m_SearchFilter:
-    m_NameFilter: 
+    m_NameFilter: KeyDoorSystem_Player
     m_ClassNames: []
     m_AssetLabels: []
     m_AssetBundleNames: []
@@ -428,13 +428,13 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/FPS
+    - Assets
     m_Globs: []
-    m_OriginalText: 
+    m_OriginalText: KeyDoorSystem_Player
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/FPS
+  - Assets
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\Elod\Uni\Thesis\Unity_Project\ProceduralShooterGame_Thesis\Procedural
     Shooter Game
@@ -442,9 +442,9 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 50950000
-    m_LastClickedID: 38224
-    m_ExpandedIDs: 000000001c95000000ca9a3b
+    m_SelectedIDs: 1c950000
+    m_LastClickedID: 38172
+    m_ExpandedIDs: 000000001c9500004e950000e8960000f096000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -497,26 +497,26 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_SelectedInstanceIDs: de960000
+    m_LastClickedInstanceID: 38622
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: KeyDoorSystem_Player
+      m_OriginalName: KeyDoorSystem_Player
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 38622
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 0}
+      m_ClientGUIView: {fileID: 6}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0
@@ -549,9 +549,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1337
+    x: 1334
     y: 81
-    width: 273
+    width: 275
     height: 910
   m_ViewDataDictionary: {fileID: 0}
   m_ObjectsLockedBeforeSerialization: []
@@ -595,7 +595,7 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 4082ffff
+      m_SelectedIDs: 
       m_LastClickedID: 0
       m_ExpandedIDs: 50fbffff
       m_RenameOverlay:
@@ -644,7 +644,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 209
     y: 81
-    width: 1126
+    width: 1123
     height: 575
   m_ViewDataDictionary: {fileID: 0}
   m_ShowContextualTools: 0
@@ -849,10 +849,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 0
-    y: 895
-    width: 1977
-    height: 440
+    x: 8
+    y: 677
+    width: 1325
+    height: 314
   m_ViewDataDictionary: {fileID: 0}
 --- !u!114 &22
 MonoBehaviour:
