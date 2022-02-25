@@ -14,17 +14,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Default
   description: Enter any text here
-  TargetRooms: 30
+  TargetRooms: 60
   minRooms: 10
   useDeadendRooms: 0
   spawnRooms:
-  - {fileID: 1806229969733909555, guid: 818e4031d92f90d478984298b7a61ae5, type: 3}
+  - {fileID: 1158489967969199130, guid: a854c07538a983547b4aa53ebaa69a59, type: 3}
   possibleRooms:
-  - {fileID: 3870241731841622851, guid: 8362c4268f653eb4b80f7346c5670c2c, type: 3}
+  - {fileID: 1965067407796199713, guid: fba50dd9c375d124b983d91ce5fcba4d, type: 3}
+  - {fileID: 7818667046545178926, guid: ae1dd4d73058bdd4f9ccd5d901069231, type: 3}
+  - {fileID: 1689678617894328908, guid: 8fd6dc8794ac3364baab9beeae2f0ce9, type: 3}
+  - {fileID: 3195290937082437184, guid: fa55be84a781f2b46bd1edab155e9861, type: 3}
+  - {fileID: 6445580138176190127, guid: 286ea9c6014f3ca47a2e81f6fe7cf3ea, type: 3}
+  - {fileID: 1183215843943632007, guid: cc418136145e5074db5fccab07573a19, type: 3}
+  - {fileID: 8937446800026461264, guid: e353c7ddc5e4bf34c8378c1f91d5cb62, type: 3}
+  - {fileID: 8141005937135103521, guid: 5eafec1eb0f0da942aface154e49389c, type: 3}
+  - {fileID: 2846508535157480711, guid: 3d4d3985e32608c4c8d5a5622501945e, type: 3}
+  - {fileID: 6904526582590638837, guid: 2cc4176aa36d9314c849a4057a7d9d6f, type: 3}
+  - {fileID: 4986000997833885325, guid: b501c092533403448817a1ac4bc00fe9, type: 3}
+  - {fileID: 2773188112421333741, guid: 7364b6c4114244148a9de4bd6b7cc766, type: 3}
+  - {fileID: 2625105950800004594, guid: 5f9e1164718699b48b0fccd49ec1ede0, type: 3}
+  - {fileID: 9211745210740263702, guid: 2050cc583f8e6cf45babae03ed6ee446, type: 3}
+  - {fileID: 1893428735341795543, guid: 7cb29d23f7c3e424b9da028e65102759, type: 3}
+  - {fileID: 6602321640400328357, guid: 789f31d2f1dcfc14780ab1a695fac31f, type: 3}
+  - {fileID: 2150311941834849857, guid: a808d1e7e12f83f48a4e7921efa38373, type: 3}
   possibleLoopRooms: []
   deadendRooms:
-  - {fileID: 4003442982485034022, guid: d15240c528ad9de41bf2cef3753c13fe, type: 3}
+  - {fileID: 936815216931619414, guid: 47c6e5ae703432b44ad769310169a2ea, type: 3}
   deadendDoors:
-  - {fileID: 914093815365161233, guid: 37918503574e690488116dfbf8898e0d, type: 3}
+  - {fileID: 9133218529407127863, guid: 0fc250d9e59cbd24cac1331a0a11dd15, type: 3}
   doors:
-  - {fileID: 5247213043559155693, guid: 79fe295fad76442408a63edc49b08bbf, type: 3}
+  - {fileID: 8429781058253300031, guid: 81dde870e006c7446b49517df48248ca, type: 3}
