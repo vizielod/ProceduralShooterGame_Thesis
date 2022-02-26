@@ -6,8 +6,12 @@ using System;
 using DMUtils;
 
 namespace DMDungeonGenerator {
-    public class DungeonGenerator:MonoBehaviour {
+    public class DungeonGenerator:MonoBehaviour
+    {
 
+        [Header("Player")] 
+        [SerializeField] private GameObject player;
+        
         [Header("Generator Options")]
         public bool generateOnStart = true;
         public bool randomSeedOnStart = false;
@@ -163,12 +167,16 @@ namespace DMDungeonGenerator {
                             PostGeneration();
                         }
 
+                        if (generationComplete)
+                        {
+                            player.SetActive(true);
+                        }
                     }
                 }
             }
 
 
-            if(Input.GetKeyUp(KeyCode.Space)) {
+            if(Input.GetKeyUp(KeyCode.T)) {
                 //restart?
                 Debug.Log("Regenerating the next dungeon");
                 randomSeed++;
