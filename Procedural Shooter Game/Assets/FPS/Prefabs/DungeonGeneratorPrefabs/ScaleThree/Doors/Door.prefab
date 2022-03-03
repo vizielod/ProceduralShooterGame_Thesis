@@ -224,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c22afa5cacc07424eb2095e1ac84bf23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorMesh: {fileID: 6802559601128777842}
+  doorMesh: {fileID: 8720760931477657478}
   doorTrigger: {fileID: 0}
   genDoor: {fileID: 0}
 --- !u!65 &2063919042287066534
@@ -322,6 +322,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door_Open
       objectReference: {fileID: 0}
+    - target: {fileID: 3518673655953745633, guid: 140c1289b57e5024492de83e173abc36,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8453716355077699203, guid: 140c1289b57e5024492de83e173abc36,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -332,11 +337,22 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[1]
       value: 
       objectReference: {fileID: 2100000, guid: 6b86d4a73ae4a1d41ba3d1bcef451682, type: 2}
+    - target: {fileID: 8453716355079891011, guid: 140c1289b57e5024492de83e173abc36,
+        type: 3}
+      propertyPath: m_Name
+      value: DoorMesh
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 140c1289b57e5024492de83e173abc36, type: 3}
 --- !u!4 &2392680476071119964 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3270596119567905689, guid: 140c1289b57e5024492de83e173abc36,
+    type: 3}
+  m_PrefabInstance: {fileID: 889460792920309701}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8720760931477657478 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8453716355079891011, guid: 140c1289b57e5024492de83e173abc36,
     type: 3}
   m_PrefabInstance: {fileID: 889460792920309701}
   m_PrefabAsset: {fileID: 0}
@@ -351,6 +367,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Doorway
+      objectReference: {fileID: 0}
+    - target: {fileID: 2987366413140593199, guid: 6f4acab1e5ab978448fc85d88ed0b7a3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6001133030840162139, guid: 6f4acab1e5ab978448fc85d88ed0b7a3,
         type: 3}

@@ -167,10 +167,10 @@ namespace DMDungeonGenerator {
                             PostGeneration();
                         }
 
-                        if (generationComplete)
+                        /*if (generationComplete)
                         {
                             player.SetActive(true);
-                        }
+                        }*/
                     }
                 }
             }

@@ -186,10 +186,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generator: {fileID: 736231639}
-  PlayerPrefab: {fileID: 374109433352817464, guid: 4168a1c5b47b6244cbf55fadeb19c7ba,
-    type: 3}
+  PlayerPrefab: {fileID: 2729281214152228921}
   spawnedPlayer: {fileID: 0}
-  KeyPrefab: {fileID: 117974594982845708, guid: 206c6c81cb8764f4b8f4d3e452159c3e,
+  KeyPrefab: {fileID: 7748435171864914870, guid: 219124989887ccc4fbf975e79850e3e9,
     type: 3}
   keys: []
   keysToSpawnMin: 5
@@ -207,14 +206,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 2729281214152228921}
-  generateOnStart: 0
+  generateOnStart: 1
   randomSeedOnStart: 1
   randomSeed: 7444
   generationComplete: 0
   generatorSettings: {fileID: 11400000, guid: f32473afef2f6b14f91e3a8d6ea57265, type: 2}
   AllRooms: []
   AllDoorsData: []
-  generateInUpdate: 1
+  generateInUpdate: 0
   generationTimer: 0.1
   debugGradient:
     serializedVersion: 2
@@ -245,7 +244,7 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  drawGlobalVoxels: 1
+  drawGlobalVoxels: 0
   drawAllDoors: 0
   drawGraph: 1
   drawDepthLabels: 0
@@ -253,7 +252,7 @@ MonoBehaviour:
   colourLockedDoors: 0
   graphConnectionColor: {r: 1, g: 1, b: 1, a: 1}
   globalVoxelColor: {r: 1, g: 1, b: 1, a: 0.22745098}
-  drawKeyLocksLabels: 0
+  drawKeyLocksLabels: 1
   DungeonGraph: []
 --- !u!4 &736231640
 Transform:
@@ -355,6 +354,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7253983127304857660, guid: 761cdc9e4e883334cbdcea062d0befa7,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 7267769575523271762, guid: 761cdc9e4e883334cbdcea062d0befa7,
         type: 3}

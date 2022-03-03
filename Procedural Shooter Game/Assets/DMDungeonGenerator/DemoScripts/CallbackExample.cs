@@ -37,7 +37,9 @@ public class CallbackExample : MonoBehaviour
 
         //cleanup
         //Destroy the player if one already exists from the last generation
-        if(spawnedPlayer != null)  GameObject.DestroyImmediate(spawnedPlayer);
+        
+        //if(spawnedPlayer != null)  GameObject.DestroyImmediate(spawnedPlayer);
+        
         //Destroy any keys we may have spawned (from the last run of the generator if there is a prev gen)
         for(int i = 0; i < keys.Count; i++) GameObject.DestroyImmediate(keys[i].gameObject);
         keys = new List<GameObject>(); //clear the key list
@@ -60,8 +62,8 @@ public class CallbackExample : MonoBehaviour
 
 
         //spawn the player in the first room somewhere
-        Vector3 spawnRoomPos = generator.DungeonGraph[0].data.gameObject.transform.position;
-        spawnedPlayer = GameObject.Instantiate(PlayerPrefab, spawnRoomPos, Quaternion.identity);
+        /*Vector3 spawnRoomPos = generator.DungeonGraph[0].data.gameObject.transform.position;
+        spawnedPlayer = GameObject.Instantiate(PlayerPrefab, spawnRoomPos, Quaternion.identity);*/
 
     }
 
