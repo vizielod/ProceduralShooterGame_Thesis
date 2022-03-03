@@ -157,14 +157,19 @@ public class CallbackExample : MonoBehaviour
         //iterate through the dungeon graph, find the rooms that need keys to be spawned (these can be keys or switches, they work the same)
         for(int i = 0; i < generator.DungeonGraph.Count; i++) {
             GraphNode room = generator.DungeonGraph[i];
-
-            for(int j = 0; j < room.keyIDs.Count; j++) {
+            GameplayRoom r = generator.DungeonGraph[i].data.gameObject.GetComponent<GameplayRoom>();
+            for(int j = 0; j < room.keyIDs.Count; j++)
+            {
+                /*
                 //we are just spawning simple gameobjects as pickups at the room position (plus a random offset so we don't get overlapping keys in rooms with more than 1 key)
                 Vector3 keyOffset = new Vector3(Random.Range(-0.1f, 0.1f), 0f, Random.Range(-0.1f, 0.1f)); 
                 Vector3 keyPos = room.data.transform.position; //just using the default room position for the spawn location 
                 //generally you want to choose a spawning postion in a smarter way.  Perhaps having null locators in the room data or something
-
-                GameObject spawnedKey = GameObject.Instantiate(KeyPrefab, keyPos + keyOffset, Quaternion.identity);
+                */
+                
+                Vector3 keySpawnPosition = r.GetRandomKeySpawnPosition();
+                GameObject spawnedKey = GameObject.Instantiate(KeyPrefab, keySpawnPosition, Quaternion.identity);
+                //GameObject spawnedKey = GameObject.Instantiate(KeyPrefab, keyPos + keyOffset, Quaternion.identity);
                 spawnedKey.GetComponent<DemoKeyPickup>().keyID = room.keyIDs[j]; //set the keyID so when the player picks up the key, he knows what ID the key is for
                 keys.Add(spawnedKey); //add it to a list for safekeeping (and for cleanup purposes)
 

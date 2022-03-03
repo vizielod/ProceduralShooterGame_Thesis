@@ -8,6 +8,7 @@ public class GameplayRoom : MonoBehaviour {
     public bool initialized = false;
     public int roomIndex = -1;
 
+    public List<Transform> spawnKeyLocations = new List<Transform>();
     public List<Transform> spawnLocations = new List<Transform>();
     public List<GameObject> spawnables = new List<GameObject>();
 
@@ -42,4 +43,22 @@ public class GameplayRoom : MonoBehaviour {
             childMats[i].material.color = c;
         }
     }
+
+    public Vector3 GetRandomKeySpawnPosition()
+    {
+        Vector3 keyOffset = new Vector3(Random.Range(-0.1f, 0.1f), 0f, Random.Range(-0.1f, 0.1f));
+        if (spawnKeyLocations.Count <= 0)
+        {
+            return this.transform.position + keyOffset;
+        }
+        else
+        {
+            return spawnKeyLocations[0].position + keyOffset;
+        }
+    }
+    /*public Vector3 GetRandomKeySpawnLocation()
+    {
+        if (spawnKeyLocations.Count <= 0) return;
+        return spawnKeyLocations[0].position;
+    }*/
 }
