@@ -11,10 +11,15 @@ public class GameplayRoom : MonoBehaviour {
     public List<Transform> spawnKeyLocations = new List<Transform>();
     public List<Transform> spawnLocations = new List<Transform>();
     public List<GameObject> spawnables = new List<GameObject>();
-
     public List<GameObject> spawnedRandomProps = new List<GameObject>();
+    
+    public List<GameObject> possibleEnemiesToSpawn = new List<GameObject>();
+    public List<GameObject> spawnedEnemies = new List<GameObject>();
+    
+    public int enemiesToSpawnMin = 5;
+    public int enemiesToSpawnMax = 10;
 
-
+    
 
     public void Init(int roomIndex, System.Random rand) {
 
@@ -35,6 +40,30 @@ public class GameplayRoom : MonoBehaviour {
             GameObject spawned = GameObject.Instantiate(spawnables[spawnableToUse], spawnLocation, spawnRotation, this.transform);
             spawnedRandomProps.Add(spawned);
         }
+
+        if (possibleEnemiesToSpawn.Count > 0)
+        {
+            Debug.Log("Spawn Enemies");
+            //spawn enemies randomly in the room based off locators set when buildin the room prefab
+            int numEnemiesToSpawn = enemiesToSpawnMin + rand.Next((enemiesToSpawnMax - enemiesToSpawnMin)); //get a random amount of enemies between [enemiesToSpawnMin, enemiesToSpawnMax]
+            Debug.Log("CallbackExample::Computing Locks and Keys - Total keys: " + numEnemiesToSpawn);
+
+            possibleLocations.Shuffle(rand);
+            for (int i = 0; i < numEnemiesToSpawn; i++)
+            {
+                Vector3 spawnLocationOffset = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f));
+                Vector3 spawnLocation = possibleLocations[rand.Next(possibleLocations.Count)].position + spawnLocationOffset;
+
+                float randomAngle = (float) rand.Next(360);
+                Quaternion spawnRotation = Quaternion.AngleAxis(randomAngle, Vector3.up);
+
+                //choose a random enemy
+                int enemyToUse = rand.Next(possibleEnemiesToSpawn.Count);
+                GameObject spawnedEnemy = GameObject.Instantiate(possibleEnemiesToSpawn[enemyToUse],
+                    new Vector3(spawnLocation.x, 0, spawnLocation.z), spawnRotation);
+                spawnedEnemies.Add(spawnedEnemy);
+            }
+        }
     }
 
     public void ColorRoom(Color c) {
@@ -43,7 +72,7 @@ public class GameplayRoom : MonoBehaviour {
             childMats[i].material.color = c;
         }
     }
-
+    
     public Vector3 GetRandomKeySpawnPosition()
     {
         Vector3 keyOffset = new Vector3(Random.Range(-0.1f, 0.1f), 0f, Random.Range(-0.1f, 0.1f));

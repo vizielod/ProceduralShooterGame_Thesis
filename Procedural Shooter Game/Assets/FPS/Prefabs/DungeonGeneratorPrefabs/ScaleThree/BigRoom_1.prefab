@@ -451,6 +451,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialized: 0
   roomIndex: -1
+  spawnKeyLocations: []
   spawnLocations:
   - {fileID: 1547426094437718869}
   - {fileID: 8288450835841815981}
@@ -464,6 +465,11 @@ MonoBehaviour:
   - {fileID: 3171380011446899355, guid: ad3ccb19d273581459a6f5dacc11d8c2, type: 3}
   - {fileID: 1624934432581080724, guid: 632f352e33819b34497035674b28eaa4, type: 3}
   spawnedRandomProps: []
+  possibleEnemiesToSpawn:
+  - {fileID: 2015434656898269652, guid: 25a1b0efadb966e44889fce712c8ff8d, type: 3}
+  spawnedEnemies: []
+  enemiesToSpawnMin: 5
+  enemiesToSpawnMax: 10
 --- !u!1 &2216904775037064892
 GameObject:
   m_ObjectHideFlags: 0

@@ -223,7 +223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c22afa5cacc07424eb2095e1ac84bf23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorMesh: {fileID: 0}
+  doorMesh: {fileID: 1422536371979466486}
   doorTrigger: {fileID: 0}
   genDoor: {fileID: 0}
 --- !u!65 &3939695541676389974
