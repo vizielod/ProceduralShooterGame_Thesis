@@ -17,6 +17,8 @@ public class CallbackExample : MonoBehaviour
     public int keysToSpawnMin = 5;
     public int keysToSpawnMax = 10;
 
+    public bool spawnEnemies = true;
+
     void Awake()
     {
         if(generator != null) {
@@ -218,6 +220,6 @@ public class CallbackExample : MonoBehaviour
     /// <param name="generator"></param>
     private void OnInitRoomCallback(GameObject room, System.Random rand, int roomIndex) {
         GameplayRoom r = room.GetComponent<GameplayRoom>();
-        if(r != null) r.Init(roomIndex, rand);       
+        if(r != null) r.Init(roomIndex, rand, spawnEnemies);       
     }
 }

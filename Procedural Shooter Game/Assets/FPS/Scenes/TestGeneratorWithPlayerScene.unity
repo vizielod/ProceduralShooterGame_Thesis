@@ -193,6 +193,7 @@ MonoBehaviour:
   keys: []
   keysToSpawnMin: 5
   keysToSpawnMax: 10
+  spawnEnemies: 1
 --- !u!114 &736231639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,7 +211,7 @@ MonoBehaviour:
   randomSeedOnStart: 1
   randomSeed: 7444
   generationComplete: 0
-  generatorSettings: {fileID: 11400000, guid: f32473afef2f6b14f91e3a8d6ea57265, type: 2}
+  generatorSettings: {fileID: 11400000, guid: 6e0e62e31f3d512469431d4e649eaa4f, type: 2}
   AllRooms: []
   AllDoorsData: []
   generateInUpdate: 0

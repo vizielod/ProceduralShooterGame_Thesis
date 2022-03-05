@@ -21,17 +21,20 @@ public class GameplayRoom : MonoBehaviour {
 
     
 
-    public void Init(int roomIndex, System.Random rand) {
+    public void Init(int roomIndex, System.Random rand, bool spawnEnemies) {
 
         this.initialized = true;
         this.roomIndex = roomIndex;
 
         //spawn props randomly in the room based off locators set when buildin the room prefab
         int numSpawn = rand.Next(spawnLocations.Count);
-        List<Transform> possibleLocations = new List<Transform>(spawnLocations);
-        possibleLocations.Shuffle(rand);
+        List<Transform> possiblePropLocations = new List<Transform>(spawnLocations);
+        List<Transform> occupiedSpawnLocations = new List<Transform>();
+        possiblePropLocations.Shuffle(rand);
         for(int i =0; i < numSpawn; i++) {
-            Vector3 spawnLocation = possibleLocations[i].position;
+            Vector3 spawnLocation = possiblePropLocations[i].position;
+            //occupiedSpawnLocations.Add(possiblePropLocations[i]);
+            possiblePropLocations.Remove(possiblePropLocations[i]);
             float randomAngle = (float)rand.Next(360);
             Quaternion spawnRotation = Quaternion.AngleAxis(randomAngle, Vector3.up);
 
@@ -41,18 +44,25 @@ public class GameplayRoom : MonoBehaviour {
             spawnedRandomProps.Add(spawned);
         }
 
-        if (possibleEnemiesToSpawn.Count > 0)
+        if (possibleEnemiesToSpawn.Count > 0 && spawnEnemies)
         {
+            List<Transform> possibleEnemyLocations = new List<Transform>();
+            for (int i = 0; i < possiblePropLocations.Count; i++)
+            {
+                possibleEnemyLocations.Add(possiblePropLocations[i]);
+            }
+            //possibleEnemyLocations = possiblePropLocations;
+
             Debug.Log("Spawn Enemies");
             //spawn enemies randomly in the room based off locators set when buildin the room prefab
             int numEnemiesToSpawn = enemiesToSpawnMin + rand.Next((enemiesToSpawnMax - enemiesToSpawnMin)); //get a random amount of enemies between [enemiesToSpawnMin, enemiesToSpawnMax]
             Debug.Log("CallbackExample::Computing Locks and Keys - Total keys: " + numEnemiesToSpawn);
 
-            possibleLocations.Shuffle(rand);
+            possibleEnemyLocations.Shuffle(rand);
             for (int i = 0; i < numEnemiesToSpawn; i++)
             {
                 Vector3 spawnLocationOffset = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f));
-                Vector3 spawnLocation = possibleLocations[rand.Next(possibleLocations.Count)].position + spawnLocationOffset;
+                Vector3 spawnLocation = possibleEnemyLocations[rand.Next(possibleEnemyLocations.Count)].position + spawnLocationOffset;
 
                 float randomAngle = (float) rand.Next(360);
                 Quaternion spawnRotation = Quaternion.AngleAxis(randomAngle, Vector3.up);
