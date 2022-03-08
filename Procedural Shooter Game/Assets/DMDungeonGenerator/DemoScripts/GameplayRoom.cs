@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GameplayRoom : MonoBehaviour {
 
@@ -19,6 +20,8 @@ public class GameplayRoom : MonoBehaviour {
     public int enemiesToSpawnMin = 5;
     public int enemiesToSpawnMax = 10;
 
+    public NavMeshSurface navMeshSurface;
+
     
 
     public void Init(int roomIndex, System.Random rand, bool spawnEnemies) {
@@ -26,15 +29,20 @@ public class GameplayRoom : MonoBehaviour {
         this.initialized = true;
         this.roomIndex = roomIndex;
 
+        if (navMeshSurface != null)
+        {
+            BuildNavMesh();
+        }
+
         //spawn props randomly in the room based off locators set when buildin the room prefab
         int numSpawn = rand.Next(spawnLocations.Count);
+        List<Transform> possibleSpawnLocations = new List<Transform>(spawnLocations);
         List<Transform> possiblePropLocations = new List<Transform>(spawnLocations);
-        List<Transform> occupiedSpawnLocations = new List<Transform>();
+
         possiblePropLocations.Shuffle(rand);
         for(int i =0; i < numSpawn; i++) {
             Vector3 spawnLocation = possiblePropLocations[i].position;
-            //occupiedSpawnLocations.Add(possiblePropLocations[i]);
-            possiblePropLocations.Remove(possiblePropLocations[i]);
+            possibleSpawnLocations.Remove(possiblePropLocations[i]);
             float randomAngle = (float)rand.Next(360);
             Quaternion spawnRotation = Quaternion.AngleAxis(randomAngle, Vector3.up);
 
@@ -47,9 +55,9 @@ public class GameplayRoom : MonoBehaviour {
         if (possibleEnemiesToSpawn.Count > 0 && spawnEnemies)
         {
             List<Transform> possibleEnemyLocations = new List<Transform>();
-            for (int i = 0; i < possiblePropLocations.Count; i++)
+            for (int i = 0; i < possibleSpawnLocations.Count; i++)
             {
-                possibleEnemyLocations.Add(possiblePropLocations[i]);
+                possibleEnemyLocations.Add(possibleSpawnLocations[i]);
             }
             //possibleEnemyLocations = possiblePropLocations;
 
@@ -74,6 +82,12 @@ public class GameplayRoom : MonoBehaviour {
                 spawnedEnemies.Add(spawnedEnemy);
             }
         }
+    }
+
+    public void BuildNavMesh()
+    {
+        //this.gameObject.GetComponent<NavMeshSurface>().BuildNavMesh();
+        navMeshSurface.BuildNavMesh();
     }
 
     public void ColorRoom(Color c) {
