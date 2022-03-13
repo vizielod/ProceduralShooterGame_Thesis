@@ -51,7 +51,7 @@ public class CallbackExample : MonoBehaviour
         int numKeys = keysToSpawnMin + generator.rand.Next((keysToSpawnMax - keysToSpawnMin));//get a random amount of keys between [keysToSpawnMin, keysToSpawnMax]
         Debug.Log("CallbackExample::Computing Locks and Keys - Total keys: " + numKeys);
         ComputeLocksAndKeys(numKeys); //compute the data needed to spawn the key gameobjects
-        SpawnKeys(); //spawn the gameobjets using the computed data
+        //SpawnKeys(); //spawn the gameobjets using the computed data
 
         ChooseEndRoom();
         //color the spawn room green
@@ -62,7 +62,8 @@ public class CallbackExample : MonoBehaviour
             OnInitRoomCallback(generator.DungeonGraph[i].data.gameObject, generator.rand, i);
         }
 
-
+        SpawnKeys(); //spawn the gameobjets using the computed data
+        
         //spawn the player in the first room somewhere
         /*Vector3 spawnRoomPos = generator.DungeonGraph[0].data.gameObject.transform.position;
         spawnedPlayer = GameObject.Instantiate(PlayerPrefab, spawnRoomPos, Quaternion.identity);*/

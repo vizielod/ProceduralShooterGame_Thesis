@@ -146,6 +146,25 @@ namespace Unity.FPS.Gameplay
             return false;
         }
 
+        public bool GetMapInputDown()
+        {
+            if (CanProcessInput())
+            {
+                return Input.GetButtonDown(GameConstants.k_ButtonNameMap);
+            }
+
+            return false;
+        }
+        
+        public bool GetMapInputReleased()
+        {
+            if (CanProcessInput())
+            {
+                return Input.GetButtonUp(GameConstants.k_ButtonNameMap);
+            }
+
+            return false;
+        }
         public bool GetCrouchInputDown()
         {
             if (CanProcessInput())

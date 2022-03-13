@@ -851,8 +851,75 @@ namespace DMDungeonGenerator {
         private void PostGeneration() {
             Debug.Log("Dungeon Generator:: Post Generation Starting. ");
 
+            /*for (int i = 0; i < AllRooms.Count; i++)
+            {
+                Debug.Log(AllRooms[i].transform.position);
+            }*/
+            CalculateDungeonSize();
             //let the user hook in here once it's all done
             if(OnComplete != null) OnComplete(this);
+        }
+
+        private void CalculateDungeonSize()
+        {
+            float min_x = 0;
+            float max_x = 0;
+            float min_z = 0;
+            float max_z = 0;
+            
+            for (int i = 0; i < AllRooms.Count; i++)
+            {
+                Debug.Log(AllRooms[i].transform.position);
+                if (AllRooms[i].transform.position.x >= max_x)
+                {
+                    max_x = AllRooms[i].transform.position.x;
+                }
+
+                if (AllRooms[i].transform.position.x <= min_x)
+                {
+                    min_x = AllRooms[i].transform.position.x;
+                }
+                
+                if (AllRooms[i].transform.position.z >= max_z)
+                {
+                    max_z = AllRooms[i].transform.position.z;
+                }
+
+                if (AllRooms[i].transform.position.z <= min_z)
+                {
+                    min_z = AllRooms[i].transform.position.z;
+                }
+            }
+            
+            Debug.DrawLine(Vector3.zero, new Vector3(min_x - 30, 0, 0), Color.red, 100f);
+            Debug.DrawLine(Vector3.zero, new Vector3(max_x + 30, 0, 0), Color.red, 100f);
+            Debug.DrawLine(Vector3.zero, new Vector3(0, 0, min_z - 30), Color.red, 100f);
+            Debug.DrawLine(Vector3.zero, new Vector3(0, 0, max_z + 30), Color.red, 100f);
+            
+            Debug.Log("Min X: " + min_x);
+            Debug.Log("Max X: " + max_x);
+            Debug.Log("Min Z: " + min_z);
+            Debug.Log("Max Z: " + max_z);
+
+            min_x = min_x - 30;
+            max_x = max_x + 30;
+            min_z = min_z - 30;
+            max_z = max_z + 30;
+
+            float width_x = Mathf.Abs(min_x) + Mathf.Abs(max_x);
+            float width_z = Mathf.Abs(min_z) + Mathf.Abs(max_z);
+            
+            Debug.Log("width_x: " + width_x);
+            Debug.Log("width_z: " + width_z);
+
+            Vector3 center = new Vector3((max_x+min_x)/2, 0 ,(max_z+min_z)/2);
+            
+            Debug.DrawLine(Vector3.zero, center, Color.green, 100f);
+            
+            Debug.DrawLine(center, new Vector3(center.x + width_x/2, 0, center.z), Color.green, 100f);
+            Debug.DrawLine(center, new Vector3(center.x - width_x/2, 0, center.z), Color.green, 100f);
+            Debug.DrawLine(center, new Vector3(center.x, 0, center.z + width_z/2), Color.green, 100f);
+            Debug.DrawLine(center, new Vector3(center.x, 0, center.z - width_z/2), Color.green, 100f);
         }
 
         public void DestroyAllGeneratedRooms() {

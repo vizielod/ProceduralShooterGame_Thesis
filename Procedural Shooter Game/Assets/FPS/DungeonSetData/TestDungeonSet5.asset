@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Default
   description: Enter any text here
-  TargetRooms: 60
+  TargetRooms: 12
   minRooms: 10
   useDeadendRooms: 0
   spawnRooms:

@@ -1,4 +1,5 @@
-﻿using Unity.FPS.Game;
+﻿using System;
+using Unity.FPS.Game;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,6 +13,9 @@ namespace Unity.FPS.Gameplay
 
         [Tooltip("Audio source for footsteps, jump, etc...")]
         public AudioSource AudioSource;
+
+        public GameObject MapImage;
+        public GameObject MapCamera;
 
         [Header("General")] [Tooltip("Force applied downward when in the air")]
         public float GravityDownForce = 20f;
@@ -204,6 +208,7 @@ namespace Unity.FPS.Gameplay
                     AudioSource.PlayOneShot(LandSfx);
                 }
             }
+            
 
             // crouching
             if (m_InputHandler.GetCrouchInputDown())
@@ -214,6 +219,32 @@ namespace Unity.FPS.Gameplay
             UpdateCharacterHeight(false);
 
             HandleCharacterMovement();
+        }
+
+        private void LateUpdate()
+        {
+            if (m_InputHandler.GetMapInputDown())
+            {
+                OpenMap();
+            }
+            if (m_InputHandler.GetMapInputReleased())
+            {
+                CloseMap();
+            }
+        }
+
+        private void OpenMap()
+        {
+            MapCamera.SetActive(true);
+            MapImage.SetActive(true);
+            //Debug.Log("Open Map");
+        }
+        
+        private void CloseMap()
+        {
+            MapCamera.SetActive(false);
+            MapImage.SetActive(false);
+            //Debug.Log("Close Map");
         }
 
         void OnDie()
