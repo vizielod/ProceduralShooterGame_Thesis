@@ -75,7 +75,11 @@ public class CallbackExample : MonoBehaviour
     /// Hpw you want to compute this is up to you, right now it just chooses random rooms with nothing else.  
     /// You could write logic to make it so rooms have to be a certain distance apart to be locked (Every 3 rooms at least, etc)
     /// </summary>
-    public void ComputeLocksAndKeys(int totalKeys, int randomStepsMax = 25) {
+    ///
+    /// Vizi: randomStepsMax was set to default 25 which is fine if the dungeon has to generate a minimom of 50 or so rooms
+    /// When I was testing with 15-20 rooms the value was too high and I was constantly getting out of bound exception errors
+    /// referring to GraphConnection selected = possibleRooms[conIndex];
+    public void ComputeLocksAndKeys(int totalKeys, int randomStepsMax = 5) {
         int totalKeysGenerated = 0;
         
         for(int i = 0; i < totalKeys; i++) {

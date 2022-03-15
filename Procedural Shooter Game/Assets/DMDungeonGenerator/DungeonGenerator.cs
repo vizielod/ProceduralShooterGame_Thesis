@@ -3,14 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using System.Numerics;
 using DMUtils;
+using UnityEngine.ProBuilder;
+using Matrix4x4 = UnityEngine.Matrix4x4;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 namespace DMDungeonGenerator {
     public class DungeonGenerator:MonoBehaviour
     {
 
-        [Header("Player")] 
+        [Header("Player and Map")] 
         [SerializeField] private GameObject player;
+        [SerializeField] private Material fogPlaneMaterial;
+        [SerializeField] private Camera mapCamera;
         
         [Header("Generator Options")]
         public bool generateOnStart = true;
@@ -855,17 +862,30 @@ namespace DMDungeonGenerator {
             {
                 Debug.Log(AllRooms[i].transform.position);
             }*/
-            CalculateDungeonSize();
+            CalculateDungeonSizeAndCenter();
+            
+            GenerateFogOfWarPlane();
+            SetMapCamera();
+            
             //let the user hook in here once it's all done
             if(OnComplete != null) OnComplete(this);
         }
 
-        private void CalculateDungeonSize()
+        private float min_x = 0;
+        private float max_x = 0;
+        private float min_z = 0;
+        private float max_z = 0;
+        
+        private float width_x = 0;
+        private float width_z = 0;
+
+        private Vector3 dungeonCenter = Vector3.zero;
+        private void CalculateDungeonSizeAndCenter()
         {
-            float min_x = 0;
-            float max_x = 0;
-            float min_z = 0;
-            float max_z = 0;
+            min_x = 0;
+            max_x = 0;
+            min_z = 0;
+            max_z = 0;
             
             for (int i = 0; i < AllRooms.Count; i++)
             {
@@ -891,35 +911,81 @@ namespace DMDungeonGenerator {
                 }
             }
             
-            Debug.DrawLine(Vector3.zero, new Vector3(min_x - 30, 0, 0), Color.red, 100f);
+            /*Debug.DrawLine(Vector3.zero, new Vector3(min_x - 30, 0, 0), Color.red, 100f);
             Debug.DrawLine(Vector3.zero, new Vector3(max_x + 30, 0, 0), Color.red, 100f);
             Debug.DrawLine(Vector3.zero, new Vector3(0, 0, min_z - 30), Color.red, 100f);
-            Debug.DrawLine(Vector3.zero, new Vector3(0, 0, max_z + 30), Color.red, 100f);
+            Debug.DrawLine(Vector3.zero, new Vector3(0, 0, max_z + 30), Color.red, 100f);*/
             
-            Debug.Log("Min X: " + min_x);
+            /*Debug.Log("Min X: " + min_x);
             Debug.Log("Max X: " + max_x);
             Debug.Log("Min Z: " + min_z);
-            Debug.Log("Max Z: " + max_z);
+            Debug.Log("Max Z: " + max_z);*/
 
             min_x = min_x - 30;
             max_x = max_x + 30;
             min_z = min_z - 30;
             max_z = max_z + 30;
 
-            float width_x = Mathf.Abs(min_x) + Mathf.Abs(max_x);
-            float width_z = Mathf.Abs(min_z) + Mathf.Abs(max_z);
+            width_x = Mathf.Abs(min_x) + Mathf.Abs(max_x);
+            width_z = Mathf.Abs(min_z) + Mathf.Abs(max_z);
             
-            Debug.Log("width_x: " + width_x);
-            Debug.Log("width_z: " + width_z);
+            /*Debug.Log("width_x: " + width_x);
+            Debug.Log("width_z: " + width_z);*/
 
-            Vector3 center = new Vector3((max_x+min_x)/2, 0 ,(max_z+min_z)/2);
+            dungeonCenter = new Vector3((max_x+min_x)/2, 0 ,(max_z+min_z)/2);
             
-            Debug.DrawLine(Vector3.zero, center, Color.green, 100f);
+            Debug.DrawLine(Vector3.zero, dungeonCenter, Color.green, 100f);
             
-            Debug.DrawLine(center, new Vector3(center.x + width_x/2, 0, center.z), Color.green, 100f);
+            /*Debug.DrawLine(center, new Vector3(center.x + width_x/2, 0, center.z), Color.green, 100f);
             Debug.DrawLine(center, new Vector3(center.x - width_x/2, 0, center.z), Color.green, 100f);
             Debug.DrawLine(center, new Vector3(center.x, 0, center.z + width_z/2), Color.green, 100f);
-            Debug.DrawLine(center, new Vector3(center.x, 0, center.z - width_z/2), Color.green, 100f);
+            Debug.DrawLine(center, new Vector3(center.x, 0, center.z - width_z/2), Color.green, 100f);*/
+        }
+
+        private GameObject fogPlane;
+        private void GenerateFogOfWarPlane()
+        {
+            //create a square plane where the length of the side is the bigger value from width_x and width_z
+            float width = width_x >= width_z ? width_x : width_z;
+            float height = width_x >= width_z ? width_x : width_z;
+            
+            ProBuilderMesh fogPlaneMesh = ShapeGenerator.GeneratePlane(PivotLocation.Center, width, height, 30, 30, Axis.Up);
+            
+            fogPlane = fogPlaneMesh.gameObject;
+
+            fogPlane.transform.position = new Vector3(dungeonCenter.x, 90, dungeonCenter.z);
+
+            //Set the material of the FogOfWar Plane
+            fogPlane.GetComponent<MeshRenderer>().material = fogPlaneMaterial;
+
+            fogPlane.AddComponent<MeshCollider>();
+            //IEnumerable<Face> faces = fogPlaneMesh.faces;
+            //fogPlaneMesh.SetMaterial(faces, fogPlaneMaterial);
+
+            fogPlane.layer = LayerMask.NameToLayer("FogOfWar");
+
+            fogPlane.gameObject.name = "FogPlane";
+        }
+
+        private void SetMapCamera()
+        {
+            mapCamera.orthographic = true;
+
+            mapCamera.orthographicSize = (width_x >= width_z ? width_x : width_z) / 2f;
+            
+            //mapCamera.rect = new Rect(0, 0, 5, 5);
+            
+            mapCamera.transform.position = new Vector3(dungeonCenter.x, 100, dungeonCenter.z);
+            
+            mapCamera.gameObject.SetActive(true);
+
+            mapCamera.GetComponent<FogOfWar>().m_fogOfWarPlane = fogPlane;
+            
+            mapCamera.GetComponent<FogOfWar>().Initialize();
+
+            mapCamera.GetComponent<FogOfWar>().startUpdate = true;
+
+            //mapCamera.orthographicSize = width_x;
         }
 
         public void DestroyAllGeneratedRooms() {

@@ -142,6 +142,8 @@ MonoBehaviour:
   keyID: 0
   currentRotation: 0
   rotationSpeed: 250
+  keyIconImage: {fileID: 7078846816719310193, guid: c831d08fcffa23f41a798b788c7e7852,
+    type: 3}
 --- !u!135 &8112161447485378807
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DemoKeyPickup : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class DemoKeyPickup : MonoBehaviour
 
     public float currentRotation = 0f;
     public float rotationSpeed = 10f;
+
+    public GameObject keyIconImage;
 
     void Start()
     {
@@ -28,6 +31,21 @@ public class DemoKeyPickup : MonoBehaviour
             if(!DemoPlayer.HasKey(keyID)) {
                 DemoPlayer.AddKey(keyID);
 
+                GameObject keyIcon = Instantiate(keyIconImage, transform.position, Quaternion.identity);
+                
+                GameObject parentGO = GameObject.Find("HUD");
+                keyIcon.transform.SetParent(parentGO.transform);
+
+                RectTransform keyIconRectTransform = keyIcon.GetComponent<RectTransform>();
+
+                keyIconRectTransform.position = new Vector3(30 + 30*(DemoPlayer.keysFound.Count-1), 60, 0);
+                
+                RawImage keyImage = keyIcon.GetComponent<RawImage>();
+                Color newColor = new Color(transform.GetComponentInChildren<Renderer>().material.color.r, 
+                    transform.GetComponentInChildren<Renderer>().material.color.g, 
+                    transform.GetComponentInChildren<Renderer>().material.color.b);
+                newColor.a = 1;
+                keyImage.color = newColor;
 
                 GameObject.Destroy(this.gameObject);
             }
