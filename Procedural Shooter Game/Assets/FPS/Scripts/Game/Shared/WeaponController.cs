@@ -478,6 +478,7 @@ namespace Unity.FPS.Game
             if (ShootSfx && !UseContinuousShootSound)
             {
                 m_ShootAudioSource.PlayOneShot(ShootSfx);
+                
             }
 
             // Trigger attack animation if there is any
@@ -487,6 +488,7 @@ namespace Unity.FPS.Game
             }
 
             OnShoot?.Invoke();
+            //Debug.Log("Shooting");
             OnShootProcessed?.Invoke();
         }
 

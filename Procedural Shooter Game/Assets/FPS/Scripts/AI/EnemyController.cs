@@ -22,7 +22,12 @@ namespace Unity.FPS.AI
             }
         }
 
-        [Header("Parameters")]
+        [Header("Parameters")] 
+        [Tooltip("Player Range defined in DynamicDifficultyManager. Used for adjusting difficulty based on enemy count in Range")]
+        public float PlayerRange = .0f;
+
+        public bool isEnemyInPlayerRange = false;
+        
         [Tooltip("The Y height at which the enemy will be automatically killed (if it falls off of the level)")]
         public float SelfDestructYHeight = -20f;
 
@@ -88,6 +93,10 @@ namespace Unity.FPS.AI
         public UnityAction onDetectedTarget;
         public UnityAction onLostTarget;
         public UnityAction onDamaged;
+        public UnityAction<EnemyController> onDie;
+        public UnityAction<GameObject> onHealthSpawned;
+        public UnityAction onEnterPlayerRange;
+        public UnityAction onLeavePlayerRange;
 
         List<RendererIndexData> m_BodyRenderers = new List<RendererIndexData>();
         MaterialPropertyBlock m_BodyFlashMaterialPropertyBlock;
@@ -123,7 +132,7 @@ namespace Unity.FPS.AI
             m_EnemyManager = FindObjectOfType<EnemyManager>();
             DebugUtility.HandleErrorIfNullFindObject<EnemyManager, EnemyController>(m_EnemyManager, this);
 
-            m_ActorsManager = FindObjectOfType<ActorsManager>();
+            m_ActorsManager = FindObjectOfType<ActorsManager>(); //m_ActorsManager can access Player GO
             DebugUtility.HandleErrorIfNullFindObject<ActorsManager, EnemyController>(m_ActorsManager, this);
 
             m_EnemyManager.RegisterEnemy(this);
@@ -214,8 +223,35 @@ namespace Unity.FPS.AI
             }
 
             m_WasDamagedThisFrame = false;
+
+            /*
+            //Check if enemy enters player range. Lets use the Detection Range for now to consider the Enemy being already hostile to the player
+            if (Vector3.Distance(this.transform.position, m_ActorsManager.Player.transform.position) < DetectionModule.DetectionRange &&
+                !isEnemyInPlayerRange)
+            {
+                OnEnterPlayerRange();
+                isEnemyInPlayerRange = true;
+            }
+            
+            //Check if enemy leaves player range. Lets use the Detection Range for now to consider the Enemy being no longer hostile to the player
+            //However, currently the enemy is still chasing the player when it gets out of the range.
+            if (Vector3.Distance(this.transform.position, m_ActorsManager.Player.transform.position) > DetectionModule.DetectionRange &&
+                isEnemyInPlayerRange)
+            {
+                OnLeavePlayerRange();
+                isEnemyInPlayerRange = false;
+            }*/
         }
 
+        void OnEnterPlayerRange()
+        {
+            onEnterPlayerRange?.Invoke();
+        }
+
+        void OnLeavePlayerRange()
+        {
+            onLeavePlayerRange?.Invoke();
+        }
         void EnsureIsWithinLevelBounds()
         {
             // at every frame, this tests for conditions to kill the enemy
@@ -369,11 +405,14 @@ namespace Unity.FPS.AI
             // loot an object
             if (TryDropItem())
             {
-                Instantiate(LootPrefab, transform.position, Quaternion.identity);
+                GameObject healthPickupGO = Instantiate(LootPrefab, transform.position, Quaternion.identity);
+                onHealthSpawned?.Invoke(healthPickupGO);
             }
 
             // this will call the OnDestroy function
             Destroy(gameObject, DeathDuration);
+            onDie?.Invoke(this);
+
         }
 
         void OnDrawGizmosSelected()

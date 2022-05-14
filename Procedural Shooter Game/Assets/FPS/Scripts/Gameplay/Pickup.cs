@@ -1,5 +1,6 @@
 ﻿using Unity.FPS.Game;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Unity.FPS.Gameplay
 {
@@ -22,6 +23,8 @@ namespace Unity.FPS.Gameplay
         Collider m_Collider;
         Vector3 m_StartPosition;
         bool m_HasPlayedFeedback;
+        
+        //public UnityAction<GameObject> onPicked;
 
         protected virtual void Start()
         {
@@ -55,7 +58,7 @@ namespace Unity.FPS.Gameplay
             if (pickingPlayer != null)
             {
                 OnPicked(pickingPlayer);
-
+                //onPicked?.Invoke(this.gameObject);
                 PickupEvent evt = Events.PickupEvent;
                 evt.Pickup = gameObject;
                 EventManager.Broadcast(evt);
