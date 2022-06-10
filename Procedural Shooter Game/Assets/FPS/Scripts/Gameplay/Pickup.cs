@@ -18,6 +18,8 @@ namespace Unity.FPS.Gameplay
         [Tooltip("Sound played on pickup")] public AudioClip PickupSfx;
         [Tooltip("VFX spawned on pickup")] public GameObject PickupVfxPrefab;
 
+        [Tooltip("Player Range defined in DynamicDifficultyManager. Used for adjusting difficulty based on pickup count in Range")]
+        public float PlayerRange = .0f;
         public Rigidbody PickupRigidbody { get; private set; }
 
         Collider m_Collider;
@@ -25,6 +27,10 @@ namespace Unity.FPS.Gameplay
         bool m_HasPlayedFeedback;
         
         //public UnityAction<GameObject> onPicked;
+        public GameObject Player;
+        public UnityAction onOutOfPlayerRange;
+        public UnityAction onInPlayerRange;
+        public bool isInPlayerRange = false;
 
         protected virtual void Start()
         {
@@ -49,6 +55,24 @@ namespace Unity.FPS.Gameplay
 
             // Handle rotating
             transform.Rotate(Vector3.up, RotatingSpeed * Time.deltaTime, Space.Self);
+
+            if (Player == null) return;
+
+            // Handle pickup count on Dynamic Difficulty Manager based on player proximity
+            if (!isInPlayerRange)
+            {
+                if (Vector3.Distance(transform.position, Player.transform.position) < PlayerRange)
+                {
+                    OnInPlayerRange();
+                }
+            }
+            else
+            {
+                if (Vector3.Distance(transform.position, Player.transform.position) > PlayerRange)
+                {
+                    OnOutOfPlayerRange();
+                }
+            }
         }
 
         void OnTriggerEnter(Collider other)
@@ -65,6 +89,17 @@ namespace Unity.FPS.Gameplay
             }
         }
 
+        void OnInPlayerRange()
+        {
+            isInPlayerRange = true;
+            onInPlayerRange?.Invoke();
+        }
+        void OnOutOfPlayerRange()
+        {
+            isInPlayerRange = false;
+            onOutOfPlayerRange?.Invoke();
+        }
+        
         protected virtual void OnPicked(PlayerCharacterController playerController)
         {
             PlayPickupFeedback();

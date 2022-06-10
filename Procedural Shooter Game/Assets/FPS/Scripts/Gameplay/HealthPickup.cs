@@ -23,5 +23,7 @@ namespace Unity.FPS.Gameplay
                 Destroy(gameObject);
             }
         }
+        
+        
     }
 }

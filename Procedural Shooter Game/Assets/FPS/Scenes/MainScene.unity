@@ -403,6 +403,7 @@ GameObject:
   m_Component:
   - component: {fileID: 686316974}
   - component: {fileID: 686316973}
+  - component: {fileID: 686316975}
   m_Layer: 0
   m_Name: DynamicDifficultyManager
   m_TagString: Untagged
@@ -422,6 +423,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3589175e132a0d94e9436a2d3e64fe33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EnemyPrefab: {fileID: 2015434656898269652, guid: 25a1b0efadb966e44889fce712c8ff8d,
+    type: 3}
+  MinEnemySpawnPostion: {fileID: 1385802922}
+  MaxEnemySpawnPostion: {fileID: 813685280}
   Player: {fileID: 2729281214152228921}
   _playerWeaponsManager: {fileID: 2729281214152228929}
   PlayerAccuracy: 0
@@ -435,6 +440,34 @@ MonoBehaviour:
   - {fileID: 998418075}
   - {fileID: 1632010250}
   HealthPickups: []
+  EstimatedDifficulty: 0.5
+  DifficultyGauge: 0.5
+  _tempDifficultyGauge: 0
+  MinDifficultyBoundary: 0
+  MaxDifficultyBoundary: 1
+  _tempEstimatedReverseDiff: 0
+  previousEstimatedReverseDiff: 0
+  _tempMinDifficultyBoundary: 0
+  _tempMaxDifficultyBoundary: 1
+  testValue: 0
+  DiffGaugeRecalcPeriod: 3
+  BoundaryStepSize: 0.05
+  timer: 0
+  playerHealthDifficultyFactor: 0
+  enemyCountDifficultyFactor: 0
+  healthPickupsCountDifficultyFactor: 0
+  playerAccuracyDifficultyFactor: 0
+  difficultyVariableCount: 4
+  playerHealthScaledForEstimatedDifficulty: 0
+  playerAccuracyScaledForEstimatedDifficulty: 0
+  enemyCountScaledForEstimatedDifficulty: 0
+  healthPickupsCountScaledForEstimatedDifficulty: 0
+  previousMin: 0
+  previousMax: 0
+  updateBoundariesPeriod: 3
+  updateBoundariesTimer: 0
+  originalBoundaryDistance: 0
+  lerpTime: 2.54
 --- !u!4 &686316974
 Transform:
   m_ObjectHideFlags: 0
@@ -443,12 +476,24 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 686316972}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 21.763447, y: -59.41033, z: 43.00467}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &686316975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686316972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 560c17abc75550d4593b0811f9a392a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &759815506 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2141676431450117668, guid: cd17687759887a0438ee021e51abc9d9,
@@ -461,6 +506,36 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2729281214502264976}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &813685279
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 813685280}
+  m_Layer: 0
+  m_Name: MaxEnemySpawnPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &813685280
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 813685279}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7, y: 0.5, z: 40}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 26
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &816852358
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1911,6 +1986,36 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1357953775}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1385802921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1385802922}
+  m_Layer: 0
+  m_Name: MinEnemySpawnPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1385802922
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385802921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5, y: 0.5, z: 60}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 25
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1400294458 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2141676431450117668, guid: cd17687759887a0438ee021e51abc9d9,
