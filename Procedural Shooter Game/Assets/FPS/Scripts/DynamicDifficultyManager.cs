@@ -75,13 +75,21 @@ public class DynamicDifficultyManager : MonoBehaviour
     public float playerAccuracyScaledForEstimatedDifficulty;
     public float enemyCountScaledForEstimatedDifficulty;
     public float healthPickupsCountScaledForEstimatedDifficulty;
+    
 
-
-    public float previousMin, previousMax;
-
-    public float updateBoundariesPeriod = 1f, updateBoundariesTimer;
+    public float updateBoundariesPeriod = 2f, updateBoundariesTimer;
 
     public float originalBoundaryDistance;
+    
+    private bool minWasAdjusted = false, maxWasAdjusted = false;
+    private float minAdjustedCount = 0, maxAdjustedCount = 0;
+
+    private float previousTempMinValue, previousTempMaxValue;
+    private float newTempMinValue, newTempMaxValue;
+    private float newMinValue, newMaxValue;
+    private float newTempDifficultyGauge;
+    private float newTempEstimatedReverseDifficulty;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -89,10 +97,10 @@ public class DynamicDifficultyManager : MonoBehaviour
         timer = 0f;
         
         float difficultyVariableWeight = 1 / difficultyVariableCount;
-        playerHealthDifficultyFactor = difficultyVariableWeight;
-        enemyCountDifficultyFactor = difficultyVariableWeight;
-        healthPickupsCountDifficultyFactor = difficultyVariableWeight;
-        playerAccuracyDifficultyFactor = difficultyVariableWeight;
+        playerHealthDifficultyFactor = difficultyVariableWeight + 0.1f;
+        enemyCountDifficultyFactor = difficultyVariableWeight + 0.1f;
+        healthPickupsCountDifficultyFactor = difficultyVariableWeight - 0.05f;
+        playerAccuracyDifficultyFactor = difficultyVariableWeight - 0.15f;
         
         _playerWeaponsManager.OnAddedWeapon += OnAddedWeapon;
 
@@ -117,16 +125,14 @@ public class DynamicDifficultyManager : MonoBehaviour
         
         _tempMinDifficultyBoundary = _tempEstimatedReverseDiff - BoundaryStepSize <= 0 ? 0 : _tempEstimatedReverseDiff - BoundaryStepSize;
         _tempMaxDifficultyBoundary = _tempEstimatedReverseDiff + BoundaryStepSize >= 1 ? 1 : _tempEstimatedReverseDiff + BoundaryStepSize;
+        newTempMinValue = _tempMinDifficultyBoundary;
+        newTempMaxValue = _tempMaxDifficultyBoundary;
         
         MinDifficultyBoundary = 0.5f;
         MaxDifficultyBoundary = 0.5f;
 
         originalBoundaryDistance = MaxDifficultyBoundary - MinDifficultyBoundary;
         
-        previousMin = MinDifficultyBoundary;
-        previousMax = MaxDifficultyBoundary;
-
-        //updateBoundariesTimer = 1f;
     }
 
     private float testTimer = 0f, testTimer2 = 0f;
@@ -145,47 +151,44 @@ public class DynamicDifficultyManager : MonoBehaviour
         }
 
         CalculateDifficulty();
+        StartCoroutine(TempEstimatedReverseDifficultyCoroutine(_tempEstimatedReverseDiff, newTempEstimatedReverseDifficulty, 1.5f));
 
         testTimer += Time.deltaTime;
-        if (testTimer > 1f)
+        if (testTimer > 2f)
         {
             CalculateTempBoundaries();
-            previousEstimatedReverseDiff = _tempEstimatedReverseDiff;
+
+            if (maxWasAdjusted)
+            {
+                StartCoroutine(TempMaxBoundaryCoroutine(_tempMaxDifficultyBoundary, newTempMaxValue, 1.5f));
+            }
+            
+            if (minWasAdjusted)
+            {
+                StartCoroutine(TempMinBoundaryCoroutine(_tempMinDifficultyBoundary, newTempMinValue, 1.5f));
+            }
+            StartCoroutine(PreviousEstimatedReverseDiffCourutine(previousEstimatedReverseDiff, _tempEstimatedReverseDiff,1.5f));
             testTimer = 0;
         }
 
-        AdjustTempBoundaries();
-        
-        /*updateBoundariesTimer += Time.deltaTime;
-        if (!adjustBoundaries && updateBoundariesTimer > updateBoundariesPeriod)
-        {
-            adjustBoundaries = true;
-            maxTargetValue = (_tempMaxDifficultyBoundary - MaxDifficultyBoundary) / 2f;
-            minTargetValue = (_tempMinDifficultyBoundary - MinDifficultyBoundary) / 2f;
-            updateBoundariesTimer = 0f;
-        }
-        if (adjustBoundaries)
-        {
-            AdjustBoundaries(minTargetValue, maxTargetValue, lerpTime * Time.deltaTime);
-        }*/
         updateBoundariesTimer += Time.deltaTime;
         if (updateBoundariesTimer > updateBoundariesPeriod)
         {
             AdjustBoundaries();
+            StartCoroutine(AdjustMaxBoundaryCoroutine(MaxDifficultyBoundary, newMaxValue, 1.5f));
+            StartCoroutine(AdjustMinBoundaryCoroutine(MinDifficultyBoundary, newMinValue, 1.5f));
             updateBoundariesTimer = 0f;
         }
 
         timer += Time.deltaTime;
         if (timer > DiffGaugeRecalcPeriod)
         {
-            //AdjustDifficultyGauge();
-            StartCoroutine(TestCourutine(0, 1, 3));
             CalculateGauge();
+            StartCoroutine(CalculateGaugeCoroutine(_tempDifficultyGauge, newTempDifficultyGauge, 1f));
             timer = 0f;
         }
+        
         AdjustDifficultyGauge();
-
-        //StartCoroutine(TestCourutine(0, 1, 3));
     }
 
     IEnumerator TestCourutine(float from, float to, float duration)
@@ -213,65 +216,122 @@ public class DynamicDifficultyManager : MonoBehaviour
                               healthPickupsCountDifficultyFactor * healthPickupsCountScaledForEstimatedDifficulty +
                               playerAccuracyDifficultyFactor * playerAccuracyScaledForEstimatedDifficulty;
         
-        _tempEstimatedReverseDiff = 1 - EstimatedDifficulty;
-        //Debug.Log("EstimatedDifficulty: " + EstimatedDifficulty);
-
-        /*testTimer += Time.deltaTime;
-        if (testTimer > 2)
-        {
-            CalculateBoundaries();
-            testTimer = 0f;
-        }
-        
-        testTimer2 += Time.deltaTime;
-        if (testTimer2 > 1)
-        {
-            //CalculateBoundaries();
-            previousEstimatedReverseDiff = _tempEstimatedReverseDiff;
-            testTimer2 = 0f;
-        }*/
-        
-        //CalculateBoundaries();
-        
+        //_tempEstimatedReverseDiff = 1 - EstimatedDifficulty;
+        newTempEstimatedReverseDifficulty = 1 - EstimatedDifficulty;
     }
 
-    private bool minWasAdjusted = false, maxWasAdjusted = false;
-    private float minAdjustedCount = 0, maxAdjustedCount = 0;
+    private IEnumerator TempEstimatedReverseDifficultyCoroutine(float from, float to, float duration)
+    {
+        float timeStep = 0f;
+
+        float _from = from;
+        while (timeStep <= duration)
+        {
+            timeStep = timeStep + Time.deltaTime;
+            float step = Mathf.Clamp01(timeStep / duration);
+            _tempEstimatedReverseDiff = Mathf.Lerp(_from, to, step);
+            yield return null;
+        }
+    }
+
+    private IEnumerator PreviousEstimatedReverseDiffCourutine(float from, float to, float duration)
+    {
+        float timeStep = 0f;
+
+        float _from = from;
+        while (timeStep <= duration)
+        {
+            timeStep = timeStep + Time.deltaTime;
+            float step = Mathf.Clamp01(timeStep / duration);
+            previousEstimatedReverseDiff = Mathf.Lerp(_from, to, step);
+            yield return null;
+        }
+    }
+
+    private IEnumerator TempMaxBoundaryCoroutine(float from, float to, float duration)
+    {
+        float timeStep = 0f;
+
+        float _from = from;
+        while (timeStep <= duration)
+        {
+            timeStep = timeStep + Time.deltaTime;
+            float step = Mathf.Clamp01(timeStep / duration);
+            _tempMaxDifficultyBoundary = Mathf.Lerp(_from, to, step);
+            yield return null;
+        }
+    }
+    
+    private IEnumerator TempMinBoundaryCoroutine(float from, float to, float duration)
+    {
+        float timeStep = 0f;
+
+        float _from = from;
+        while (timeStep <= duration)
+        {
+            timeStep = timeStep + Time.deltaTime;
+            float step = Mathf.Clamp01(timeStep / duration);
+            _tempMinDifficultyBoundary = Mathf.Lerp(_from, to, step);
+            yield return null;
+        }
+    }
     
     private void CalculateTempBoundaries()
     {
-        //_tempEstimatedReverseDiff = 1 - EstimatedDifficulty;
-
-        if (_tempEstimatedReverseDiff > previousEstimatedReverseDiff && _tempEstimatedReverseDiff > _tempMaxDifficultyBoundary)
+        if (_tempEstimatedReverseDiff > previousEstimatedReverseDiff && _tempEstimatedReverseDiff > _tempMaxDifficultyBoundary - BoundaryStepSize)
         {
             //if greater, then we adjust the MAX boundary
             //MaxDifficultyBoundary = MaxDifficultyBoundary + BoundaryStepSize >= 1 ? 1 : MaxDifficultyBoundary + BoundaryStepSize;
-            _tempMaxDifficultyBoundary = _tempEstimatedReverseDiff + BoundaryStepSize >= 1 ? 1 : _tempEstimatedReverseDiff + BoundaryStepSize;
+            
+            //_tempMaxDifficultyBoundary = _tempEstimatedReverseDiff + BoundaryStepSize >= 1 ? 1 : _tempEstimatedReverseDiff + BoundaryStepSize;
+            
+            newTempMaxValue = _tempEstimatedReverseDiff + BoundaryStepSize >= 1 ? 1 : _tempEstimatedReverseDiff + BoundaryStepSize;
             maxWasAdjusted = true;
             minWasAdjusted = false;
             maxAdjustedCount++;
             minAdjustedCount = 0;
+
+            if (maxAdjustedCount >= 2)
+            {
+                newTempMinValue = _tempMinDifficultyBoundary + 2 * BoundaryStepSize;
+                maxAdjustedCount = 0;
+                minWasAdjusted = true;
+            }
+            
+            if (newTempMaxValue - _tempEstimatedReverseDiff > 0.1f)
+            {
+                newTempMaxValue -= (newTempMaxValue - _tempEstimatedReverseDiff) / 2f;
+            }
         }
-        else if(_tempEstimatedReverseDiff < previousEstimatedReverseDiff && _tempEstimatedReverseDiff < _tempMinDifficultyBoundary)
+        else if(_tempEstimatedReverseDiff < previousEstimatedReverseDiff && _tempEstimatedReverseDiff < _tempMinDifficultyBoundary + BoundaryStepSize)
         {
             //MinDifficultyBoundary = MinDifficultyBoundary - BoundaryStepSize <= 0 ? 0 : MinDifficultyBoundary - BoundaryStepSize;
-            _tempMinDifficultyBoundary = _tempEstimatedReverseDiff - BoundaryStepSize <= 0 ? 0 : _tempEstimatedReverseDiff - BoundaryStepSize;
+            //_tempMinDifficultyBoundary = _tempEstimatedReverseDiff - BoundaryStepSize <= 0 ? 0 : _tempEstimatedReverseDiff - BoundaryStepSize;
+            
+            newTempMinValue = _tempEstimatedReverseDiff - BoundaryStepSize <= 0 ? 0 : _tempEstimatedReverseDiff - BoundaryStepSize;
             minWasAdjusted = true;
             maxWasAdjusted = false;
             minAdjustedCount++;
             maxAdjustedCount = 0;
+            
+            if (minAdjustedCount >= 2)
+            {
+                //make a step with max to left
+                newTempMaxValue = _tempMaxDifficultyBoundary - 2 * BoundaryStepSize;
+                minAdjustedCount = 0;
+                maxWasAdjusted = true;
+            }
+            
+            //this should most likely be _tempEstimatedReverseDiff - _tempMaxDifficultyBoundary
+            if (_tempEstimatedReverseDiff - newTempMinValue > 0.1f)
+            {
+                newTempMinValue += (_tempEstimatedReverseDiff - newTempMinValue) / 2f;
+            }
         }
         else
         {
             //if equals do nothing
         }
-
-
-        /*_tempDifficultyGauge = MinDifficultyBoundary + (MaxDifficultyBoundary - MinDifficultyBoundary) / 2f;
-        
-        float scaledTempDiffGauge = (MinDifficultyBoundary - _tempDifficultyGauge) / (MinDifficultyBoundary - MaxDifficultyBoundary);
-        Debug.Log("_tempDifficultyGauge: " + _tempDifficultyGauge);
-        Debug.Log("ScaledTempDiffGauge: " + scaledTempDiffGauge);*/
     }
 
     private void AdjustTempBoundaries()
@@ -304,58 +364,60 @@ public class DynamicDifficultyManager : MonoBehaviour
         
     }
 
+    private IEnumerator CalculateGaugeCoroutine(float from, float to, float duration)
+    {
+        float timeStep = 0f;
+
+        float _from = from;
+        while (timeStep <= duration)
+        {
+            timeStep = timeStep + Time.deltaTime;
+            float step = Mathf.Clamp01(timeStep / duration);
+            _tempDifficultyGauge = Mathf.Lerp(_from, to, step);
+            yield return null;
+        }
+    }
     private void CalculateGauge()
     {
-        _tempDifficultyGauge = MinDifficultyBoundary + (MaxDifficultyBoundary - MinDifficultyBoundary) / 2f;
+        newTempDifficultyGauge = MinDifficultyBoundary + (MaxDifficultyBoundary - MinDifficultyBoundary) / 2f;
         
         float scaledTempDiffGauge = (MinDifficultyBoundary - _tempDifficultyGauge) / (MinDifficultyBoundary - MaxDifficultyBoundary);
         Debug.Log("_tempDifficultyGauge: " + _tempDifficultyGauge);
         Debug.Log("ScaledTempDiffGauge: " + scaledTempDiffGauge);
     }
-    /*private void CalculateBoundaries()
+
+    private IEnumerator AdjustMaxBoundaryCoroutine(float from, float to, float duration)
     {
-        //_tempEstimatedReverseDiff = 1 - EstimatedDifficulty;
+        float timeStep = 0f;
 
-        if (_tempEstimatedReverseDiff > previousEstimatedReverseDiff)
+        float _from = from;
+        while (timeStep <= duration)
         {
-            //if greater, then we adjust the MAX boundary
-            MaxDifficultyBoundary = _tempEstimatedReverseDiff + BoundaryStepSize >= 1 ? 1 : _tempEstimatedReverseDiff + BoundaryStepSize;
-            maxWasAdjusted = true;
-            minWasAdjusted = false;
-            
+            timeStep = timeStep + Time.deltaTime;
+            float step = Mathf.Clamp01(timeStep / duration);
+            MaxDifficultyBoundary = Mathf.Lerp(_from, to, step);
+            yield return null;
         }
-        else if(_tempEstimatedReverseDiff < previousEstimatedReverseDiff)
+    }
+    
+    private IEnumerator AdjustMinBoundaryCoroutine(float from, float to, float duration)
+    {
+        float timeStep = 0f;
+
+        float _from = from;
+        while (timeStep <= duration)
         {
-            MinDifficultyBoundary = _tempEstimatedReverseDiff - BoundaryStepSize <= 0 ? 0 : _tempEstimatedReverseDiff - BoundaryStepSize;
-            minWasAdjusted = true;
-            maxWasAdjusted = false;
+            timeStep = timeStep + Time.deltaTime;
+            float step = Mathf.Clamp01(timeStep / duration);
+            MinDifficultyBoundary = Mathf.Lerp(_from, to, step);
+            yield return null;
         }
-        else
-        {
-            //if equals do nothing
-        }
-
-        //THIS SHOULDNT BE INSTANTLY ADJUSTED
-        //previousEstimatedReverseDiff = _tempEstimatedReverseDiff;
-        _tempDifficultyGauge = MinDifficultyBoundary + (MaxDifficultyBoundary - MinDifficultyBoundary) / 2f;
-
-        //DifficultyGauge = MinDifficultyBoundary + 
-        float scaledTempDiffGauge = (MinDifficultyBoundary - _tempDifficultyGauge) / (MinDifficultyBoundary - MaxDifficultyBoundary);
-        Debug.Log("_tempDifficultyGauge: " + _tempDifficultyGauge);
-        Debug.Log("ScaledTempDiffGauge: " + scaledTempDiffGauge);
-    }*/
-
-    private void AdjustBoundaries(/*float minTargetValue, float maxTargetValue, float t*/)
+    }
+    private void AdjustBoundaries()
     {
 
-        MaxDifficultyBoundary = MaxDifficultyBoundary + (_tempMaxDifficultyBoundary - MaxDifficultyBoundary) / 2f;
-        MinDifficultyBoundary = MinDifficultyBoundary + (_tempMinDifficultyBoundary - MinDifficultyBoundary) / 2f;
-
-        //float maxTargetValue = (_tempMaxDifficultyBoundary - MaxDifficultyBoundary) / 2f;
-        //MaxDifficultyBoundary = Mathf.Lerp(MaxDifficultyBoundary, maxTargetValue, t);
-        
-        //float minTargetValue = (_tempMinDifficultyBoundary - MinDifficultyBoundary) / 2f;
-        //MinDifficultyBoundary = Mathf.Lerp(MinDifficultyBoundary, minTargetValue, t);
+        newMaxValue = MaxDifficultyBoundary + (_tempMaxDifficultyBoundary - MaxDifficultyBoundary) / 2f;
+        newMinValue = MinDifficultyBoundary + (_tempMinDifficultyBoundary - MinDifficultyBoundary) / 2f;
         
         /*if (maxWasAdjusted)
         {

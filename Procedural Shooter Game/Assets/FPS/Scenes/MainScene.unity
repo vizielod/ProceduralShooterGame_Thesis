@@ -450,7 +450,7 @@ MonoBehaviour:
   _tempMinDifficultyBoundary: 0
   _tempMaxDifficultyBoundary: 1
   testValue: 0
-  DiffGaugeRecalcPeriod: 3
+  DiffGaugeRecalcPeriod: 1
   BoundaryStepSize: 0.05
   timer: 0
   playerHealthDifficultyFactor: 0
@@ -464,7 +464,7 @@ MonoBehaviour:
   healthPickupsCountScaledForEstimatedDifficulty: 0
   previousMin: 0
   previousMax: 0
-  updateBoundariesPeriod: 3
+  updateBoundariesPeriod: 2
   updateBoundariesTimer: 0
   originalBoundaryDistance: 0
   lerpTime: 2.54
