@@ -11,8 +11,12 @@ using Random = UnityEngine.Random;
 
 public class DynamicDifficultyManager : MonoBehaviour
 {
-
+    [Header("Enemy types")] 
+    [SerializeField] private GameObject TankPrefab;
+    [SerializeField] private GameObject SoldierPrefab;
+    [SerializeField] private GameObject AssassinPrefab;
     [SerializeField] private GameObject EnemyPrefab;
+    
     [SerializeField] private Transform MinEnemySpawnPostion;
     [SerializeField] private Transform MaxEnemySpawnPostion;
     
@@ -559,6 +563,17 @@ public class DynamicDifficultyManager : MonoBehaviour
         Vector3 position = new Vector3(randX, 0.5f, randZ);
         GameObject newEnemy = Instantiate(EnemyPrefab, position, Quaternion.identity);
 
+        EnemyController enemyController = newEnemy.GetComponent<EnemyController>();
+        EnemyControllers.Add(enemyController);
+        RegisterEnemyController(enemyController);
+    }
+
+    public void SpawnEnemy()
+    {
+        Debug.Log("Spawn Enemy");
+        Vector3 position = new Vector3(-45f, 0, 70f);
+        GameObject newEnemy = Instantiate(TankPrefab, position, Quaternion.identity);
+        
         EnemyController enemyController = newEnemy.GetComponent<EnemyController>();
         EnemyControllers.Add(enemyController);
         RegisterEnemyController(enemyController);

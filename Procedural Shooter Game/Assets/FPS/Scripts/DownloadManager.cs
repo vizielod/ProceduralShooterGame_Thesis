@@ -5,42 +5,69 @@ using UnityEngine;
 
 public class DownloadManager : MonoBehaviour
 {
+    
+    [Header("References")]
     [SerializeField] private GameObject Player;
+    [SerializeField] private DynamicDifficultyManager dynamicDifficultyManager;
+    //[SerializeField] private GameObject DownloadBar;
+    
+    [Header("General")]
     [SerializeField] private float downloadRange = 30;
+    [SerializeField] private float maxTime = 10;
     [SerializeField] private float progress = 0f;
     [SerializeField] private float playerDistance = 0f;
-    
+    [SerializeField] private float spawnTimer = 0f;
+    [Tooltip("Spawn an enemy in every X second defined by spawnPeriod")]
+    [SerializeField] private float spawnPeriod = 5f;
+
     private DownloadDataButton downloadDataButton;
+    private float timeLeft;
     
+
+    private enum EnemyType
+    {
+        Tank = 0,
+        Soldier = 1,
+        Assasin = 2
+    }
     // Start is called before the first frame update
     void Start()
     {
         downloadDataButton = GetComponent<DownloadDataButton>();
+        timeLeft = maxTime;
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         if (downloadDataButton.isOn)
         {
             CalculatePlayerDistance();
             if (playerDistance <= downloadRange)
             {
-                if (progress < 100)
+                if (timeLeft > 0)
                 {
-                    progress++;
-                }
-                else
-                {
-                    progress = 0f; //test
+                    timeLeft -= Time.deltaTime;
+                    float downloadBarFillAmount = timeLeft / maxTime;
+                    downloadDataButton.UpdateDownloadBar(downloadBarFillAmount);
                 }
             }
 
             if (playerDistance > downloadRange)
             {
-                downloadDataButton.isOn = !downloadDataButton.isOn;
+                downloadDataButton.isPaused = true;
+                downloadDataButton.isOn = false;
                 downloadDataButton.UpdateDownload();
             }
+
+            spawnTimer += Time.deltaTime;
+            if (spawnTimer > spawnPeriod)
+            {
+                dynamicDifficultyManager.SpawnEnemy();
+                spawnTimer = 0f;
+            }
+
         }
     }
 
