@@ -23,13 +23,6 @@ public class DownloadManager : MonoBehaviour
     private DownloadDataButton downloadDataButton;
     private float timeLeft;
     
-
-    private enum EnemyType
-    {
-        Tank = 0,
-        Soldier = 1,
-        Assasin = 2
-    }
     // Start is called before the first frame update
     void Start()
     {
@@ -64,7 +57,7 @@ public class DownloadManager : MonoBehaviour
             spawnTimer += Time.deltaTime;
             if (spawnTimer > spawnPeriod)
             {
-                dynamicDifficultyManager.SpawnEnemy();
+                dynamicDifficultyManager.SpawnEnemy(this.transform.position, downloadRange - 10f);
                 spawnTimer = 0f;
             }
 

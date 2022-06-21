@@ -94,6 +94,13 @@ public class DynamicDifficultyManager : MonoBehaviour
     private float newTempDifficultyGauge;
     private float newTempEstimatedReverseDifficulty;
     
+    private enum EnemyType
+    {
+        Tank = 0,
+        Soldier = 1,
+        Assasin = 2
+    }
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -386,8 +393,8 @@ public class DynamicDifficultyManager : MonoBehaviour
         newTempDifficultyGauge = MinDifficultyBoundary + (MaxDifficultyBoundary - MinDifficultyBoundary) / 2f;
         
         float scaledTempDiffGauge = (MinDifficultyBoundary - _tempDifficultyGauge) / (MinDifficultyBoundary - MaxDifficultyBoundary);
-        Debug.Log("_tempDifficultyGauge: " + _tempDifficultyGauge);
-        Debug.Log("ScaledTempDiffGauge: " + scaledTempDiffGauge);
+        //Debug.Log("_tempDifficultyGauge: " + _tempDifficultyGauge);
+        //Debug.Log("ScaledTempDiffGauge: " + scaledTempDiffGauge);
     }
 
     private IEnumerator AdjustMaxBoundaryCoroutine(float from, float to, float duration)
@@ -568,11 +575,112 @@ public class DynamicDifficultyManager : MonoBehaviour
         RegisterEnemyController(enemyController);
     }
 
-    public void SpawnEnemy()
+    private int i = 0;
+    public void SpawnEnemy(Vector3 center, float radius)
     {
         Debug.Log("Spawn Enemy");
-        Vector3 position = new Vector3(-45f, 0, 70f);
-        GameObject newEnemy = Instantiate(TankPrefab, position, Quaternion.identity);
+        //int i = Random.Range(0, 100);
+        float angle = Mathf.PI * 2f / 10 * i;
+        i++;
+        Vector3 newPos = center + new Vector3(Mathf.Cos(angle)*radius, 0, Mathf.Sin(angle)*radius);
+        Debug.Log("Enemy spawn position: " + newPos);
+        //Vector3 position = new Vector3(-45f, 0, 70f);
+
+        float random = Random.Range(0, 100);
+        Debug.Log("Random enemy: " + random);
+
+        //Easy
+        if (DifficultyGauge < 0.3f)
+        {
+            //80% to spawn a tank
+            //20% to spawn a soldier
+            if (random >= 0 && random < 80)
+            {
+                //Spawm a Tank
+                InstantiateEnemy(TankPrefab, newPos);
+            }
+            else
+            {
+                //if random >= 80
+                //Spawn a Soldier
+                InstantiateEnemy(SoldierPrefab, newPos);
+            }
+        }
+        //Medium-to-Easy
+        if (DifficultyGauge >= 0.3f && DifficultyGauge < 0.5f)
+        {
+            //60% to spawn a tank
+            //40% to spawn a soldier
+            if (random >= 0 && random < 60)
+            {
+                //Spawm a Tank
+                InstantiateEnemy(TankPrefab, newPos);
+            }
+            else
+            {
+                //if random >= 60
+                //Spawn a Soldier
+                InstantiateEnemy(SoldierPrefab, newPos);
+            }
+        }
+        //Medium-to-Hard
+        if (DifficultyGauge >= 0.5f && DifficultyGauge < 0.7f)
+        {
+            //20% to spawn a tank
+            //60% to spawn a soldier
+            //20% to spawn a assassin
+            if (random >= 0 && random < 20)
+            {
+                //Spawm a Tank
+                InstantiateEnemy(TankPrefab, newPos);
+            }
+            else if (random >= 20 && random < 80)
+            {
+                //Spawn a Soldier
+                InstantiateEnemy(SoldierPrefab, newPos);
+            }
+            else
+            {
+                //if random >= 80
+                //Spawn an Assassin
+                InstantiateEnemy(AssassinPrefab, newPos);
+            }
+        }
+        //Hard
+        if (DifficultyGauge >= 0.7f)
+        {
+            //20% to spawn a tank
+            //40% to spawn a soldier
+            //40% to spawn a assassin
+            if (random >= 0 && random < 20)
+            {
+                //Spawm a Tank
+                InstantiateEnemy(TankPrefab, newPos);
+            }
+            else if (random >= 20 && random < 60)
+            {
+                //Spawn a Soldier
+                InstantiateEnemy(SoldierPrefab, newPos);
+            }
+            else
+            {
+                //if random >= 60
+                //Spawn an Assassin
+                InstantiateEnemy(AssassinPrefab, newPos);
+            }
+        }
+        
+        /*GameObject newEnemy = Instantiate(TankPrefab, newPos, Quaternion.identity);
+        
+        EnemyController enemyController = newEnemy.GetComponent<EnemyController>();
+        EnemyControllers.Add(enemyController);
+        RegisterEnemyController(enemyController);*/
+    }
+
+    private void InstantiateEnemy(GameObject enemyPrefab, Vector3 position)
+    {
+        Debug.Log("Enemy type spawned: " + enemyPrefab);
+        GameObject newEnemy = Instantiate(enemyPrefab, position, Quaternion.identity);
         
         EnemyController enemyController = newEnemy.GetComponent<EnemyController>();
         EnemyControllers.Add(enemyController);
@@ -680,7 +788,7 @@ public class DynamicDifficultyManager : MonoBehaviour
     }
     private void OnShoot()
     {
-        Debug.Log("Shooooooting");
+        //Debug.Log("Shooooooting");
         playerTotalShotCount++;
         CalculatePlayerAccuracy();
     }
