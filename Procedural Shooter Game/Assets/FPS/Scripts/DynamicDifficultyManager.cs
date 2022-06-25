@@ -146,7 +146,7 @@ public class DynamicDifficultyManager : MonoBehaviour
         
     }
 
-    private float testTimer = 0f, testTimer2 = 0f;
+    private float updateTempBoundariesTimer = 0f, catchupTempBoundariesTimer = 0f;
 
     private bool adjustBoundaries = false;
 
@@ -164,11 +164,11 @@ public class DynamicDifficultyManager : MonoBehaviour
         CalculateDifficulty();
         StartCoroutine(TempEstimatedReverseDifficultyCoroutine(_tempEstimatedReverseDiff, newTempEstimatedReverseDifficulty, 1.5f));
 
-        testTimer += Time.deltaTime;
-        if (testTimer > 2f)
+        updateTempBoundariesTimer += Time.deltaTime;
+        if (updateTempBoundariesTimer > 2f)
         {
             CalculateTempBoundaries();
-
+            //AdjustTempBoundaries();
             if (maxWasAdjusted)
             {
                 StartCoroutine(TempMaxBoundaryCoroutine(_tempMaxDifficultyBoundary, newTempMaxValue, 1.5f));
@@ -179,7 +179,23 @@ public class DynamicDifficultyManager : MonoBehaviour
                 StartCoroutine(TempMinBoundaryCoroutine(_tempMinDifficultyBoundary, newTempMinValue, 1.5f));
             }
             StartCoroutine(PreviousEstimatedReverseDiffCourutine(previousEstimatedReverseDiff, _tempEstimatedReverseDiff,1.5f));
-            testTimer = 0;
+            updateTempBoundariesTimer = 0;
+        }
+        
+        catchupTempBoundariesTimer += Time.deltaTime;
+        if (catchupTempBoundariesTimer > 6f)
+        {
+            AdjustTempBoundaries();
+            if (maxWasAdjusted)
+            {
+                StartCoroutine(TempMaxBoundaryCoroutine(_tempMaxDifficultyBoundary, newTempMaxValue, 1.5f));
+            }
+            
+            if (minWasAdjusted)
+            {
+                StartCoroutine(TempMinBoundaryCoroutine(_tempMinDifficultyBoundary, newTempMinValue, 1.5f));
+            }
+            catchupTempBoundariesTimer = 0;
         }
 
         updateBoundariesTimer += Time.deltaTime;
@@ -309,7 +325,7 @@ public class DynamicDifficultyManager : MonoBehaviour
                 minWasAdjusted = true;
             }
             
-            if (newTempMaxValue - _tempEstimatedReverseDiff > 0.1f)
+            if (/*newTempMaxValue - _tempEstimatedReverseDiff > 0.1f*/_tempMaxDifficultyBoundary - _tempEstimatedReverseDiff > 0.1f)
             {
                 newTempMaxValue -= (newTempMaxValue - _tempEstimatedReverseDiff) / 2f;
             }
@@ -333,8 +349,8 @@ public class DynamicDifficultyManager : MonoBehaviour
                 maxWasAdjusted = true;
             }
             
-            //this should most likely be _tempEstimatedReverseDiff - _tempMaxDifficultyBoundary
-            if (_tempEstimatedReverseDiff - newTempMinValue > 0.1f)
+            //this should most likely be _tempEstimatedReverseDiff - _tempMinDifficultyBoundary
+            if (/*_tempEstimatedReverseDiff - newTempMinValue > 0.1f*/_tempEstimatedReverseDiff - _tempMinDifficultyBoundary > 0.1f)
             {
                 newTempMinValue += (_tempEstimatedReverseDiff - newTempMinValue) / 2f;
             }
@@ -346,6 +362,21 @@ public class DynamicDifficultyManager : MonoBehaviour
     }
 
     private void AdjustTempBoundaries()
+    {
+        if (/*newTempMaxValue - _tempEstimatedReverseDiff > 0.1f*/_tempMaxDifficultyBoundary - _tempEstimatedReverseDiff > 0.1f)
+        {
+            newTempMaxValue -= (newTempMaxValue - _tempEstimatedReverseDiff) / 2f;
+            maxWasAdjusted = true;
+        }
+        if (/*_tempEstimatedReverseDiff - newTempMinValue > 0.1f*/_tempEstimatedReverseDiff - _tempMinDifficultyBoundary > 0.1f)
+        {
+            newTempMinValue += (_tempEstimatedReverseDiff - newTempMinValue) / 2f;
+            minWasAdjusted = true;
+        }
+        
+    }
+    
+    /*private void AdjustTempBoundaries()
     {
         if (maxAdjustedCount >= 2)
         {
@@ -373,7 +404,7 @@ public class DynamicDifficultyManager : MonoBehaviour
                                          (_tempMaxDifficultyBoundary - _tempEstimatedReverseDiff) / 3f;
         }
         
-    }
+    }*/
 
     private IEnumerator CalculateGaugeCoroutine(float from, float to, float duration)
     {
@@ -429,7 +460,7 @@ public class DynamicDifficultyManager : MonoBehaviour
 
         newMaxValue = MaxDifficultyBoundary + (_tempMaxDifficultyBoundary - MaxDifficultyBoundary) / 2f;
         newMinValue = MinDifficultyBoundary + (_tempMinDifficultyBoundary - MinDifficultyBoundary) / 2f;
-        
+
         /*if (maxWasAdjusted)
         {
             float a = Mathf.Abs(originalBoundaryDistance - (MaxDifficultyBoundary - MinDifficultyBoundary));
