@@ -10,6 +10,14 @@ namespace Unity.FPS.AI
     public class EnemyController : MonoBehaviour
     {
         [System.Serializable]
+        public struct SpawnObject
+        {
+            public GameObject spawnObject;
+            public int minProbabilityRange;
+            public int maxProbabilityRange;
+        }
+        
+        [System.Serializable]
         public struct RendererIndexData
         {
             public Renderer Renderer;
@@ -74,11 +82,13 @@ namespace Unity.FPS.AI
         [Tooltip("The point at which the death VFX is spawned")]
         public Transform DeathVfxSpawnPoint;
 
-        [Header("Loot")] [Tooltip("The object this enemy can drop when dying")]
+        [Header("Loot")] 
+        [Tooltip("The healtpacks this enemy can drop when dying")]
+        public SpawnObject[] HealthPickupPrefabs;
+        /*[Tooltip("The object this enemy can drop when dying")]
         public GameObject LootPrefab;
-
         [Tooltip("The chance the object has to drop")] [Range(0, 1)]
-        public float DropRate = 1f;
+        public float DropRate = 1f;*/
 
         [Header("Debug Display")] [Tooltip("Color of the sphere gizmo representing the path reaching range")]
         public Color PathReachingRangeColor = Color.yellow;
@@ -403,16 +413,32 @@ namespace Unity.FPS.AI
             m_EnemyManager.UnregisterEnemy(this);
 
             // loot an object
-            if (TryDropItem())
+            /*if (TryDropItem())
             {
                 GameObject healthPickupGO = Instantiate(LootPrefab, transform.position, Quaternion.identity);
                 onHealthSpawned?.Invoke(healthPickupGO);
-            }
+            }*/
+            SpawnObjects();
 
             // this will call the OnDestroy function
             Destroy(gameObject, DeathDuration);
             onDie?.Invoke(this);
 
+        }
+
+        void SpawnObjects()
+        {
+            int i = Random.Range(0, 100);
+
+            for (int j = 0; j < HealthPickupPrefabs.Length; j++)
+            {
+                if (i >= HealthPickupPrefabs[j].minProbabilityRange &&
+                    i <= HealthPickupPrefabs[j].maxProbabilityRange)
+                {
+                    GameObject healthPickupGO = Instantiate(HealthPickupPrefabs[j].spawnObject, transform.position, Quaternion.identity);
+                    onHealthSpawned?.Invoke(healthPickupGO);
+                }
+            }
         }
 
         void OnDrawGizmosSelected()
@@ -470,7 +496,7 @@ namespace Unity.FPS.AI
             return didFire;
         }
 
-        public bool TryDropItem()
+        /*public bool TryDropItem()
         {
             if (DropRate == 0 || LootPrefab == null)
                 return false;
@@ -478,7 +504,7 @@ namespace Unity.FPS.AI
                 return true;
             else
                 return (Random.value <= DropRate);
-        }
+        }*/
 
         void FindAndInitializeAllWeapons()
         {

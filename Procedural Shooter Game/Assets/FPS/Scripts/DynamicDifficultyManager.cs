@@ -162,56 +162,57 @@ public class DynamicDifficultyManager : MonoBehaviour
         }
 
         CalculateDifficulty();
-        StartCoroutine(TempEstimatedReverseDifficultyCoroutine(_tempEstimatedReverseDiff, newTempEstimatedReverseDifficulty, 1.5f));
+        StartCoroutine(TempEstimatedReverseDifficultyCoroutine(_tempEstimatedReverseDiff, newTempEstimatedReverseDifficulty, 1.5f/2f));
 
         updateTempBoundariesTimer += Time.deltaTime;
-        if (updateTempBoundariesTimer > 2f)
+        if (updateTempBoundariesTimer > 2f/2f)
         {
             CalculateTempBoundaries();
             //AdjustTempBoundaries();
             if (maxWasAdjusted)
             {
-                StartCoroutine(TempMaxBoundaryCoroutine(_tempMaxDifficultyBoundary, newTempMaxValue, 1.5f));
+                StartCoroutine(TempMaxBoundaryCoroutine(_tempMaxDifficultyBoundary, newTempMaxValue, 1.5f/2f));
             }
             
             if (minWasAdjusted)
             {
-                StartCoroutine(TempMinBoundaryCoroutine(_tempMinDifficultyBoundary, newTempMinValue, 1.5f));
+                StartCoroutine(TempMinBoundaryCoroutine(_tempMinDifficultyBoundary, newTempMinValue, 1.5f/2f));
             }
-            StartCoroutine(PreviousEstimatedReverseDiffCourutine(previousEstimatedReverseDiff, _tempEstimatedReverseDiff,1.5f));
+            StartCoroutine(PreviousEstimatedReverseDiffCourutine(previousEstimatedReverseDiff, _tempEstimatedReverseDiff,1.5f/2f));
             updateTempBoundariesTimer = 0;
         }
         
         catchupTempBoundariesTimer += Time.deltaTime;
-        if (catchupTempBoundariesTimer > 6f)
+        if (catchupTempBoundariesTimer > 6f/2f)
         {
             AdjustTempBoundaries();
+            //or maybe do something like if !maxWasAdjusted && maxNeedsToBeAdjusted
             if (maxWasAdjusted)
             {
-                StartCoroutine(TempMaxBoundaryCoroutine(_tempMaxDifficultyBoundary, newTempMaxValue, 1.5f));
+                StartCoroutine(TempMaxBoundaryCoroutine(_tempMaxDifficultyBoundary, newTempMaxValue, 1.5f/2f));
             }
             
             if (minWasAdjusted)
             {
-                StartCoroutine(TempMinBoundaryCoroutine(_tempMinDifficultyBoundary, newTempMinValue, 1.5f));
+                StartCoroutine(TempMinBoundaryCoroutine(_tempMinDifficultyBoundary, newTempMinValue, 1.5f/2f));
             }
             catchupTempBoundariesTimer = 0;
         }
 
         updateBoundariesTimer += Time.deltaTime;
-        if (updateBoundariesTimer > updateBoundariesPeriod)
+        if (updateBoundariesTimer > updateBoundariesPeriod/2f)
         {
             AdjustBoundaries();
-            StartCoroutine(AdjustMaxBoundaryCoroutine(MaxDifficultyBoundary, newMaxValue, 1.5f));
-            StartCoroutine(AdjustMinBoundaryCoroutine(MinDifficultyBoundary, newMinValue, 1.5f));
+            StartCoroutine(AdjustMaxBoundaryCoroutine(MaxDifficultyBoundary, newMaxValue, 1.5f/2f));
+            StartCoroutine(AdjustMinBoundaryCoroutine(MinDifficultyBoundary, newMinValue, 1.5f/2f));
             updateBoundariesTimer = 0f;
         }
 
         timer += Time.deltaTime;
-        if (timer > DiffGaugeRecalcPeriod)
+        if (timer > DiffGaugeRecalcPeriod/2f)
         {
             CalculateGauge();
-            StartCoroutine(CalculateGaugeCoroutine(_tempDifficultyGauge, newTempDifficultyGauge, 1f));
+            StartCoroutine(CalculateGaugeCoroutine(_tempDifficultyGauge, newTempDifficultyGauge, 1f/2f));
             timer = 0f;
         }
         
@@ -325,10 +326,6 @@ public class DynamicDifficultyManager : MonoBehaviour
                 minWasAdjusted = true;
             }
             
-            if (/*newTempMaxValue - _tempEstimatedReverseDiff > 0.1f*/_tempMaxDifficultyBoundary - _tempEstimatedReverseDiff > 0.1f)
-            {
-                newTempMaxValue -= (newTempMaxValue - _tempEstimatedReverseDiff) / 2f;
-            }
         }
         else if(_tempEstimatedReverseDiff < previousEstimatedReverseDiff && _tempEstimatedReverseDiff < _tempMinDifficultyBoundary + BoundaryStepSize)
         {
@@ -348,12 +345,6 @@ public class DynamicDifficultyManager : MonoBehaviour
                 minAdjustedCount = 0;
                 maxWasAdjusted = true;
             }
-            
-            //this should most likely be _tempEstimatedReverseDiff - _tempMinDifficultyBoundary
-            if (/*_tempEstimatedReverseDiff - newTempMinValue > 0.1f*/_tempEstimatedReverseDiff - _tempMinDifficultyBoundary > 0.1f)
-            {
-                newTempMinValue += (_tempEstimatedReverseDiff - newTempMinValue) / 2f;
-            }
         }
         else
         {
@@ -367,6 +358,7 @@ public class DynamicDifficultyManager : MonoBehaviour
         {
             newTempMaxValue -= (newTempMaxValue - _tempEstimatedReverseDiff) / 2f;
             maxWasAdjusted = true;
+            //maxNeedsToBeAdjusted = true;
         }
         if (/*_tempEstimatedReverseDiff - newTempMinValue > 0.1f*/_tempEstimatedReverseDiff - _tempMinDifficultyBoundary > 0.1f)
         {

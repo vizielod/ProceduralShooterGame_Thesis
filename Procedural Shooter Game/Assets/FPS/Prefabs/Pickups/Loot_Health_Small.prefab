@@ -100,11 +100,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4508236271983282889, guid: d40ae884302b6684a8b3b6f3d55a71ba,
         type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4508236271983282889, guid: d40ae884302b6684a8b3b6f3d55a71ba,
-        type: 3}
       propertyPath: m_LocalScale.x
       value: 0.5
       objectReference: {fileID: 0}
@@ -156,7 +151,7 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 524190758648670502}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &2608178912185414881
+--- !u!1001 &4219222418455134928
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
