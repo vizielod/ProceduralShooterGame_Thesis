@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace Unity.FPS.Game
 {
@@ -9,6 +10,8 @@ namespace Unity.FPS.Game
 
         [Tooltip("Health ratio at which the critical health vignette starts appearing")]
         public float CriticalHealthRatio = 0.3f;
+
+        //public Text HealthText;
 
         public UnityAction<float, GameObject> OnDamaged;
         public UnityAction<float> OnHealed;
@@ -40,6 +43,8 @@ namespace Unity.FPS.Game
             {
                 OnHealed?.Invoke(trueHealAmount);
             }
+
+            //HealthText.text = CurrentHealth.ToString();
         }
 
         public void TakeDamage(float damage, GameObject damageSource)
@@ -50,6 +55,8 @@ namespace Unity.FPS.Game
             float healthBefore = CurrentHealth;
             CurrentHealth -= damage;
             CurrentHealth = Mathf.Clamp(CurrentHealth, 0f, MaxHealth);
+            
+            //HealthText.text = CurrentHealth.ToString();
 
             // call OnDamage action
             float trueDamageAmount = healthBefore - CurrentHealth;

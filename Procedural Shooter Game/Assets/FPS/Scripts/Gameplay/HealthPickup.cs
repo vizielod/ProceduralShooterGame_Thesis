@@ -22,6 +22,8 @@ namespace Unity.FPS.Gameplay
                 onHealthPicked?.Invoke(gameObject);
                 Destroy(gameObject);
             }
+
+            player.HealthText.text = playerHealth.CurrentHealth.ToString();
         }
         
         

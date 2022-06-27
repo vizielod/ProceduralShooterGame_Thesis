@@ -59,6 +59,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2015434656898269656}
+  - component: {fileID: 6851336623853972854}
   - component: {fileID: 9087143436424816424}
   - component: {fileID: 4752156053906186385}
   - component: {fileID: 6370966072896210225}
@@ -94,6 +95,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6851336623853972854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015434656898269652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d0767f5e3110a541ab21b5f17fa97f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnemyScriptableObject: {fileID: 11400000, guid: 5c79ff6dda8173647b7eb8263f91b109,
+    type: 2}
+  Health: {fileID: 6370966072896210225}
+  NavMeshAgent: {fileID: 7406548990343174644}
+  DetectionModule: {fileID: 6809973363424661249}
+  WeaponController: {fileID: 2104015986810675393}
 --- !u!114 &9087143436424816424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,9 +171,7 @@ MonoBehaviour:
   DeathVfx: {fileID: 8950624839484268180, guid: 2a8f5052fe50f7b41b17149abb0f7414,
     type: 3}
   DeathVfxSpawnPoint: {fileID: 381893446485871685}
-  LootPrefab: {fileID: 2529580269645609534, guid: 08ea90982e3738446a0a750f2fe9cbf6,
-    type: 3}
-  DropRate: 0.5
+  LootTable: {fileID: 11400000, guid: 7ce147a236f9a8b4f967e082b316d214, type: 2}
   PathReachingRangeColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   AttackRangeColor: {r: 1, g: 0, b: 0, a: 1}
   DetectionRangeColor: {r: 0, g: 0, b: 1, a: 1}

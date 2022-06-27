@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.FPS;
 using Unity.FPS.Game;
 using UnityEngine;
 using UnityEngine.AI;
@@ -29,7 +30,6 @@ namespace Unity.FPS.AI
                 MaterialIndex = index;
             }
         }
-
         [Header("Parameters")] 
         [Tooltip("Player Range defined in DynamicDifficultyManager. Used for adjusting difficulty based on enemy count in Range")]
         public float PlayerRange = .0f;
@@ -83,8 +83,10 @@ namespace Unity.FPS.AI
         public Transform DeathVfxSpawnPoint;
 
         [Header("Loot")] 
-        [Tooltip("The healtpacks this enemy can drop when dying")]
-        public SpawnObject[] HealthPickupPrefabs;
+        [Tooltip("The LootTable of objects this enemy can drop when dying")]
+        public LootTableScriptableObject LootTable;
+        /*[Tooltip("The healtpacks this enemy can drop when dying")]
+        public SpawnObject[] HealthPickupPrefabs;*/
         /*[Tooltip("The object this enemy can drop when dying")]
         public GameObject LootPrefab;
         [Tooltip("The chance the object has to drop")] [Range(0, 1)]
@@ -430,12 +432,22 @@ namespace Unity.FPS.AI
         {
             int i = Random.Range(0, 100);
 
-            for (int j = 0; j < HealthPickupPrefabs.Length; j++)
+            /*for (int j = 0; j < HealthPickupPrefabs.Length; j++)
             {
                 if (i >= HealthPickupPrefabs[j].minProbabilityRange &&
                     i <= HealthPickupPrefabs[j].maxProbabilityRange)
                 {
                     GameObject healthPickupGO = Instantiate(HealthPickupPrefabs[j].spawnObject, transform.position, Quaternion.identity);
+                    onHealthSpawned?.Invoke(healthPickupGO);
+                }
+            }*/
+            
+            for (int j = 0; j < LootTable.HealthPickupPrefabs.Length; j++)
+            {
+                if (i >= LootTable.HealthPickupPrefabs[j].minProbabilityRange &&
+                    i <= LootTable.HealthPickupPrefabs[j].maxProbabilityRange)
+                {
+                    GameObject healthPickupGO = Instantiate(LootTable.HealthPickupPrefabs[j].spawnObject, transform.position, Quaternion.identity);
                     onHealthSpawned?.Invoke(healthPickupGO);
                 }
             }
