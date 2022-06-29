@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: add39ec04c4c85e4e907047a30a0dd66, type: 3}
   m_Name: Assassin Enemy Spawn Config
   m_EditorClassIdentifier: 
-  Enemy: {fileID: 0}
-  MinWeight: 0
-  MaxWeight: 0
+  EnemyPrefab: {fileID: 2015434656898269652, guid: b4841375c716de24a809efcf3d2d8ffd,
+    type: 3}
+  MinWeight: 0.2
+  MaxWeight: 0.3

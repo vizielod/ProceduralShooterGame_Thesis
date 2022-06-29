@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: add39ec04c4c85e4e907047a30a0dd66, type: 3}
   m_Name: Tank Enemy Spawn Config
   m_EditorClassIdentifier: 
-  Enemy: {fileID: 0}
-  MinWeight: 0
-  MaxWeight: 0
+  EnemyPrefab: {fileID: 2015434656898269652, guid: f5ebbc5eb0acf6c4d813c7e44b45b56e,
+    type: 3}
+  MinWeight: 0.6
+  MaxWeight: 0.8

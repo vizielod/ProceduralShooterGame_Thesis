@@ -710,7 +710,7 @@ public class DynamicDifficultyManager : MonoBehaviour
         RegisterEnemyController(enemyController);
     }
 
-    private void RegisterEnemyController(EnemyController enemyController)
+    public void RegisterEnemyController(EnemyController enemyController)
     {
         enemyController.PlayerRange = range;
             
