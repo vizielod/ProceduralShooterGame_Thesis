@@ -12,7 +12,7 @@ namespace Unity.FPS.UI
         [Tooltip("Prefab for the primary objectives")]
         public GameObject PrimaryObjectivePrefab;
 
-        [Tooltip("Prefab for the primary objectives")]
+        [Tooltip("Prefab for the secondary objectives")]
         public GameObject SecondaryObjectivePrefab;
 
         Dictionary<Objective, ObjectiveToast> m_ObjectivesDictionnary;
@@ -36,6 +36,13 @@ namespace Unity.FPS.UI
             if (!objective.IsOptional)
                 objectiveUIInstance.transform.SetSiblingIndex(0);
 
+            /*if (objective.IsOptional)
+            {
+                objectiveUIInstance.GetComponent<RectTransform>().anchoredPosition = new Vector2(
+                    objectiveUIInstance.GetComponent<RectTransform>().anchoredPosition.x + 22,
+                    objectiveUIInstance.GetComponent<RectTransform>().anchoredPosition.y);
+            }*/
+            
             ObjectiveToast toast = objectiveUIInstance.GetComponent<ObjectiveToast>();
             DebugUtility.HandleErrorIfNullGetComponent<ObjectiveToast, ObjectiveHUDManager>(toast, this,
                 objectiveUIInstance.gameObject);

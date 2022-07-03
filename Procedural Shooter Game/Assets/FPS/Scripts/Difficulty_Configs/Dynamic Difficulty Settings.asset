@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eaf5812a5144d146b1320e23da03b94, type: 3}
+  m_Name: Dynamic Difficulty Settings
+  m_EditorClassIdentifier: 
+  WeightsByDifficultyList:
+  - Difficulty: 0
+    MinDifficultyGauge: 0
+    MaxDifficultyGauge: 0.3
+  - Difficulty: 1
+    MinDifficultyGauge: 0.3
+    MaxDifficultyGauge: 0.5
+  - Difficulty: 2
+    MinDifficultyGauge: 0.5
+    MaxDifficultyGauge: 0.7
+  - Difficulty: 3
+    MinDifficultyGauge: 0.7
+    MaxDifficultyGauge: 1

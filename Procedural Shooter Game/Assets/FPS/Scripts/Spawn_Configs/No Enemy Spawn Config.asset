@@ -13,5 +13,17 @@ MonoBehaviour:
   m_Name: No Enemy Spawn Config
   m_EditorClassIdentifier: 
   EnemyPrefab: {fileID: 0}
-  MinWeight: 0
-  MaxWeight: 0
+  WeightsByDifficultyList:
+  - Difficulty: 0
+    MinWeight: 0.2
+    MaxWeight: 0.3
+  - Difficulty: 1
+    MinWeight: 0.1
+    MaxWeight: 0.3
+  - Difficulty: 2
+    MinWeight: 0.1
+    MaxWeight: 0.2
+  - Difficulty: 3
+    MinWeight: 0
+    MaxWeight: 0.005
+  DifficultyTypeCount: 4

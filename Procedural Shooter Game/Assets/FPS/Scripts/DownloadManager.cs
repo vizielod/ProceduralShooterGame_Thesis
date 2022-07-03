@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.FPS.Game;
 using UnityEditor;
 using UnityEngine;
 
@@ -23,29 +24,43 @@ public class DownloadManager : MonoBehaviour
     private DownloadDataButton downloadDataButton;
     private float timeLeft;
     private EnemySpawner EnemySpawner;
+    private bool downloadCompleted = false;
     
     // Start is called before the first frame update
     void Start()
     {
         downloadDataButton = GetComponent<DownloadDataButton>();
         EnemySpawner = GetComponent<EnemySpawner>();
-        timeLeft = maxTime;
+        //timeLeft = maxTime;
+        timeLeft = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
         
-        if (downloadDataButton.isOn)
+        if (downloadDataButton.isOn && !downloadCompleted)
         {
             CalculatePlayerDistance();
             if (playerDistance <= downloadRange)
             {
-                if (timeLeft > 0)
+                if (/*timeLeft > 0*/timeLeft <= maxTime)
                 {
-                    timeLeft -= Time.deltaTime;
+                    //timeLeft -= Time.deltaTime;
+                    timeLeft += Time.deltaTime;
                     float downloadBarFillAmount = timeLeft / maxTime;
                     downloadDataButton.UpdateDownloadBar(downloadBarFillAmount);
+                }
+                else
+                {
+                    downloadCompleted = true;
+                    downloadDataButton.isOn = false;
+                    downloadDataButton.UpdateDownload();
+                    
+                    ExtractDataEvent evt = Events.ExtractDataEvent;
+                    evt.Datapoint = this.gameObject;
+                    //evt.RemainingEnemyCount = enemiesRemainingNotification;
+                    EventManager.Broadcast(evt);
                 }
             }
 
@@ -60,7 +75,7 @@ public class DownloadManager : MonoBehaviour
             if (spawnTimer > spawnPeriod)
             {
                 //dynamicDifficultyManager.SpawnEnemy(this.transform.position, downloadRange - 10f);
-                EnemySpawner.SpawnWeightedRandomEnemy(this.transform.position, downloadRange - 10f);
+                EnemySpawner.SpawnEnemyByDynamicDifficulty(this.transform.position, downloadRange - 10f);
                 spawnTimer = 0f;
             }
 

@@ -12,6 +12,7 @@ namespace Unity.FPS.Game
         public static GameOverEvent GameOverEvent = new GameOverEvent();
         public static PlayerDeathEvent PlayerDeathEvent = new PlayerDeathEvent();
         public static EnemyKillEvent EnemyKillEvent = new EnemyKillEvent();
+        public static ExtractDataEvent ExtractDataEvent = new ExtractDataEvent();
         public static PickupEvent PickupEvent = new PickupEvent();
         public static AmmoPickupEvent AmmoPickupEvent = new AmmoPickupEvent();
         public static DamageEvent DamageEvent = new DamageEvent();
@@ -40,6 +41,12 @@ namespace Unity.FPS.Game
     {
         public GameObject Enemy;
         public int RemainingEnemyCount;
+    }
+    
+    public class ExtractDataEvent : GameEvent
+    {
+        public GameObject Datapoint;
+        public int RemainingDatapoints;
     }
 
     public class PickupEvent : GameEvent

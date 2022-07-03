@@ -110,10 +110,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37fff5bb19450134f9e207f3823811fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Title: Reach the area
+  Title: Reach extraction area
   Description: 
   IsOptional: 1
-  DelayVisible: 6
+  DelayVisible: 4
   DestroyRoot: {fileID: 2707800222142829391}
 --- !u!114 &2707800222142829378
 MonoBehaviour:

@@ -14,5 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyPrefab: {fileID: 2015434656898269652, guid: b4841375c716de24a809efcf3d2d8ffd,
     type: 3}
-  MinWeight: 0.2
-  MaxWeight: 0.3
+  WeightsByDifficultyList:
+  - Difficulty: 0
+    MinWeight: 0
+    MaxWeight: 0.005
+  - Difficulty: 1
+    MinWeight: 0
+    MaxWeight: 0.005
+  - Difficulty: 2
+    MinWeight: 0.3
+    MaxWeight: 0.5
+  - Difficulty: 3
+    MinWeight: 0.4
+    MaxWeight: 0.6
+  DifficultyTypeCount: 4
