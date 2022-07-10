@@ -20,6 +20,7 @@ namespace DMDungeonGenerator {
         [HideInInspector]
         public float rotation = 0f; //used to store the rotation value once this room is committed
         public int roomTemplateID = 0; //auto generated at generation time
+        //public bool isCentralComputerRoom = false;
 //      
         /// <summary>
         /// This runs both in editor and in playmode as per ExecuteInEditMode.  

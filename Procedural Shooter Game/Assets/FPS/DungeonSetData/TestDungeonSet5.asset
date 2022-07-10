@@ -20,6 +20,7 @@ MonoBehaviour:
   spawnRooms:
   - {fileID: 1158489967969199130, guid: a854c07538a983547b4aa53ebaa69a59, type: 3}
   possibleRooms:
+  - {fileID: 1965067407796199713, guid: 7e7becea36018c94f9ffceeb8765231b, type: 3}
   - {fileID: 1965067407796199713, guid: fba50dd9c375d124b983d91ce5fcba4d, type: 3}
   - {fileID: 7818667046545178926, guid: ae1dd4d73058bdd4f9ccd5d901069231, type: 3}
   - {fileID: 1689678617894328908, guid: 8fd6dc8794ac3364baab9beeae2f0ce9, type: 3}

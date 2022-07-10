@@ -12,9 +12,9 @@ using Random = UnityEngine.Random;
 public class DynamicDifficultyManager : MonoBehaviour
 {
     [Header("Enemy types")] 
-    [SerializeField] private GameObject TankPrefab;
+    /*[SerializeField] private GameObject TankPrefab;
     [SerializeField] private GameObject SoldierPrefab;
-    [SerializeField] private GameObject AssassinPrefab;
+    [SerializeField] private GameObject AssassinPrefab;*/
     [SerializeField] private GameObject EnemyPrefab;
     
     [SerializeField] private Transform MinEnemySpawnPostion;
@@ -599,7 +599,7 @@ public class DynamicDifficultyManager : MonoBehaviour
     }
 
     private int i = 0;
-    public void SpawnEnemy(Vector3 center, float radius)
+    /*public void SpawnEnemy(Vector3 center, float radius)
     {
         Debug.Log("Spawn Enemy");
         //int i = Random.Range(0, 100);
@@ -693,12 +693,7 @@ public class DynamicDifficultyManager : MonoBehaviour
             }
         }
         
-        /*GameObject newEnemy = Instantiate(TankPrefab, newPos, Quaternion.identity);
-        
-        EnemyController enemyController = newEnemy.GetComponent<EnemyController>();
-        EnemyControllers.Add(enemyController);
-        RegisterEnemyController(enemyController);*/
-    }
+    }*/
 
     private void InstantiateEnemy(GameObject enemyPrefab, Vector3 position)
     {

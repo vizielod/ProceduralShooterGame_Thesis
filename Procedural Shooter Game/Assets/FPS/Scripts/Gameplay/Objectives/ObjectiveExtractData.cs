@@ -30,23 +30,34 @@ namespace Unity.FPS.Gameplay
             EventManager.AddListener<ExtractDataEvent>(OnDataExtracted);
 
             // set a title and description specific for this type of objective, if it hasn't one
+            /*if (string.IsNullOrEmpty(Title))
+                Title = "Extract data";
+
+            string description = "Extract data from " + (MustExtractAllData ? "all the" : DatapointsToCompleteObjective.ToString()) +
+                                 " Datapoints";
+
+            DatapointsToCompleteObjective = CentralComputers.Count;
+
+            UpdateObjective(description, GetUpdatedCounterAmount(), string.Empty);
+
+            InstantiateReachPointObjectives();*/
+        }
+
+        public void SetExtractDataObjectives()
+        {
             if (string.IsNullOrEmpty(Title))
                 Title = "Extract data";
 
             string description = "Extract data from " + (MustExtractAllData ? "all the" : DatapointsToCompleteObjective.ToString()) +
                                  " Datapoints";
             
-            /*if (string.IsNullOrEmpty(Description))
-            {
-                Description = description;
-            }*/
-
             DatapointsToCompleteObjective = CentralComputers.Count;
 
             UpdateObjective(description, GetUpdatedCounterAmount(), string.Empty);
 
             InstantiateReachPointObjectives();
         }
+        
 
         private void Update()
         {

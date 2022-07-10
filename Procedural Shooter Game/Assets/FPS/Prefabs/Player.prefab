@@ -367,7 +367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89e56c134bc27ca4dbd68c76eae601c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionDistance: 50
+  interactionDistance: 2
   interactionText: {fileID: 0}
   WeaponCamera: {fileID: 2286125971047457827}
   AimingWeaponPosition: {fileID: 6033319682454824337}
@@ -400,6 +400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8e9b849ae2755b428b23edfa9686c79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HealthText: {fileID: 0}
   PlayerCamera: {fileID: 8303093099919959869}
   AudioSource: {fileID: 1272397862697293493}
   MapImage: {fileID: 0}
@@ -446,7 +447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e27364eefd6dd0341ba72a3bfc0d9727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 200
+  MaxHealth: 500
   CriticalHealthRatio: 0.3
 --- !u!114 &298744117520805562
 MonoBehaviour:

@@ -5,6 +5,8 @@ using System.Linq;
 using System;
 using System.Numerics;
 using DMUtils;
+using Unity.FPS.Game;
+using Unity.FPS.Gameplay;
 using UnityEngine.ProBuilder;
 using Matrix4x4 = UnityEngine.Matrix4x4;
 using Quaternion = UnityEngine.Quaternion;
@@ -14,6 +16,8 @@ namespace DMDungeonGenerator {
     public class DungeonGenerator:MonoBehaviour
     {
 
+        public GameObject CentralComputer;
+        public ObjectiveExtractData ObjectiveExtractData;
         [Header("Player and Map")] 
         [SerializeField] private GameObject player;
         [SerializeField] private Material fogPlaneMaterial;
@@ -866,6 +870,7 @@ namespace DMDungeonGenerator {
             
             GenerateFogOfWarPlane();
             SetMapCamera();
+            ObjectiveExtractData.SetExtractDataObjectives();
             
             //let the user hook in here once it's all done
             if(OnComplete != null) OnComplete(this);
@@ -1045,6 +1050,27 @@ namespace DMDungeonGenerator {
             if(b) {
                 roomObj.GetComponent<GameplayRoom>().ColorRoom(Color.black);
             }
+
+            if (prefabData.gameObject.name.Equals("CentralComputerRoom"))
+            {
+                Debug.Log("Spawn Central Computer");
+                GameObject centralComputer = GameObject.Instantiate(CentralComputer, pos, Quaternion.identity);
+
+                //Set centralComputer position to center of the room
+                Transform centerTransform = roomObj.transform.Find("Center").transform;
+                Vector3 center = transform.TransformPoint(centerTransform.position);
+                centralComputer.transform.position = center;
+
+                //Make the room the parent of the centralComputer GO
+                GameObject parentGO = roomObj;
+                centralComputer.transform.SetParent(parentGO.transform);
+                
+                centralComputer.GetComponent<CentralComputer>().ParentRoom = roomObj;
+                
+                ObjectiveExtractData.CentralComputers.Add(centralComputer);
+                centralComputer.SetActive(true);
+            }
+
             return data;
         }
 
@@ -1052,7 +1078,7 @@ namespace DMDungeonGenerator {
             for(int i = 0; i < d.LocalVoxels.Count; i++) {
                 Voxel v = d.LocalVoxels[i];
                 Vector3 r = (GetVoxelWorldPos(v.position, rotation)) + offset;
-                Debug.Log(r.ToString() + " : " + voxelScale);
+                //Debug.Log(r.ToString() + " : " + voxelScale);
                 Vector3 iV = new Vector3(Mathf.RoundToInt(r.x), Mathf.RoundToInt(r.y), Mathf.RoundToInt(r.z));
                 GlobalVoxelGrid.Add(iV, true);
                 //Debug.Log("Adding voxel to global voxel list: " + r);
