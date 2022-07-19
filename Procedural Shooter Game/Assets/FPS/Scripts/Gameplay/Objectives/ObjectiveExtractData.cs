@@ -25,12 +25,12 @@ namespace Unity.FPS.Gameplay
 
         protected override void Start()
         {
-            base.Start();
+            /*base.Start();
             
             EventManager.AddListener<ExtractDataEvent>(OnDataExtracted);
 
             // set a title and description specific for this type of objective, if it hasn't one
-            /*if (string.IsNullOrEmpty(Title))
+            if (string.IsNullOrEmpty(Title))
                 Title = "Extract data";
 
             string description = "Extract data from " + (MustExtractAllData ? "all the" : DatapointsToCompleteObjective.ToString()) +
@@ -45,6 +45,10 @@ namespace Unity.FPS.Gameplay
 
         public void SetExtractDataObjectives()
         {
+            base.Start();
+            
+            EventManager.AddListener<ExtractDataEvent>(OnDataExtracted);
+            
             if (string.IsNullOrEmpty(Title))
                 Title = "Extract data";
 
