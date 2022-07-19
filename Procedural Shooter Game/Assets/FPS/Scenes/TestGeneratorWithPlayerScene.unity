@@ -80043,6 +80043,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ObjectiveExtractData
       objectReference: {fileID: 0}
+    - target: {fileID: 6740569042849265021, guid: 0251385b299edb147ab2aba3056d161d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0251385b299edb147ab2aba3056d161d, type: 3}
 --- !u!1 &1908989374

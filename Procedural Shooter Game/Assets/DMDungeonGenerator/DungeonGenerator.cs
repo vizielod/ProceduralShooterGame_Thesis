@@ -15,9 +15,16 @@ using Vector3 = UnityEngine.Vector3;
 namespace DMDungeonGenerator {
     public class DungeonGenerator:MonoBehaviour
     {
-
-        public GameObject CentralComputer;
+        
         public ObjectiveExtractData ObjectiveExtractData;
+        
+        [Header("Data Extraction Computer Settings")] 
+        public GameObject CentralComputer;
+        public int spawnedComputerCount = 0;
+        public int computersToSpawnMin = 3;
+        public int computersToSpawnMax = 6;
+        public int targetComputerCount = 0;
+
         [Header("Player and Map")] 
         [SerializeField] private GameObject player;
         [SerializeField] private Material fogPlaneMaterial;
@@ -198,6 +205,7 @@ namespace DMDungeonGenerator {
 
         //Call this to start the generator.  
         public void RunGenerator(int seed) {
+
             openSet = new List<Door>();
             GlobalVoxelGrid = new Dictionary<Vector3, bool>();
             AllRooms = new List<GameObject>();
@@ -235,10 +243,8 @@ namespace DMDungeonGenerator {
                 templateId++;
             }
 
-
-
-
             rand = new System.Random(seed);
+            targetComputerCount = computersToSpawnMin + rand.Next((computersToSpawnMax - computersToSpawnMin));
 
             int ri = rand.Next(0, generatorSettings.spawnRooms.Count); //get a random start room
             RoomData startRoomPrefab = generatorSettings.spawnRooms[ri].GetComponent<RoomData>();
@@ -676,7 +682,33 @@ namespace DMDungeonGenerator {
             Door loopDoorForProcessing = null; //the door pair that we might connect a loop up to (newly spawned room will connect two of it's doors to doorFOrProcessing and loopDoorForProcessing)
             Door loopTargetDoor = null; //this is grabbed later from openset[doorindex] 
 
-            List<GameObject> roomsToTry = new List<GameObject>(generatorSettings.possibleRooms);
+            //List<GameObject> roomsToTry = new List<GameObject>(generatorSettings.possibleRooms);
+            List<GameObject> roomsToTry = new List<GameObject>();
+            
+            //Code written by VIZI
+            //Adding the possible Computer rooms to the RoomsToTry list
+            int remainingRoomSpotCount = targetRooms - AllRooms.Count;
+            int remainingComputersToSpawnCount = targetComputerCount - spawnedComputerCount;
+            
+            //This helps to force the generator to spawn Computer rooms when getting closer to the Target Room count but there are still computers left to be spawned
+            if ((remainingRoomSpotCount / 2 + 1) <= remainingComputersToSpawnCount)
+            {
+                //Force to spawn a Computer room
+                roomsToTry = new List<GameObject>(generatorSettings.possibleComputerRooms);
+            }
+            else //Otherwise just spawn a random room from the pool which can be either a Computer Room or a simple room from the PossibleRooms list
+            {
+                roomsToTry = new List<GameObject>(generatorSettings.possibleRooms);
+                if (spawnedComputerCount < targetComputerCount)
+                {
+                    for (int i = 0; i < generatorSettings.possibleComputerRooms.Count; i++)
+                    {
+                        //Extend the roomsToTry list with the PossibleComputerRooms list
+                        roomsToTry.Add(generatorSettings.possibleComputerRooms[i]);
+                    }
+                }
+            }
+
             //create a copy of the "all possible rooms list" so we can pick and remove from this list as we try different rooms
             //this ensures we don't try the same room over and over, and so we know when we have exhausted all the possiblities and just have to cap it off with a 1x1x1 vox room
 
@@ -1070,6 +1102,7 @@ namespace DMDungeonGenerator {
                 
                 ObjectiveExtractData.CentralComputers.Add(centralComputer);
                 centralComputer.SetActive(true);
+                spawnedComputerCount++;
             }
 
             return data;

@@ -22,6 +22,9 @@ namespace DMDungeonGenerator {
 
         [Header("Generator will use these rooms randomly")]
         public List<GameObject> possibleRooms = new List<GameObject>();
+        
+        [Header("Generator will use these rooms randomly within a forced min and max range")]
+        public List<GameObject> possibleComputerRooms = new List<GameObject>();
 
         [Header("Generator will add these to room list when trying to make a loop. These will not be spawned otherwise")]
         public List<GameObject> possibleLoopRooms = new List<GameObject>();
