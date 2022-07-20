@@ -23,7 +23,7 @@ public class DownloadDataButton : Interactable
     public void UpdateDownload() {
         DownloadBar.SetActive(isOn);
         downloadZoneVisualizer.SetActive(isOn);
-        Debug.Log("Download Updated");
+        //Debug.Log("Download Updated");
     }
 
     public override string GetDescription() {

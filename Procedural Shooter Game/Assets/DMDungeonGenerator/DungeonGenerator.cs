@@ -17,12 +17,15 @@ namespace DMDungeonGenerator {
     {
         
         public ObjectiveExtractData ObjectiveExtractData;
+        public SharedDifficultySettingsSO SharedDifficultySettings;
+        
         
         [Header("Data Extraction Computer Settings")] 
         public GameObject CentralComputer;
+        public DifficultyType Difficulty;
         public int spawnedComputerCount = 0;
-        public int computersToSpawnMin = 3;
-        public int computersToSpawnMax = 6;
+        public int computersToSpawnMin = 0;
+        public int computersToSpawnMax = 0;
         public int targetComputerCount = 0;
 
         [Header("Player and Map")] 
@@ -57,7 +60,7 @@ namespace DMDungeonGenerator {
         /// is laid out to match the voxels, changing voxelScale literally makes the voxels bigger so that the room geometry will no longer link up properly. The generator should still *work*
         /// but visually your rooms will not connect at all!. THis really only affects rendering, as the generator uses unscaled voxels for everything except for rendering.  
         /// </summary>
-        public static float voxelScale = 3f; //original 1f //see note above about changing this. This must be whole numbers, (no decimals) and can not be smaller than 1. Anything other than 1 is kind of mostly untested so your milage may vary
+        public static float voxelScale = 9f; //original 1f //see note above about changing this. This must be whole numbers, (no decimals) and can not be smaller than 1. Anything other than 1 is kind of mostly untested so your milage may vary
 
         [Header("Room Prefabs")]
         public DungeonSet generatorSettings;
@@ -112,6 +115,10 @@ namespace DMDungeonGenerator {
         public void Start() {
             generationComplete = true; //we set this to true by default so that StartGenerator knows nothing is running already, and sets it to false when it starts.  
             if(randomSeedOnStart) randomSeed = UnityEngine.Random.Range(0, 9999);
+            
+            generatorSettings.minRooms = SharedDifficultySettings.WeightsByDifficultyList[(int)Difficulty].RoomsToSpawnMin;
+            generatorSettings.TargetRooms = SharedDifficultySettings.WeightsByDifficultyList[(int)Difficulty].RoomsToSpawnMax;
+            
             targetRooms = generatorSettings.TargetRooms;
 
             if(generateOnStart) {
@@ -244,7 +251,8 @@ namespace DMDungeonGenerator {
             }
 
             rand = new System.Random(seed);
-            targetComputerCount = computersToSpawnMin + rand.Next((computersToSpawnMax - computersToSpawnMin));
+            //targetComputerCount = computersToSpawnMin + rand.Next((computersToSpawnMax - computersToSpawnMin));
+            GetDifficultyBasedTargetComputerCount();
 
             int ri = rand.Next(0, generatorSettings.spawnRooms.Count); //get a random start room
             RoomData startRoomPrefab = generatorSettings.spawnRooms[ri].GetComponent<RoomData>();
@@ -276,6 +284,47 @@ namespace DMDungeonGenerator {
             Debug.Log("Dungeon Generator:: Generation Complete in [" + DMDebugTimer.Lap() + "ms] and [" + attempts + "] attempts");
             generationComplete = true;
 
+        }
+
+        private void GetDifficultyBasedTargetComputerCount()
+        {
+            //if(!DynamicDifficultySettings.WeightsByDifficultyList[j].Difficulty.Equals((DifficultyType)j))
+            //computersToSpawnMin = SharedDifficultySettings.WeightsByDifficultyList.
+            
+            computersToSpawnMin = SharedDifficultySettings.WeightsByDifficultyList[(int)Difficulty].ComputersToSpawnMin;
+            computersToSpawnMax = SharedDifficultySettings.WeightsByDifficultyList[(int)Difficulty].ComputersToSpawnMax;
+            
+            targetComputerCount = computersToSpawnMin + rand.Next((computersToSpawnMax - computersToSpawnMin));
+            
+            /*switch (Difficulty)
+            {
+                case DifficultyType.Hard:
+                {
+                    Debug.Log(DifficultyType.Hard);
+                    computersToSpawnMin = SharedDifficultySettings.WeightsByDifficultyList[0].ComputersToSpawnMin;
+                    computersToSpawnMax = SharedDifficultySettings.WeightsByDifficultyList[0].ComputersToSpawnMax;
+                    break;
+                }
+                case DifficultyType.MediumToHard:
+                {
+                    Debug.Log(DifficultyType.EasyToMedium);
+                    break;
+                }
+                case DifficultyType.EasyToMedium:
+                {
+                    Debug.Log(DifficultyType.EasyToMedium);
+                    break;
+                }
+                case DifficultyType.Easy:
+                {
+                    Debug.Log(DifficultyType.Easy);
+                    break;
+                }
+                default:
+                    break;
+            }
+            
+            targetComputerCount = computersToSpawnMin + rand.Next((computersToSpawnMax - computersToSpawnMin));*/
         }
 
         //Takes the target door, and creates a door pair between target door and every other door
@@ -893,11 +942,12 @@ namespace DMDungeonGenerator {
         //Wrapping the interal post step, just generate doors and keys for now (eg, taking each door pair and spawning a gameplay door in it's place)
         private void PostGeneration() {
             Debug.Log("Dungeon Generator:: Post Generation Starting. ");
-
+            Debug.Log("Dungeon Generator:: Generated room count: " + AllRooms.Count);
             /*for (int i = 0; i < AllRooms.Count; i++)
             {
                 Debug.Log(AllRooms[i].transform.position);
             }*/
+            
             CalculateDungeonSizeAndCenter();
             
             GenerateFogOfWarPlane();
@@ -927,7 +977,7 @@ namespace DMDungeonGenerator {
             
             for (int i = 0; i < AllRooms.Count; i++)
             {
-                Debug.Log(AllRooms[i].transform.position);
+                //Debug.Log(AllRooms[i].transform.position);
                 if (AllRooms[i].transform.position.x >= max_x)
                 {
                     max_x = AllRooms[i].transform.position.x;
@@ -1084,9 +1134,9 @@ namespace DMDungeonGenerator {
                 roomObj.GetComponent<GameplayRoom>().ColorRoom(Color.black);
             }
 
-            if (prefabData.gameObject.name.Equals("CentralComputerRoom"))
+            if (prefabData.gameObject.name.Equals("CentralComputerRoom_Big_1"))
             {
-                Debug.Log("Spawn Central Computer");
+                //Debug.Log("Spawn Central Computer");
                 GameObject centralComputer = GameObject.Instantiate(CentralComputer, pos, Quaternion.identity);
 
                 //Set centralComputer position to center of the room

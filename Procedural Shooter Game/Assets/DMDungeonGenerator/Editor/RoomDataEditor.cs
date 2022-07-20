@@ -16,6 +16,8 @@ public class RoomDataEditor: Editor {
     
     bool DrawRoomBounds = true;
     bool DrawVolumes = true;
+
+    private bool showArrows = true;
     
     public override void OnInspectorGUI() {
         RoomData data = (RoomData)target;
@@ -69,24 +71,26 @@ public class RoomDataEditor: Editor {
                         iS = -1f ;
                         iO = 0.5f ;
                     }
+                    
+
 
                     Handles.color = Color.blue;
-                    if(doEntireRow) Handles.color = Color.Lerp(Color.blue, Color.white, 0.5f);
+                    if (doEntireRow) Handles.color = Color.Lerp(Color.blue, Color.white, 0.5f);
                     DrawArrowButton(pos, Vector3.forward, handleSize, iO, iS);
                     DrawArrowButton(pos, Vector3.back, handleSize, iO, iS);
 
 
                     Handles.color = Color.green;
-                    if(doEntireRow) Handles.color = Color.Lerp(Color.green, Color.white, 0.5f);
+                    if (doEntireRow) Handles.color = Color.Lerp(Color.green, Color.white, 0.5f);
                     DrawArrowButton(pos, Vector3.up, handleSize, iO, iS);
                     DrawArrowButton(pos, Vector3.down, handleSize, iO, iS);
 
                     Handles.color = Color.red;
-                    if(doEntireRow) Handles.color = Color.Lerp(Color.red, Color.white, 0.5f);
+                    if (doEntireRow) Handles.color = Color.Lerp(Color.red, Color.white, 0.5f);
                     DrawArrowButton(pos, Vector3.left, handleSize, iO, iS);
                     DrawArrowButton(pos, Vector3.right, handleSize, iO, iS);
-                
-            }
+
+                }
             break;
             case EditingMode.Doors:
                 for(int i = 0; i < vox.Count; i++) {

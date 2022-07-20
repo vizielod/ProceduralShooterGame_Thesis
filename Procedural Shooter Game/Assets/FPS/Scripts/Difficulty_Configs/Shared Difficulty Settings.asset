@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a592372d06d634546bfb4f555ef21b68, type: 3}
+  m_Name: Shared Difficulty Settings
+  m_EditorClassIdentifier: 
+  WeightsByDifficultyList:
+  - Difficulty: 0
+    ComputersToSpawnMin: 7
+    ComputersToSpawnMax: 10
+    RoomsToSpawnMin: 25
+    RoomsToSpawnMax: 40
+  - Difficulty: 1
+    ComputersToSpawnMin: 5
+    ComputersToSpawnMax: 8
+    RoomsToSpawnMin: 20
+    RoomsToSpawnMax: 30
+  - Difficulty: 2
+    ComputersToSpawnMin: 3
+    ComputersToSpawnMax: 6
+    RoomsToSpawnMin: 15
+    RoomsToSpawnMax: 25
+  - Difficulty: 3
+    ComputersToSpawnMin: 1
+    ComputersToSpawnMax: 4
+    RoomsToSpawnMin: 10
+    RoomsToSpawnMax: 20
