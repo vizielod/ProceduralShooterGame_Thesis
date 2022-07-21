@@ -11,6 +11,7 @@ public class DownloadDataButton : Interactable
     public bool isDownloadBarActive = false;
     public bool isOn = false;
     public bool isPaused = false;
+    public bool isCompleted = false;
 
     private void Start()
     {
@@ -29,22 +30,25 @@ public class DownloadDataButton : Interactable
     public override string GetDescription() {
         if (isOn) return "Press [E] to <color=red>STOP</color> downloading.";
         if (isPaused) return "Press [E] to <color=green>CONTINUE</color> downloading.";
+        if (isCompleted) return "Dara already Downloaded from this Computer";
         return "Press [E] to <color=green>START</color> downloading.";
     }
 
     public override void Interact() {
-        if (!isOn)
+        if (!isCompleted)
         {
-            isOn = true;
-            isPaused = false;
+            if (!isOn)
+            {
+                isOn = true;
+                isPaused = false;
+            }
+            else
+            {
+                isPaused = true;
+                isOn = false;
+            }
+            UpdateDownload();
         }
-        else
-        {
-            isPaused = true;
-            isOn = false;
-        }
-        //isOn = !isOn;
-        UpdateDownload();
     }
 
     public void UpdateDownloadBar(float fillAmount)

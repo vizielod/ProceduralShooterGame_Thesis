@@ -25,6 +25,8 @@ public class DownloadManager : MonoBehaviour
     private float timeLeft;
     private EnemySpawner EnemySpawner;
     private bool downloadCompleted = false;
+
+    private bool wasPlayerAccuracyReseted = false;
     
     // Start is called before the first frame update
     void Start()
@@ -41,6 +43,12 @@ public class DownloadManager : MonoBehaviour
         
         if (downloadDataButton.isOn && !downloadCompleted)
         {
+            if (!wasPlayerAccuracyReseted)
+            {
+                ResetPlayerAccuracy();
+                wasPlayerAccuracyReseted = true;
+            }
+            
             CalculatePlayerDistance();
             if (playerDistance <= downloadRange)
             {
@@ -55,6 +63,7 @@ public class DownloadManager : MonoBehaviour
                 {
                     downloadCompleted = true;
                     downloadDataButton.isOn = false;
+                    downloadDataButton.isCompleted = true;
                     downloadDataButton.UpdateDownload();
                     
                     ExtractDataEvent evt = Events.ExtractDataEvent;
@@ -80,6 +89,12 @@ public class DownloadManager : MonoBehaviour
             }
 
         }
+    }
+
+    private void ResetPlayerAccuracy()
+    {
+        dynamicDifficultyManager.SetPlayerAccuracy(0.5f);
+        dynamicDifficultyManager.playerAccuracyScaledForEstimatedDifficulty = 0.5f;
     }
 
     private void CalculatePlayerDistance()

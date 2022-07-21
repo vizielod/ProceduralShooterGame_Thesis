@@ -825,4 +825,9 @@ public class DynamicDifficultyManager : MonoBehaviour
             Player.transform.position.z);
         Handles.DrawWireDisc(_centre, Vector3.up, range);
     }
+
+    public void SetPlayerAccuracy(float playerAccuracy)
+    {
+        PlayerAccuracy = playerAccuracy;
+    }
 }
