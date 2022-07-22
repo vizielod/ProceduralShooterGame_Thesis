@@ -8,6 +8,7 @@ using DMUtils;
 using Unity.FPS.Game;
 using Unity.FPS.Gameplay;
 using UnityEngine.ProBuilder;
+using UnityEngine.Serialization;
 using Matrix4x4 = UnityEngine.Matrix4x4;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
@@ -22,7 +23,7 @@ namespace DMDungeonGenerator {
         
         [Header("Data Extraction Computer Settings")] 
         public GameObject CentralComputer;
-        public DifficultyType Difficulty;
+        [FormerlySerializedAs("Difficulty")] public DynamicDifficultyType dynamicDifficulty;
         public int spawnedComputerCount = 0;
         public int computersToSpawnMin = 0;
         public int computersToSpawnMax = 0;
@@ -116,8 +117,8 @@ namespace DMDungeonGenerator {
             generationComplete = true; //we set this to true by default so that StartGenerator knows nothing is running already, and sets it to false when it starts.  
             if(randomSeedOnStart) randomSeed = UnityEngine.Random.Range(0, 9999);
             
-            generatorSettings.minRooms = SharedDifficultySettings.WeightsByDifficultyList[(int)Difficulty].RoomsToSpawnMin;
-            generatorSettings.TargetRooms = SharedDifficultySettings.WeightsByDifficultyList[(int)Difficulty].RoomsToSpawnMax;
+            generatorSettings.minRooms = SharedDifficultySettings.WeightsByDifficultyList[(int)dynamicDifficulty].RoomsToSpawnMin;
+            generatorSettings.TargetRooms = SharedDifficultySettings.WeightsByDifficultyList[(int)dynamicDifficulty].RoomsToSpawnMax;
             
             targetRooms = generatorSettings.TargetRooms;
 
@@ -291,8 +292,8 @@ namespace DMDungeonGenerator {
             //if(!DynamicDifficultySettings.WeightsByDifficultyList[j].Difficulty.Equals((DifficultyType)j))
             //computersToSpawnMin = SharedDifficultySettings.WeightsByDifficultyList.
             
-            computersToSpawnMin = SharedDifficultySettings.WeightsByDifficultyList[(int)Difficulty].ComputersToSpawnMin;
-            computersToSpawnMax = SharedDifficultySettings.WeightsByDifficultyList[(int)Difficulty].ComputersToSpawnMax;
+            computersToSpawnMin = SharedDifficultySettings.WeightsByDifficultyList[(int)dynamicDifficulty].ComputersToSpawnMin;
+            computersToSpawnMax = SharedDifficultySettings.WeightsByDifficultyList[(int)dynamicDifficulty].ComputersToSpawnMax;
             
             targetComputerCount = computersToSpawnMin + rand.Next((computersToSpawnMax - computersToSpawnMin));
             

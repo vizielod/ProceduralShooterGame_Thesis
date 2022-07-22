@@ -11,6 +11,11 @@ using Random = UnityEngine.Random;
 
 public class DynamicDifficultyManager : MonoBehaviour
 {
+    [Header("Difficulty Settings")] 
+    [SerializeField] private bool useDDA = true;
+    [SerializeField] private StaticDifficultyType difficulty;
+    
+    
     [Header("Enemy types")] 
     /*[SerializeField] private GameObject TankPrefab;
     [SerializeField] private GameObject SoldierPrefab;
@@ -100,19 +105,20 @@ public class DynamicDifficultyManager : MonoBehaviour
         Soldier = 1,
         Assasin = 2
     }
-    
+
+    private void Awake()
+    {
+        int difficultyIdx = PlayerPrefs.GetInt("difficulty");
+        difficulty = (StaticDifficultyType) difficultyIdx;
+        useDDA = PlayerPrefs.GetInt("useDDA") == 0 ? false : true;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        //DiffGaugeRecalcPeriod = 1f;
+        
         timer = 0f;
-        
-        float difficultyVariableWeight = 1 / difficultyVariableCount;
-        playerHealthDifficultyFactor = difficultyVariableWeight + 0.1f;
-        enemyCountDifficultyFactor = difficultyVariableWeight + 0.1f;
-        healthPickupsCountDifficultyFactor = difficultyVariableWeight - 0.05f;
-        playerAccuracyDifficultyFactor = difficultyVariableWeight - 0.15f;
-        
+
         _playerWeaponsManager.OnAddedWeapon += OnAddedWeapon;
 
         foreach (var enemyController in EnemyControllers)
@@ -127,23 +133,63 @@ public class DynamicDifficultyManager : MonoBehaviour
         }
         
         Debug.Log("Error Function Test: " + ErrorFunction.TestErf());
-        
-        //EXPERIMENTING
-        DifficultyGauge = 1 - EstimatedDifficulty;
-        _tempDifficultyGauge = 1 - EstimatedDifficulty;
-        _tempEstimatedReverseDiff = 1 - EstimatedDifficulty;
-        previousEstimatedReverseDiff = 1 - EstimatedDifficulty;
-        
-        _tempMinDifficultyBoundary = _tempEstimatedReverseDiff - BoundaryStepSize <= 0 ? 0 : _tempEstimatedReverseDiff - BoundaryStepSize;
-        _tempMaxDifficultyBoundary = _tempEstimatedReverseDiff + BoundaryStepSize >= 1 ? 1 : _tempEstimatedReverseDiff + BoundaryStepSize;
-        newTempMinValue = _tempMinDifficultyBoundary;
-        newTempMaxValue = _tempMaxDifficultyBoundary;
-        
-        MinDifficultyBoundary = 0.5f;
-        MaxDifficultyBoundary = 0.5f;
 
-        originalBoundaryDistance = MaxDifficultyBoundary - MinDifficultyBoundary;
-        
+        if (useDDA)
+        {
+            //EXPERIMENTING with DDA
+
+            float difficultyVariableWeight = 1 / difficultyVariableCount;
+            playerHealthDifficultyFactor = difficultyVariableWeight + 0.1f;
+            enemyCountDifficultyFactor = difficultyVariableWeight + 0.1f;
+            healthPickupsCountDifficultyFactor = difficultyVariableWeight - 0.05f;
+            playerAccuracyDifficultyFactor = difficultyVariableWeight - 0.15f;
+
+            DifficultyGauge = 1 - EstimatedDifficulty;
+            _tempDifficultyGauge = 1 - EstimatedDifficulty;
+            _tempEstimatedReverseDiff = 1 - EstimatedDifficulty;
+            previousEstimatedReverseDiff = 1 - EstimatedDifficulty;
+
+            _tempMinDifficultyBoundary = _tempEstimatedReverseDiff - BoundaryStepSize <= 0
+                ? 0
+                : _tempEstimatedReverseDiff - BoundaryStepSize;
+            _tempMaxDifficultyBoundary = _tempEstimatedReverseDiff + BoundaryStepSize >= 1
+                ? 1
+                : _tempEstimatedReverseDiff + BoundaryStepSize;
+            newTempMinValue = _tempMinDifficultyBoundary;
+            newTempMaxValue = _tempMaxDifficultyBoundary;
+
+            MinDifficultyBoundary = 0.5f;
+            MaxDifficultyBoundary = 0.5f;
+
+            originalBoundaryDistance = MaxDifficultyBoundary - MinDifficultyBoundary;
+        }
+        else //No DDA, use Static difficulty
+        {
+            switch (difficulty)
+            {
+                case StaticDifficultyType.Hard:
+                {
+                    //Debug.Log(DynamicDifficultyType.Hard);
+                    DifficultyGauge = 0.85f;
+                    break;
+                }
+                case StaticDifficultyType.Medium:
+                {
+                    //Debug.Log(DynamicDifficultyType.EasyToMedium);
+                    DifficultyGauge = 0.5f;
+                    break;
+                }
+                case StaticDifficultyType.Easy:
+                {
+                    //Debug.Log(DynamicDifficultyType.EasyToMedium);
+                    DifficultyGauge = 0.15f;
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+
     }
 
     private float updateTempBoundariesTimer = 0f, catchupTempBoundariesTimer = 0f;
@@ -161,62 +207,69 @@ public class DynamicDifficultyManager : MonoBehaviour
             SpawnEnemyAtRandomLocation(MinEnemySpawnPostion.position, MaxEnemySpawnPostion.position);
         }
 
-        CalculateDifficulty();
-        StartCoroutine(TempEstimatedReverseDifficultyCoroutine(_tempEstimatedReverseDiff, newTempEstimatedReverseDifficulty, 1.5f/2f));
+        if (useDDA)
+        {
+            CalculateDifficulty();
+            StartCoroutine(TempEstimatedReverseDifficultyCoroutine(_tempEstimatedReverseDiff,
+                newTempEstimatedReverseDifficulty, 1.5f / 2f));
 
-        updateTempBoundariesTimer += Time.deltaTime;
-        if (updateTempBoundariesTimer > 2f/2f)
-        {
-            CalculateTempBoundaries();
-            //AdjustTempBoundaries();
-            if (maxWasAdjusted)
+            updateTempBoundariesTimer += Time.deltaTime;
+            if (updateTempBoundariesTimer > 2f / 2f)
             {
-                StartCoroutine(TempMaxBoundaryCoroutine(_tempMaxDifficultyBoundary, newTempMaxValue, 1.5f/2f));
-            }
-            
-            if (minWasAdjusted)
-            {
-                StartCoroutine(TempMinBoundaryCoroutine(_tempMinDifficultyBoundary, newTempMinValue, 1.5f/2f));
-            }
-            StartCoroutine(PreviousEstimatedReverseDiffCourutine(previousEstimatedReverseDiff, _tempEstimatedReverseDiff,1.5f/2f));
-            updateTempBoundariesTimer = 0;
-        }
-        
-        catchupTempBoundariesTimer += Time.deltaTime;
-        if (catchupTempBoundariesTimer > 6f/2f)
-        {
-            AdjustTempBoundaries();
-            //or maybe do something like if !maxWasAdjusted && maxNeedsToBeAdjusted
-            if (maxWasAdjusted)
-            {
-                StartCoroutine(TempMaxBoundaryCoroutine(_tempMaxDifficultyBoundary, newTempMaxValue, 1.5f/2f));
-            }
-            
-            if (minWasAdjusted)
-            {
-                StartCoroutine(TempMinBoundaryCoroutine(_tempMinDifficultyBoundary, newTempMinValue, 1.5f/2f));
-            }
-            catchupTempBoundariesTimer = 0;
-        }
+                CalculateTempBoundaries();
+                //AdjustTempBoundaries();
+                if (maxWasAdjusted)
+                {
+                    StartCoroutine(TempMaxBoundaryCoroutine(_tempMaxDifficultyBoundary, newTempMaxValue, 1.5f / 2f));
+                }
 
-        updateBoundariesTimer += Time.deltaTime;
-        if (updateBoundariesTimer > updateBoundariesPeriod/2f)
-        {
-            AdjustBoundaries();
-            StartCoroutine(AdjustMaxBoundaryCoroutine(MaxDifficultyBoundary, newMaxValue, 1.5f/2f));
-            StartCoroutine(AdjustMinBoundaryCoroutine(MinDifficultyBoundary, newMinValue, 1.5f/2f));
-            updateBoundariesTimer = 0f;
-        }
+                if (minWasAdjusted)
+                {
+                    StartCoroutine(TempMinBoundaryCoroutine(_tempMinDifficultyBoundary, newTempMinValue, 1.5f / 2f));
+                }
 
-        timer += Time.deltaTime;
-        if (timer > DiffGaugeRecalcPeriod/2f)
-        {
-            CalculateGauge();
-            StartCoroutine(CalculateGaugeCoroutine(_tempDifficultyGauge, newTempDifficultyGauge, 1f/2f));
-            timer = 0f;
+                StartCoroutine(PreviousEstimatedReverseDiffCourutine(previousEstimatedReverseDiff,
+                    _tempEstimatedReverseDiff, 1.5f / 2f));
+                updateTempBoundariesTimer = 0;
+            }
+
+            catchupTempBoundariesTimer += Time.deltaTime;
+            if (catchupTempBoundariesTimer > 6f / 2f)
+            {
+                AdjustTempBoundaries();
+                //or maybe do something like if !maxWasAdjusted && maxNeedsToBeAdjusted
+                if (maxWasAdjusted)
+                {
+                    StartCoroutine(TempMaxBoundaryCoroutine(_tempMaxDifficultyBoundary, newTempMaxValue, 1.5f / 2f));
+                }
+
+                if (minWasAdjusted)
+                {
+                    StartCoroutine(TempMinBoundaryCoroutine(_tempMinDifficultyBoundary, newTempMinValue, 1.5f / 2f));
+                }
+
+                catchupTempBoundariesTimer = 0;
+            }
+
+            updateBoundariesTimer += Time.deltaTime;
+            if (updateBoundariesTimer > updateBoundariesPeriod / 2f)
+            {
+                AdjustBoundaries();
+                StartCoroutine(AdjustMaxBoundaryCoroutine(MaxDifficultyBoundary, newMaxValue, 1.5f / 2f));
+                StartCoroutine(AdjustMinBoundaryCoroutine(MinDifficultyBoundary, newMinValue, 1.5f / 2f));
+                updateBoundariesTimer = 0f;
+            }
+
+            timer += Time.deltaTime;
+            if (timer > DiffGaugeRecalcPeriod / 2f)
+            {
+                CalculateGauge();
+                StartCoroutine(CalculateGaugeCoroutine(_tempDifficultyGauge, newTempDifficultyGauge, 1f / 2f));
+                timer = 0f;
+            }
+
+            AdjustDifficultyGauge();
         }
-        
-        AdjustDifficultyGauge();
     }
 
     IEnumerator TestCourutine(float from, float to, float duration)

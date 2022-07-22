@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.FPS.AI;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
@@ -11,7 +12,7 @@ public class EnemySpawner : MonoBehaviour
     [System.Serializable]
     public struct SpawnWeightsByDifficulty
     {
-        [SerializeField] public DifficultyType Difficulty;
+        [FormerlySerializedAs("Difficulty")] [SerializeField] public DynamicDifficultyType dynamicDifficulty;
         [SerializeField] public float[] Weights;
     }
     
@@ -32,7 +33,7 @@ public class EnemySpawner : MonoBehaviour
         for (int j = 0; j < DifficultyTypeCount; j++)
         {
             SpawnWeightsByDifficulty newElement = new SpawnWeightsByDifficulty();
-            newElement.Difficulty = (DifficultyType)j;
+            newElement.dynamicDifficulty = (DynamicDifficultyType)j;
             newElement.Weights = new float[WeightedEnemies.Count];
             
             SpawnWeightsByDifficultyList.Add(newElement);
@@ -51,10 +52,10 @@ public class EnemySpawner : MonoBehaviour
 
         for (int j = 0; j < DifficultyTypeCount; j++)
         {
-            if(!DynamicDifficultySettings.WeightsByDifficultyList[j].Difficulty.Equals((DifficultyType)j))
+            if(!DynamicDifficultySettings.WeightsByDifficultyList[j].dynamicDifficulty.Equals((DynamicDifficultyType)j))
             {
                 Debug.LogError($"DynamicDifficultySettings does not have Element {j} set up correctly in the list! " +
-                               $"Hint: It should be {(DifficultyType)j}");
+                               $"Hint: It should be {(DynamicDifficultyType)j}");
             }
         }
     }
@@ -69,10 +70,10 @@ public class EnemySpawner : MonoBehaviour
             }
             for (int j = 0; j < weightedEnemy.WeightsByDifficultyList.Count; j++)
             {
-                if (!weightedEnemy.WeightsByDifficultyList[j].Difficulty
-                        .Equals((DifficultyType) j))
+                if (!weightedEnemy.WeightsByDifficultyList[j].dynamicDifficulty
+                        .Equals((DynamicDifficultyType) j))
                 {
-                    Debug.LogError(weightedEnemy + " Does not have Difficulty " + (DifficultyType) j + " Set up correctly!");
+                    Debug.LogError(weightedEnemy + " Does not have Difficulty " + (DynamicDifficultyType) j + " Set up correctly!");
                     //return;
                 }
             }
@@ -123,31 +124,31 @@ public class EnemySpawner : MonoBehaviour
             Value -= Weights[i];
         }*/
         
-        DifficultyType currentDifficulty = GetCurrentDifficulty();
+        DynamicDifficultyType currentDynamicDifficulty = GetCurrentDifficulty();
 
-        switch (currentDifficulty)
+        switch (currentDynamicDifficulty)
         {
-            case DifficultyType.Hard:
+            case DynamicDifficultyType.Hard:
             {
-                Debug.Log(DifficultyType.Hard);
+                Debug.Log(DynamicDifficultyType.Hard);
                 SpawnWeightedRandomEnemy(0, center, radius);
                 break;
             }
-            case DifficultyType.MediumToHard:
+            case DynamicDifficultyType.MediumToHard:
             {
-                Debug.Log(DifficultyType.EasyToMedium);
+                Debug.Log(DynamicDifficultyType.EasyToMedium);
                 SpawnWeightedRandomEnemy(1, center, radius);
                 break;
             }
-            case DifficultyType.EasyToMedium:
+            case DynamicDifficultyType.EasyToMedium:
             {
-                Debug.Log(DifficultyType.EasyToMedium);
+                Debug.Log(DynamicDifficultyType.EasyToMedium);
                 SpawnWeightedRandomEnemy(2, center, radius);
                 break;
             }
-            case DifficultyType.Easy:
+            case DynamicDifficultyType.Easy:
             {
-                Debug.Log(DifficultyType.Easy);
+                Debug.Log(DynamicDifficultyType.Easy);
                 SpawnWeightedRandomEnemy(3, center, radius);
                 break;
             }
@@ -174,10 +175,10 @@ public class EnemySpawner : MonoBehaviour
     }
     //SpawnWeightedRandomEnemy
 
-    private DifficultyType GetCurrentDifficulty()
+    private DynamicDifficultyType GetCurrentDifficulty()
     {
         float currentDifficultyGauge = dynamicDifficultyManager.DifficultyGauge;
-        DifficultyType currentDifficulty = DifficultyType.Easy;
+        DynamicDifficultyType currentDynamicDifficulty = DynamicDifficultyType.Easy;
 
         for (int j = 0; j < DynamicDifficultySettings.WeightsByDifficultyList.Count; j++)
         {
@@ -186,7 +187,7 @@ public class EnemySpawner : MonoBehaviour
                 if (currentDifficultyGauge >= DynamicDifficultySettings.WeightsByDifficultyList[j].MinDifficultyGauge &&
                     currentDifficultyGauge < DynamicDifficultySettings.WeightsByDifficultyList[j].MaxDifficultyGauge)
                 {
-                    currentDifficulty = DynamicDifficultySettings.WeightsByDifficultyList[j].Difficulty;
+                    currentDynamicDifficulty = DynamicDifficultySettings.WeightsByDifficultyList[j].dynamicDifficulty;
                 }
             }
             else
@@ -194,12 +195,12 @@ public class EnemySpawner : MonoBehaviour
                 if (currentDifficultyGauge >= DynamicDifficultySettings.WeightsByDifficultyList[j].MinDifficultyGauge &&
                     currentDifficultyGauge <= DynamicDifficultySettings.WeightsByDifficultyList[j].MaxDifficultyGauge)
                 {
-                    currentDifficulty = DynamicDifficultySettings.WeightsByDifficultyList[j].Difficulty;
+                    currentDynamicDifficulty = DynamicDifficultySettings.WeightsByDifficultyList[j].dynamicDifficulty;
                 }
             }
         }
 
-        return currentDifficulty;
+        return currentDynamicDifficulty;
     }
     
     private void InstantiateEnemy(GameObject enemyPrefab, Vector3 position)

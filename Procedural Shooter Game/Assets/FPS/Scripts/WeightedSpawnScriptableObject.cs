@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.FPS.AI;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 [CreateAssetMenu(fileName = "Weighted Spawn Config", menuName = "ScriptableObject/Weighted Spawn Config")]
@@ -18,10 +19,11 @@ public class WeightedSpawnScriptableObject : ScriptableObject
     [System.Serializable]
     public class WeightsByDifficulty
     {
+        [FormerlySerializedAs("Difficulty")]
         [Tooltip("This is the Estimated Difficulty, percieved by the player!" +
                  "If it is HARD it means the tension should be decreased by spawning fewer and weaker enemies!" +
                  "If it is EASY it means the tension should be increased by spawning more and stronger enemies!")]
-        public DifficultyType Difficulty;
+        public DynamicDifficultyType dynamicDifficulty;
 
         [Range(0, 1)] public float MinWeight;
         [Range(0, 1)] public float MaxWeight;
@@ -34,6 +36,6 @@ public class WeightedSpawnScriptableObject : ScriptableObject
     
     public GameObject EnemyPrefab;
     public List<WeightsByDifficulty> WeightsByDifficultyList = new List<WeightsByDifficulty>();
-    public int DifficultyTypeCount = Enum.GetValues(typeof(DifficultyType)).Length;
+    public int DifficultyTypeCount = Enum.GetValues(typeof(DynamicDifficultyType)).Length;
 
 }
