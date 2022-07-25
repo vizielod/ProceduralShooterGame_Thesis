@@ -26,6 +26,8 @@ MonoBehaviour:
   - {fileID: 6695848333846302573, guid: f6ecb5cb517885748b91311a2a56c79b, type: 3}
   possibleComputerRooms:
   - {fileID: 7264955518353853777, guid: 34f1f75f5749c8e40977b08516ed71e8, type: 3}
+  possibleBossFightRooms:
+  - {fileID: 7264955518353853777, guid: 34f1f75f5749c8e40977b08516ed71e8, type: 3}
   possibleLoopRooms: []
   deadendRooms:
   - {fileID: 936815216931619414, guid: 47c6e5ae703432b44ad769310169a2ea, type: 3}

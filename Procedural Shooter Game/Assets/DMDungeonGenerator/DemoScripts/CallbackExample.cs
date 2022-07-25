@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using DMDungeonGenerator;
 
@@ -53,7 +54,8 @@ public class CallbackExample : MonoBehaviour
         ComputeLocksAndKeys(numKeys); //compute the data needed to spawn the key gameobjects
         //SpawnKeys(); //spawn the gameobjets using the computed data
 
-        ChooseEndRoom();
+        //ChooseEndRoom();
+        ChooseExitDoor();
         //color the spawn room green
         generator.DungeonGraph[0].data.GetComponent<GameplayRoom>().ColorRoom(Color.green);
 
@@ -202,6 +204,51 @@ public class CallbackExample : MonoBehaviour
             GameObject selectedRoom = possibleRooms[randomSelected].data.gameObject; //here we can get the gameobject of the room and any associated scripts on it...for this demo we're not doing anything, just gunna colour the room
             if(selectedRoom.GetComponent<GameplayRoom>() != null) {
                 selectedRoom.GetComponent<GameplayRoom>().ColorRoom(Color.red);
+            }
+        }
+    }
+
+    public void ChooseExitDoor()
+    {
+        bool exitDoorFound = false;
+        int exitDoorIdx = 0;
+        bool bossRoomFits = false;
+
+        do
+        {
+            exitDoorIdx = generator.rand.Next(0, generator.AllDeadEndDoorData.Count);
+            Debug.Log("exitDoorIdx: " + exitDoorIdx);
+
+            bossRoomFits =
+                generator.CheckIfBossRoomFits(generator.AllDeadEndDoorData[exitDoorIdx]);
+            
+            Debug.Log("bossRoomFits: " + bossRoomFits);
+
+            if (bossRoomFits)
+            {
+                exitDoorFound = true;
+            }
+            else
+            {
+                generator.AllDeadEndDoors.RemoveAt(exitDoorIdx);
+                generator.AllDeadEndDoorData.RemoveAt(exitDoorIdx);
+            }
+
+        } while (!exitDoorFound && generator.AllDeadEndDoors.Count > 0);
+
+        if (exitDoorFound)
+        {
+            generator.ExitDoorGO = generator.AllDeadEndDoors[exitDoorIdx];
+            
+            List<Renderer> childMats =
+                generator.AllDeadEndDoors[exitDoorIdx].GetComponentsInChildren<Renderer>().ToList();
+            for (int i = 0; i < childMats.Count; i++)
+            {
+                //int keyId = genDoor.data.keyID;
+                for (int j = 0; j < childMats[i].materials.Length; j++)
+                {
+                    childMats[i].materials[j].color = Color.red;
+                }
             }
         }
     }

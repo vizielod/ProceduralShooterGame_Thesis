@@ -21,9 +21,23 @@ namespace Unity.FPS.UI
 
         public void LoadTargetScene()
         {
+            int rand = Random.Range(0, 2);
+
             SceneManager.LoadScene(SceneName);
             PlayerPrefs.SetInt("difficulty", difficultyIDX);
-            PlayerPrefs.SetInt("useDDA", 0); //0 - false, 1 - true
+            PlayerPrefs.SetInt("useDDA", rand); //0 - false, 1 - true
+            
+            /*if (rand == 0)
+            {
+                //SceneManager.LoadScene(SceneName);
+                PlayerPrefs.SetInt("difficulty", difficultyIDX);
+                PlayerPrefs.SetInt("useDDA", 0); //0 - false, 1 - true
+            }
+            else
+            {
+                PlayerPrefs.SetInt("useDDA", 1);
+            }
+            SceneManager.LoadScene(SceneName);*/
         }
     }
 }

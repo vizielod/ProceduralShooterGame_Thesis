@@ -71,6 +71,12 @@ namespace DMDungeonGenerator {
         //public GameObject singleVoxelRoom; //need this for the edge cases where nothing else fits.
         //---
 
+        [Header("Generated Data")] 
+        public List<GameObject> AllDeadEndDoors = new List<GameObject>();
+        public List<Door> AllDeadEndDoorData = new List<Door>();
+        public GameObject ExitDoorGO;
+        public Door ExitDoor;
+        public RoomSpawnTemplate BossRoomToSpawn = new RoomSpawnTemplate();
         /// <summary>
         /// A list of all the rooms that have been generated. Use this after generation is complete to randomly choose an exit room, etc
         /// </summary>
@@ -208,6 +214,11 @@ namespace DMDungeonGenerator {
                 randomSeed++;
                 //need to destroy all the rooms
                 StartGenerator(randomSeed);
+            }
+            
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                GenerateBossRoom(ExitDoor);
             }
         }
 
@@ -716,6 +727,85 @@ namespace DMDungeonGenerator {
             return true;
         }
 
+        public bool CheckIfBossRoomFits(Door exitDoor)
+        {
+            Door targetDoor = exitDoor;
+            bool success = false;
+            bool makeRoomConnectionSingleSided = false;
+            
+            Vector3 targetVoxel = targetDoor.position + targetDoor.direction; //offset one voxel in door dir so we work on the unoccupied voxel the door leads to
+            Vector3 targetWorldVoxPos = GetVoxelWorldPos(targetVoxel, targetDoor.parent.rotation) + targetDoor.parent.transform.position; //need this for offset
+            Vector3 targetWorldDoorDir = GetVoxelWorldDir(targetDoor.direction, targetDoor.parent.rotation); //the target voxel we're going to align to
+            
+            Door doorForProcessing = new Door(targetWorldVoxPos, targetWorldDoorDir, targetDoor.parent); //why do I do this instead of using targetDoor directly...? BECAUSE targetDoor is in ROOM space, doorForProcessing is in WORLD space (pos/directions)
+            Door loopDoorForProcessing = null; //the door pair that we might connect a loop up to (newly spawned room will connect two of it's doors to doorFOrProcessing and loopDoorForProcessing)
+            Door loopTargetDoor = null; //this is grabbed later from openset[doorindex] 
+            
+            List<GameObject> roomsToTry = new List<GameObject>();
+            roomsToTry = new List<GameObject>(generatorSettings.possibleBossFightRooms);
+            
+            success = ComputeNextRoomToGenerate(BossRoomToSpawn, roomsToTry, targetWorldVoxPos, targetWorldDoorDir);
+
+            if (success)
+            {
+                ExitDoor = targetDoor;
+            }
+
+            return success;
+        }
+
+        public void GenerateBossRoom(Door exitDoor)
+        {
+            Door targetDoor = exitDoor;
+            bool makeRoomConnectionSingleSided = false;
+            
+            Vector3 targetVoxel = targetDoor.position + targetDoor.direction; //offset one voxel in door dir so we work on the unoccupied voxel the door leads to
+            Vector3 targetWorldVoxPos = GetVoxelWorldPos(targetVoxel, targetDoor.parent.rotation) + targetDoor.parent.transform.position; //need this for offset
+            Vector3 targetWorldDoorDir = GetVoxelWorldDir(targetDoor.direction, targetDoor.parent.rotation); //the target voxel we're going to align to
+            
+            Door doorForProcessing = new Door(targetWorldVoxPos, targetWorldDoorDir, targetDoor.parent); //why do I do this instead of using targetDoor directly...? BECAUSE targetDoor is in ROOM space, doorForProcessing is in WORLD space (pos/directions)
+
+
+            RoomData instantiatedNewRoom = null;
+            
+            instantiatedNewRoom = AddRoom(BossRoomToSpawn.roomToSpawn.GetComponent<RoomData>(), BossRoomToSpawn.roomOffset,
+                    BossRoomToSpawn.neededRotation, BossRoomToSpawn.isLoopRoom);
+
+                //spawn in door geometry ----
+            GameObject doorToSpawn = null;
+            doorToSpawn = generatorSettings.doors[rand.Next(0, generatorSettings.doors.Count)];
+                
+                //instantiate the doors
+                //first door, we will always spawn
+            Vector3 doorOffset = new Vector3(0f, 0.5f, 0f); //to offset it so the gameobject pivot is on the bottom edge of the voxel
+            GameObject spawnedDoor = GameObject.Instantiate(doorToSpawn, doorForProcessing.position - (doorForProcessing.direction * 0.5f*voxelScale) - doorOffset*voxelScale, Quaternion.LookRotation(doorForProcessing.direction), this.transform);
+            doorForProcessing.spawnedDoor = spawnedDoor;
+
+            if (!makeRoomConnectionSingleSided)
+            {
+                GraphNode newNode = new GraphNode();
+                newNode.data =
+                    instantiatedNewRoom; //connect it both ways, so we access the data from the node, and the node from the data...
+                instantiatedNewRoom.node = newNode;
+                //grab the node of the room we are connecting to
+                GraphNode lastNode = doorForProcessing.parent.node;
+                newNode.depth = lastNode.depth + 1;
+                if (newNode.depth > highestDepth)
+                    highestDepth = newNode.depth; //store the highest depth, used for debugging
+
+                //make a connection for the two of them
+                GraphConnection con = new GraphConnection();
+                con.a = lastNode; //store the connections to the rooms
+                con.b = newNode;
+                con.open = true;
+                con.doorRef = doorForProcessing;
+                lastNode.connections.Add(con); //store the connections both ways
+                newNode.connections.Add(con);
+                spawnedDoor.GetComponent<GeneratorDoor>().data = con;
+                DungeonGraph.Add(newNode);
+            }
+        }
+        
         public void GenerateNextRoom() {
             Door targetDoor = openSet[0]; //grab the first door in the openset to process
             openSet.RemoveAt(0);
@@ -868,6 +958,13 @@ namespace DMDungeonGenerator {
             Vector3 doorOffset = new Vector3(0f, 0.5f, 0f); //to offset it so the gameobject pivot is on the bottom edge of the voxel
             GameObject spawnedDoor = GameObject.Instantiate(doorToSpawn, doorForProcessing.position - (doorForProcessing.direction * 0.5f*voxelScale) - doorOffset*voxelScale, Quaternion.LookRotation(doorForProcessing.direction), this.transform);
             doorForProcessing.spawnedDoor = spawnedDoor;
+            
+            //Code added by VIZI
+            if (!instantiateRoom)
+            {
+                AllDeadEndDoors.Add(spawnedDoor);
+                AllDeadEndDoorData.Add(targetDoor);
+            }
 
             //if it's a loop room, we have to spawn in a second door as well
             GameObject loopSpawnedDoor = null;
@@ -955,10 +1052,12 @@ namespace DMDungeonGenerator {
             SetMapCamera();
             
             ObjectiveExtractData.SetExtractDataObjectives();
-            
+
             //let the user hook in here once it's all done
             if(OnComplete != null) OnComplete(this);
         }
+
+
 
         private float min_x = 0;
         private float max_x = 0;

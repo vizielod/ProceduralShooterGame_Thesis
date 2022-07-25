@@ -143,6 +143,8 @@ public class DynamicDifficultyManager : MonoBehaviour
             enemyCountDifficultyFactor = difficultyVariableWeight + 0.1f;
             healthPickupsCountDifficultyFactor = difficultyVariableWeight - 0.05f;
             playerAccuracyDifficultyFactor = difficultyVariableWeight - 0.15f;
+            
+            EstimatedDifficulty = 0.5f;
 
             DifficultyGauge = 1 - EstimatedDifficulty;
             _tempDifficultyGauge = 1 - EstimatedDifficulty;
