@@ -30,6 +30,8 @@ namespace Unity.FPS.AI
                 MaterialIndex = index;
             }
         }
+
+        public bool IsBoss = false;
         [Header("Parameters")] 
         [Tooltip("Player Range defined in DynamicDifficultyManager. Used for adjusting difficulty based on enemy count in Range")]
         public float PlayerRange = .0f;
@@ -127,6 +129,7 @@ namespace Unity.FPS.AI
 
         int m_PathDestinationNodeIndex;
         EnemyManager m_EnemyManager;
+        BossManager m_BossManager;
         ActorsManager m_ActorsManager;
         Health m_Health;
         Actor m_Actor;
@@ -143,12 +146,19 @@ namespace Unity.FPS.AI
         {
             m_EnemyManager = FindObjectOfType<EnemyManager>();
             DebugUtility.HandleErrorIfNullFindObject<EnemyManager, EnemyController>(m_EnemyManager, this);
+            
+            m_BossManager = FindObjectOfType<BossManager>();
+            DebugUtility.HandleErrorIfNullFindObject<BossManager, EnemyController>(m_BossManager, this);
 
             m_ActorsManager = FindObjectOfType<ActorsManager>(); //m_ActorsManager can access Player GO
             DebugUtility.HandleErrorIfNullFindObject<ActorsManager, EnemyController>(m_ActorsManager, this);
-
+            
             m_EnemyManager.RegisterEnemy(this);
 
+            if (IsBoss)
+            {
+                m_BossManager.RegisterBoss(this);
+            }
             m_Health = GetComponent<Health>();
             DebugUtility.HandleErrorIfNullGetComponent<Health, EnemyController>(m_Health, this, gameObject);
 
@@ -413,6 +423,11 @@ namespace Unity.FPS.AI
 
             // tells the game flow manager to handle the enemy destuction
             m_EnemyManager.UnregisterEnemy(this);
+
+            if (IsBoss)
+            {
+                m_BossManager.UnregisterBoss(this);
+            }
 
             // loot an object
             /*if (TryDropItem())

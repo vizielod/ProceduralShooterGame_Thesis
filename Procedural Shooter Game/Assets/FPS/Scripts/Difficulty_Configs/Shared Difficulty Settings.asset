@@ -13,23 +13,23 @@ MonoBehaviour:
   m_Name: Shared Difficulty Settings
   m_EditorClassIdentifier: 
   WeightsByDifficultyList:
-  - Difficulty: 0
+  - dynamicDifficulty: 0
     ComputersToSpawnMin: 7
     ComputersToSpawnMax: 10
     RoomsToSpawnMin: 25
     RoomsToSpawnMax: 40
-  - Difficulty: 1
+  - dynamicDifficulty: 1
     ComputersToSpawnMin: 5
     ComputersToSpawnMax: 8
     RoomsToSpawnMin: 20
     RoomsToSpawnMax: 30
-  - Difficulty: 2
+  - dynamicDifficulty: 2
     ComputersToSpawnMin: 3
     ComputersToSpawnMax: 6
     RoomsToSpawnMin: 15
     RoomsToSpawnMax: 25
-  - Difficulty: 3
+  - dynamicDifficulty: 3
     ComputersToSpawnMin: 1
-    ComputersToSpawnMax: 4
+    ComputersToSpawnMax: 2
     RoomsToSpawnMin: 10
     RoomsToSpawnMax: 20

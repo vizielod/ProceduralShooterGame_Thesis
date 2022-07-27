@@ -5,6 +5,7 @@ using System.Linq;
 using System;
 using System.Numerics;
 using DMUtils;
+using Unity.FPS.AI;
 using Unity.FPS.Game;
 using Unity.FPS.Gameplay;
 using UnityEngine.ProBuilder;
@@ -19,6 +20,8 @@ namespace DMDungeonGenerator {
         
         public ObjectiveExtractData ObjectiveExtractData;
         public SharedDifficultySettingsSO SharedDifficultySettings;
+        
+        public BossManager BossManager;
         
         
         [Header("Data Extraction Computer Settings")] 
@@ -749,6 +752,7 @@ namespace DMDungeonGenerator {
             if (success)
             {
                 ExitDoor = targetDoor;
+                
             }
 
             return success;
@@ -769,7 +773,10 @@ namespace DMDungeonGenerator {
             RoomData instantiatedNewRoom = null;
             
             instantiatedNewRoom = AddRoom(BossRoomToSpawn.roomToSpawn.GetComponent<RoomData>(), BossRoomToSpawn.roomOffset,
-                    BossRoomToSpawn.neededRotation, BossRoomToSpawn.isLoopRoom);
+                    BossRoomToSpawn.neededRotation, BossRoomToSpawn.isLoopRoom/*, true*/);
+
+            //BossManager.BossRoom = instantiatedNewRoom.gameObject;
+            ObjectiveExtractData.BossRoom = instantiatedNewRoom.gameObject;
 
                 //spawn in door geometry ----
             GameObject doorToSpawn = null;
@@ -1221,11 +1228,16 @@ namespace DMDungeonGenerator {
         /// <param name="data"></param>
         /// <param name="pos"></param>
         /// <param name="rotation"></param>
-        public RoomData AddRoom(RoomData prefabData, Vector3 pos, float rotation, bool b = false) {
+        public RoomData AddRoom(RoomData prefabData, Vector3 pos, float rotation, bool b = false/*, bool bossRoom = false*/) {
             GameObject roomObj = GameObject.Instantiate(prefabData.gameObject, pos, Quaternion.AngleAxis(rotation, Vector3.up), this.transform);
             RoomData data = roomObj.GetComponent<RoomData>();
             data.rotation = rotation; //set the instantiated roomData's rotation to be used for the voxels transformation into worldspace later
             data.UpdateInstantiatedData();
+
+            /*if (bossRoom)
+            {
+                BossManager.BossRoom = roomObj;
+            }*/
 
             AllRooms.Add(roomObj);
             AddGlobalVoxels(data, pos, rotation);

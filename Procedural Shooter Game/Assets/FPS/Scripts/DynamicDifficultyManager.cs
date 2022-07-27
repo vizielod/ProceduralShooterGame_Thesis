@@ -108,9 +108,9 @@ public class DynamicDifficultyManager : MonoBehaviour
 
     private void Awake()
     {
-        int difficultyIdx = PlayerPrefs.GetInt("difficulty");
+        /*int difficultyIdx = PlayerPrefs.GetInt("difficulty");
         difficulty = (StaticDifficultyType) difficultyIdx;
-        useDDA = PlayerPrefs.GetInt("useDDA") == 0 ? false : true;
+        useDDA = PlayerPrefs.GetInt("useDDA") == 0 ? false : true;*/
     }
 
     // Start is called before the first frame update

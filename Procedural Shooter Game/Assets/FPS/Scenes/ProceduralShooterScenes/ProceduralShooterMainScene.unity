@@ -345,8 +345,9 @@ MonoBehaviour:
   ObjectiveExtractData: {fileID: 1328888004}
   SharedDifficultySettings: {fileID: 11400000, guid: fc7bd790927dd0b449077ff1bbc770ec,
     type: 2}
+  BossManager: {fileID: 1716151953}
   CentralComputer: {fileID: 289220422}
-  dynamicDifficulty: 2
+  dynamicDifficulty: 3
   spawnedComputerCount: 0
   computersToSpawnMin: 0
   computersToSpawnMax: 0
@@ -359,6 +360,14 @@ MonoBehaviour:
   randomSeed: 7444
   generationComplete: 0
   generatorSettings: {fileID: 11400000, guid: bde5149c4e075ab40bfa50846b81d3c0, type: 2}
+  AllDeadEndDoors: []
+  AllDeadEndDoorData: []
+  ExitDoorGO: {fileID: 0}
+  ExitDoor:
+    position: {x: 0, y: 0, z: 0}
+    direction: {x: 0, y: 0, z: 0}
+    parent: {fileID: 0}
+    spawnedDoor: {fileID: 0}
   AllRooms: []
   AllDoorsData: []
   generateInUpdate: 0
@@ -937,7 +946,7 @@ PrefabInstance:
     - target: {fileID: 7268948481082955657, guid: 7bb3ef68f11ffa04fac728ad3fdaccc7,
         type: 3}
       propertyPath: m_RootOrder
-      value: 17
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 7268948481082955657, guid: 7bb3ef68f11ffa04fac728ad3fdaccc7,
         type: 3}
@@ -1078,6 +1087,54 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1213424825
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1213424827}
+  - component: {fileID: 1213424826}
+  m_Layer: 0
+  m_Name: BossManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1213424826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213424825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33982200735080a4cbba01acd95c8491, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectiveExtractData: {fileID: 1328888004}
+  BossPrefab: {fileID: 7237852932878766899, guid: b803d286bcaf6da49ae3e33a431346b2,
+    type: 3}
+  BossRoom: {fileID: 0}
+  BossEnemy: {fileID: 0}
+--- !u!4 &1213424827
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213424825}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1269159055 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4502690797981101630, guid: c996b53e9f849234393d1e90f68d1679,
@@ -79465,7 +79522,7 @@ PrefabInstance:
     - target: {fileID: 278551198325847877, guid: 32970e92051eb034abac7716569655f5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 278551198325847877, guid: 32970e92051eb034abac7716569655f5,
         type: 3}
@@ -79719,7 +79776,7 @@ PrefabInstance:
     - target: {fileID: 926195733538152752, guid: 39ba23b2856e3b542b9fdc6d35c7a488,
         type: 3}
       propertyPath: m_RootOrder
-      value: 18
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 926195733538152752, guid: 39ba23b2856e3b542b9fdc6d35c7a488,
         type: 3}
@@ -80047,6 +80104,24 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &1716151943 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1315839542190839943, guid: c996b53e9f849234393d1e90f68d1679,
+    type: 3}
+  m_PrefabInstance: {fileID: 4008933581619590512}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1716151953 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7419443631013571103, guid: c996b53e9f849234393d1e90f68d1679,
+    type: 3}
+  m_PrefabInstance: {fileID: 4008933581619590512}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716151943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eb1c9cedca562f44a6595c114dec3dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1823916245
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -80056,14 +80131,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3280929121857463211, guid: 0251385b299edb147ab2aba3056d161d,
         type: 3}
+      propertyPath: BossPrefab
+      value: 
+      objectReference: {fileID: 7237852932878766899, guid: b803d286bcaf6da49ae3e33a431346b2,
+        type: 3}
+    - target: {fileID: 3280929121857463211, guid: 0251385b299edb147ab2aba3056d161d,
+        type: 3}
+      propertyPath: BossManager
+      value: 
+      objectReference: {fileID: 1213424826}
+    - target: {fileID: 3280929121857463211, guid: 0251385b299edb147ab2aba3056d161d,
+        type: 3}
+      propertyPath: GameManager
+      value: 
+      objectReference: {fileID: 1716151943}
+    - target: {fileID: 3280929121857463211, guid: 0251385b299edb147ab2aba3056d161d,
+        type: 3}
       propertyPath: CentralComputer
       value: 
       objectReference: {fileID: 289220422}
     - target: {fileID: 3280929121857463211, guid: 0251385b299edb147ab2aba3056d161d,
         type: 3}
-      propertyPath: CentralComputers.Array.size
-      value: 0
-      objectReference: {fileID: 0}
+      propertyPath: ObjectiveKillEnemies
+      value: 
+      objectReference: {fileID: 598277302063295018, guid: 012d63212fd1fe646b661cb8446c7bd4,
+        type: 3}
     - target: {fileID: 3280929121857463211, guid: 0251385b299edb147ab2aba3056d161d,
         type: 3}
       propertyPath: CentralComputers.Array.data[0]

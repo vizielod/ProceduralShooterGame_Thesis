@@ -239,6 +239,7 @@ public class CallbackExample : MonoBehaviour
         if (exitDoorFound)
         {
             generator.ExitDoorGO = generator.AllDeadEndDoors[exitDoorIdx];
+            generator.ObjectiveExtractData.ExitDoor = generator.AllDeadEndDoors[exitDoorIdx];
             
             List<Renderer> childMats =
                 generator.AllDeadEndDoors[exitDoorIdx].GetComponentsInChildren<Renderer>().ToList();
@@ -251,6 +252,11 @@ public class CallbackExample : MonoBehaviour
                 }
             }
         }
+        
+        //Spawning the room right away with the closed RED door
+        //If I remove this line the Room can be spawned runtime by pressing B
+        generator.GenerateBossRoom(generator.ExitDoor);
+        //generator.ObjectiveExtractData.InstantiateBossRoomReachPointObjective();
     }
 
     /// <summary>

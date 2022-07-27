@@ -1,11 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.FPS;
 using Unity.FPS.Game;
 using UnityEngine;
 
 namespace Unity.FPS.Gameplay
 {
+    /*
+     * This is basically and Objective Manager Class
+     */
     public class ObjectiveExtractData : Objective
     {
         [Tooltip("Chose whether you need to kill every enemies or only a minimum amount")]
@@ -19,12 +23,23 @@ namespace Unity.FPS.Gameplay
 
         public List<GameObject> CentralComputers = new List<GameObject>();
         public GameObject ObjectiveReachPoint;
+        public GameObject ObjectiveKillBoss;
+        //public GameObject ObjectiveKillEnemies;
         public GameObject CentralComputer;
+        public GameObject ExitDoor;
+
+        public GameObject GameManager;
+        public GameObject BossPrefab;
+        public GameObject BossRoom;
+        private GameObject BossEnemy;
+
+        //public BossManager BossManager;
 
         int m_DatapointsExtracted = 0;
 
         protected override void Start()
         {
+            
             /*base.Start();
             
             EventManager.AddListener<ExtractDataEvent>(OnDataExtracted);
@@ -86,6 +101,30 @@ namespace Unity.FPS.Gameplay
             }
         }
 
+        public void InstantiateBossRoomReachPointObjective()
+        {
+            Vector3 position = new Vector3(ExitDoor.transform.position.x,
+                ExitDoor.transform.position.y, ExitDoor.transform.position.z);
+            GameObject newReachPointObjective = Instantiate(ObjectiveReachPoint, position, Quaternion.identity);
+                
+            newReachPointObjective.transform.SetParent(this.transform);
+
+            newReachPointObjective.GetComponent<ObjectiveReachPoint>().Title = $"Proceed to the Boss Room";
+            
+            //Destroy(ExitDoor);
+            ExitDoor.SetActive(false);
+        }
+
+        public void InstantiateKillBossObjective()
+        {
+            Vector3 position = new Vector3(0, 0, 0);
+            GameObject newKillBossObjective = Instantiate(ObjectiveKillBoss, position, Quaternion.identity);
+                
+            //newReachPointObjective.transform.SetParent(this.transform);
+
+            //newKillBossObjective.GetComponent<ObjectiveReachPoint>().Title = $"Proceed to the Boss Room";
+        }
+
         void OnDataExtracted(ExtractDataEvent evt)
         {
             if (IsCompleted)
@@ -102,7 +141,13 @@ namespace Unity.FPS.Gameplay
             // update the objective text according to how many enemies remain to kill
             if (targetRemaining == 0)
             {
+                //BossManager.SpawnBoss();
+                SpawnBoss();
+                
+                InstantiateBossRoomReachPointObjective();
+                InstantiateKillBossObjective();
                 CompleteObjective(string.Empty, GetUpdatedCounterAmount(), "Objective complete : " + Title);
+                //Spawn the boss when Extraction objectives completed
             }
             else if (targetRemaining == 1)
             {
@@ -141,6 +186,16 @@ namespace Unity.FPS.Gameplay
             
             CentralComputers.Add(newComputer);
             //RegisterEnemyController(enemyController);
+        }
+        
+        public void SpawnBoss()
+        {
+            Vector3 position = new Vector3(BossRoom.transform.position.x, BossRoom.transform.position.y,
+                BossRoom.transform.position.z);
+
+            BossEnemy = Instantiate(BossPrefab, position, Quaternion.identity);
+
+            //ObjectiveExtractData.InstantiateKillBossObjective();
         }
     }
 }
