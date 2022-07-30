@@ -14,7 +14,7 @@ public class DynamicDifficultySettingsSO : ScriptableObject
     }*/
     
     [System.Serializable]
-    public struct WeightsByDifficulty
+    public struct DifficultyTypeByGaugeValue
     {
         [FormerlySerializedAs("Difficulty")]
         [Tooltip("This is the Estimated Difficulty, percieved by the player!" +
@@ -30,5 +30,5 @@ public class DynamicDifficultySettingsSO : ScriptableObject
         
     }
     
-    public List<WeightsByDifficulty> WeightsByDifficultyList = new List<WeightsByDifficulty>();
+    public List<DifficultyTypeByGaugeValue> DifficultyTypeByGaugeValueList = new List<DifficultyTypeByGaugeValue>();
 }

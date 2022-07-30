@@ -21,6 +21,9 @@ namespace Unity.FPS.Gameplay
         [Tooltip("Start sending notification about remaining Datapoints when this amount of Datapoints is left")]
         public int NotificationDatapointsRemainingThreshold = 3;
 
+        public int targetRemaining = 0;
+        public bool playerPerformanceNormalized = false;
+
         public List<GameObject> CentralComputers = new List<GameObject>();
         public GameObject ObjectiveReachPoint;
         public GameObject ObjectiveKillBoss;
@@ -36,10 +39,23 @@ namespace Unity.FPS.Gameplay
         //public BossManager BossManager;
 
         int m_DatapointsExtracted = 0;
+        
+        //public float HardDifficultyGaugeTimer = 0f;
+        public float NormalizedHardDifficultyGaugeTimer = 0f;
+        //public float MediumToHardDifficultyGaugeTimer = 0f;
+        public float NormalizedMediumToHardDifficultyGaugeTimer = 0f;
+        //public float EasyToMediumDifficultyGaugeTimer = 0f;
+        public float NormalizedEasyToMediumDifficultyGaugeTimer = 0f;
+        //public float EasyDifficultyGaugeTimer = 0f;
+        public float NormalizedEasyDifficultyGaugeTimer = 0f;
 
+        private void Awake()
+        {
+            targetRemaining = DatapointsToCompleteObjective - m_DatapointsExtracted;
+        }
         protected override void Start()
         {
-            
+            //targetRemaining = DatapointsToCompleteObjective - m_DatapointsExtracted;
             /*base.Start();
             
             EventManager.AddListener<ExtractDataEvent>(OnDataExtracted);
@@ -136,7 +152,7 @@ namespace Unity.FPS.Gameplay
                 DatapointsToCompleteObjective = evt.RemainingDatapoints + m_DatapointsExtracted;*/
             
             //int targetRemaining = MustExtractAllData ? evt.RemainingDatapoints : DatapointsToCompleteObjective - m_DatapointsExtracted;
-            int targetRemaining = DatapointsToCompleteObjective - m_DatapointsExtracted;
+            targetRemaining = DatapointsToCompleteObjective - m_DatapointsExtracted;
             
             // update the objective text according to how many enemies remain to kill
             if (targetRemaining == 0)
@@ -196,6 +212,12 @@ namespace Unity.FPS.Gameplay
             BossEnemy = Instantiate(BossPrefab, position, Quaternion.identity);
 
             //ObjectiveExtractData.InstantiateKillBossObjective();
+        }
+
+        private void CalculateNormalizedPlayerPerformance()
+        {
+            /*dynamicDifficultyManager.NormalizedMediumToHardDifficultyGaugeTimer =
+                timeSpentInDownload / dynamicDifficultyManager.MediumToHardDifficultyGaugeTimer;*/
         }
     }
 }

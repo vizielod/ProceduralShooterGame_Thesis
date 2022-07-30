@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.FPS;
 using Unity.FPS.AI;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -18,6 +19,7 @@ public class EnemySpawner : MonoBehaviour
     
     public List<WeightedSpawnScriptableObject> WeightedEnemies = new List<WeightedSpawnScriptableObject>();
     public DynamicDifficultySettingsSO DynamicDifficultySettings;
+    public DynamicDifficultyType currentDynamicDifficulty = DynamicDifficultyType.Easy;
 
     private int DifficultyTypeCount = 4;
 
@@ -44,15 +46,15 @@ public class EnemySpawner : MonoBehaviour
 
     private void CheckDifficultySettingsSetup()
     {
-        if (DynamicDifficultySettings.WeightsByDifficultyList.Count != DifficultyTypeCount)
+        if (DynamicDifficultySettings.DifficultyTypeByGaugeValueList.Count != DifficultyTypeCount)
         {
             Debug.LogError("Dynamic Difficulty Settings SO is not set up correctly. One or more Difficulty option is missing. " +
-                           "Make sure are 4 different Difficulty options are added to the Config file. (Hint: Easy, Easy-to-Medium, Medium-to-Hard, Hard)");
+                           "Make sure all 4 different Difficulty options are added to the Config file. (Hint: Easy, Easy-to-Medium, Medium-to-Hard, Hard)");
         }
 
         for (int j = 0; j < DifficultyTypeCount; j++)
         {
-            if(!DynamicDifficultySettings.WeightsByDifficultyList[j].dynamicDifficulty.Equals((DynamicDifficultyType)j))
+            if(!DynamicDifficultySettings.DifficultyTypeByGaugeValueList[j].dynamicDifficulty.Equals((DynamicDifficultyType)j))
             {
                 Debug.LogError($"DynamicDifficultySettings does not have Element {j} set up correctly in the list! " +
                                $"Hint: It should be {(DynamicDifficultyType)j}");
@@ -178,24 +180,24 @@ public class EnemySpawner : MonoBehaviour
     private DynamicDifficultyType GetCurrentDifficulty()
     {
         float currentDifficultyGauge = dynamicDifficultyManager.DifficultyGauge;
-        DynamicDifficultyType currentDynamicDifficulty = DynamicDifficultyType.Easy;
+        //DynamicDifficultyType currentDynamicDifficulty = DynamicDifficultyType.Easy;
 
-        for (int j = 0; j < DynamicDifficultySettings.WeightsByDifficultyList.Count; j++)
+        for (int j = 0; j < DynamicDifficultySettings.DifficultyTypeByGaugeValueList.Count; j++)
         {
-            if (j != DynamicDifficultySettings.WeightsByDifficultyList.Count - 1)
+            if (j != DynamicDifficultySettings.DifficultyTypeByGaugeValueList.Count - 1)
             {
-                if (currentDifficultyGauge >= DynamicDifficultySettings.WeightsByDifficultyList[j].MinDifficultyGauge &&
-                    currentDifficultyGauge < DynamicDifficultySettings.WeightsByDifficultyList[j].MaxDifficultyGauge)
+                if (currentDifficultyGauge >= DynamicDifficultySettings.DifficultyTypeByGaugeValueList[j].MinDifficultyGauge &&
+                    currentDifficultyGauge < DynamicDifficultySettings.DifficultyTypeByGaugeValueList[j].MaxDifficultyGauge)
                 {
-                    currentDynamicDifficulty = DynamicDifficultySettings.WeightsByDifficultyList[j].dynamicDifficulty;
+                    currentDynamicDifficulty = DynamicDifficultySettings.DifficultyTypeByGaugeValueList[j].dynamicDifficulty;
                 }
             }
-            else
+            else //This is needed so if the Gauge is at 1 it also takes it into account
             {
-                if (currentDifficultyGauge >= DynamicDifficultySettings.WeightsByDifficultyList[j].MinDifficultyGauge &&
-                    currentDifficultyGauge <= DynamicDifficultySettings.WeightsByDifficultyList[j].MaxDifficultyGauge)
+                if (currentDifficultyGauge >= DynamicDifficultySettings.DifficultyTypeByGaugeValueList[j].MinDifficultyGauge &&
+                    currentDifficultyGauge <= DynamicDifficultySettings.DifficultyTypeByGaugeValueList[j].MaxDifficultyGauge)
                 {
-                    currentDynamicDifficulty = DynamicDifficultySettings.WeightsByDifficultyList[j].dynamicDifficulty;
+                    currentDynamicDifficulty = DynamicDifficultySettings.DifficultyTypeByGaugeValueList[j].dynamicDifficulty;
                 }
             }
         }

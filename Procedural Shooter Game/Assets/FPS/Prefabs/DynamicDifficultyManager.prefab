@@ -44,12 +44,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3589175e132a0d94e9436a2d3e64fe33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TankPrefab: {fileID: 2015434656898269652, guid: f5ebbc5eb0acf6c4d813c7e44b45b56e,
+  objectiveExtractData: {fileID: 3280929121857463211, guid: 0251385b299edb147ab2aba3056d161d,
     type: 3}
-  SoldierPrefab: {fileID: 2015434656898269652, guid: 6252bf623e59c454b9333c0d9fb92512,
-    type: 3}
-  AssassinPrefab: {fileID: 2015434656898269652, guid: b4841375c716de24a809efcf3d2d8ffd,
-    type: 3}
+  useDDA: 1
+  difficulty: 0
+  HardDifficultyGaugeTimer: 0
+  NormalizedHardDifficultyGaugeTimer: 0
+  MediumToHardDifficultyGaugeTimer: 0
+  NormalizedMediumToHardDifficultyGaugeTimer: 0
+  EasyToMediumDifficultyGaugeTimer: 0
+  NormalizedEasyToMediumDifficultyGaugeTimer: 0
+  EasyDifficultyGaugeTimer: 0
+  NormalizedEasyDifficultyGaugeTimer: 0
+  timeSpentInDownload: 0
   EnemyPrefab: {fileID: 2015434656898269652, guid: 25a1b0efadb966e44889fce712c8ff8d,
     type: 3}
   MinEnemySpawnPostion: {fileID: 0}

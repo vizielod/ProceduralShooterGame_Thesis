@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.FPS;
 using Unity.FPS.Game;
 using UnityEditor;
 using UnityEngine;
@@ -88,7 +89,57 @@ public class DownloadManager : MonoBehaviour
                 spawnTimer = 0f;
             }
 
+            dynamicDifficultyManager.timeSpentInDownload += Time.deltaTime;
+            CalculateAvaragePlayerPerformance();
         }
+    }
+
+    public void CalculateAvaragePlayerPerformance()
+    {
+        switch (EnemySpawner.currentDynamicDifficulty)
+        {
+            case DynamicDifficultyType.Hard:
+            {
+                //Debug.Log(DynamicDifficultyType.Hard);
+                dynamicDifficultyManager.HardDifficultyGaugeTimer += Time.deltaTime;
+                /*dynamicDifficultyManager.NormalizedHardDifficultyGaugeTimer =
+                    timeSpentInDownload / dynamicDifficultyManager.HardDifficultyGaugeTimer;*/
+                break;
+            }
+            case DynamicDifficultyType.MediumToHard:
+            {
+                //Debug.Log(DynamicDifficultyType.EasyToMedium);
+                dynamicDifficultyManager.MediumToHardDifficultyGaugeTimer += Time.deltaTime;
+                /*dynamicDifficultyManager.NormalizedMediumToHardDifficultyGaugeTimer =
+                    timeSpentInDownload / dynamicDifficultyManager.MediumToHardDifficultyGaugeTimer;*/
+                break;
+            }
+            case DynamicDifficultyType.EasyToMedium:
+            {
+                //Debug.Log(DynamicDifficultyType.EasyToMedium);
+                dynamicDifficultyManager.EasyToMediumDifficultyGaugeTimer += Time.deltaTime;
+                /*dynamicDifficultyManager.NormalizedEasyToMediumDifficultyGaugeTimer =
+                    timeSpentInDownload / dynamicDifficultyManager.EasyToMediumDifficultyGaugeTimer;*/
+                break;
+            }
+            case DynamicDifficultyType.Easy:
+            {
+                //Debug.Log(DynamicDifficultyType.Easy);
+                dynamicDifficultyManager.EasyDifficultyGaugeTimer += Time.deltaTime;
+                /*dynamicDifficultyManager.NormalizedEasyDifficultyGaugeTimer =
+                    timeSpentInDownload / dynamicDifficultyManager.EasyDifficultyGaugeTimer;*/
+                break;
+            }
+            default:
+                break;
+        }
+
+
+
+        /*if (currentDifficultyGauge <= EnemySpawner.DynamicDifficultySettings.DifficultyTypeByGaugeValueList[j].MaxDifficultyGauge)
+        {
+            
+        }*/
     }
 
     private void ResetPlayerAccuracy()
