@@ -16,7 +16,7 @@ MonoBehaviour:
   MovementSpeed: 5
   Acceleration: 10
   AngularSpeed: 120
-  DetectionRange: 20
+  DetectionRange: 40
   AttackRange: 15
   Damage: 15
   DelayBetweenShots: 0.6

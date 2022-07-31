@@ -146,6 +146,8 @@ namespace Unity.FPS.AI
             Vector3 _centre = new Vector3(transform.position.x, transform.position.y + 1f,
                 transform.position.z);
             Handles.DrawWireDisc(_centre, Vector3.up, AttackRange);
+            Handles.color = Color.blue;
+            Handles.DrawWireDisc(_centre, Vector3.up, DetectionRange);
         }
     }
 }

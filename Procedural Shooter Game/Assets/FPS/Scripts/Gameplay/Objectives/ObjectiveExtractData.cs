@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.FPS;
 using Unity.FPS.Game;
 using UnityEngine;
@@ -25,29 +26,20 @@ namespace Unity.FPS.Gameplay
         public bool playerPerformanceNormalized = false;
 
         public List<GameObject> CentralComputers = new List<GameObject>();
+        
+        [Header("References and Prefabs")]
+        public DynamicDifficultyManager dynamicDifficultyManager;
+        public SharedDifficultySettingsSO sharedDifficultySettings;
         public GameObject ObjectiveReachPoint;
         public GameObject ObjectiveKillBoss;
-        //public GameObject ObjectiveKillEnemies;
         public GameObject CentralComputer;
-        public GameObject ExitDoor;
-
         public GameObject GameManager;
         public GameObject BossPrefab;
         public GameObject BossRoom;
+        public GameObject ExitDoor;
+
         private GameObject BossEnemy;
-
-        //public BossManager BossManager;
-
-        int m_DatapointsExtracted = 0;
-        
-        //public float HardDifficultyGaugeTimer = 0f;
-        public float NormalizedHardDifficultyGaugeTimer = 0f;
-        //public float MediumToHardDifficultyGaugeTimer = 0f;
-        public float NormalizedMediumToHardDifficultyGaugeTimer = 0f;
-        //public float EasyToMediumDifficultyGaugeTimer = 0f;
-        public float NormalizedEasyToMediumDifficultyGaugeTimer = 0f;
-        //public float EasyDifficultyGaugeTimer = 0f;
-        public float NormalizedEasyDifficultyGaugeTimer = 0f;
+        private int m_DatapointsExtracted = 0;
 
         private void Awake()
         {
@@ -158,6 +150,8 @@ namespace Unity.FPS.Gameplay
             if (targetRemaining == 0)
             {
                 //BossManager.SpawnBoss();
+                dynamicDifficultyManager.CalculateNormalizedPlayerPerformance();
+                
                 SpawnBoss();
                 
                 InstantiateBossRoomReachPointObjective();
@@ -203,21 +197,145 @@ namespace Unity.FPS.Gameplay
             CentralComputers.Add(newComputer);
             //RegisterEnemyController(enemyController);
         }
+
+        public void ChangeBossRoomSetupByStaticDifficulty(StaticDifficultyType currentDifficulty)
+        {
+            switch (currentDifficulty)
+            {
+                case StaticDifficultyType.Hard:
+                {
+                    ColorBossRoom(Color.red);
+                    break;
+                }
+                case StaticDifficultyType.Medium:
+                {
+                    ColorBossRoom(Color.magenta);
+                    break;
+                }
+                case StaticDifficultyType.Easy:
+                {
+                    ColorBossRoom(Color.yellow);
+                    break;
+                }
+                default:
+                    break;
+            }
+            
+        }
+
+        public void ChangeBossRoomSetupByDynamicDifficulty(DynamicDifficultyType currentDifficulty)
+        {
+            switch (currentDifficulty)
+            {
+                case DynamicDifficultyType.Hard:
+                {
+                    ColorBossRoom(Color.red);
+                    break;
+                }
+                case DynamicDifficultyType.MediumToHard:
+                {
+                    ColorBossRoom(Color.magenta);
+                    break;
+                }
+                case DynamicDifficultyType.EasyToMedium:
+                {
+                    ColorBossRoom(Color.magenta);
+                    break;
+                }
+                case DynamicDifficultyType.Easy:
+                {
+                    ColorBossRoom(Color.yellow);
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
         
+        public void ColorBossRoom(Color c) {
+            //generator.DungeonGraph[0].data.GetComponent<GameplayRoom>().ColorRoom(Color.green);
+            if (BossRoom == null)
+                return;
+            
+            List<Renderer> childMats = BossRoom.GetComponentsInChildren<Renderer>().ToList();
+            for(int i = 0; i < childMats.Count; i++) {
+                childMats[i].material.color = c;
+            }
+        }
         public void SpawnBoss()
         {
             Vector3 position = new Vector3(BossRoom.transform.position.x, BossRoom.transform.position.y,
                 BossRoom.transform.position.z);
+            
+            GameObject BossToSpawn = sharedDifficultySettings.WeightsByDifficultyList[3].BossPrefab; //Defaulting the Easy boss
+            
+            if (!dynamicDifficultyManager.useDDA)
+            {
+                StaticDifficultyType currentDifficulty = dynamicDifficultyManager.difficulty;
+                ChangeBossRoomSetupByStaticDifficulty(currentDifficulty);
+                Debug.Log("Current Difficulty: " + currentDifficulty);
+                
+                switch (currentDifficulty)
+                {
+                    case StaticDifficultyType.Hard:
+                    {
+                        //Spawn Hard Boss
+                        Debug.Log(DynamicDifficultyType.Hard);
+                        BossToSpawn = sharedDifficultySettings.WeightsByDifficultyList[0].BossPrefab;
+                        break;
+                    }
+                    case StaticDifficultyType.Medium:
+                    {
+                        if (dynamicDifficultyManager.Player.GetComponent<Health>().CurrentHealth >= dynamicDifficultyManager.Player.GetComponent<Health>().MaxHealth / 2f)
+                        {
+                            //If player health is greater than half of MaxHP then spawn MediumToHard Boss
+                            Debug.Log(DynamicDifficultyType.MediumToHard);
+                            BossToSpawn = sharedDifficultySettings.WeightsByDifficultyList[1].BossPrefab;
+                        }
+                        else
+                        {
+                            //If player health is lower than half of MaxHP then spawn EasyToMedium Boss
+                            Debug.Log(DynamicDifficultyType.EasyToMedium);
+                            BossToSpawn = sharedDifficultySettings.WeightsByDifficultyList[2].BossPrefab;
+                        }
+                        break;
+                    }
+                    case StaticDifficultyType.Easy:
+                    {
+                        //Spawn Easy Boss
+                        Debug.Log(DynamicDifficultyType.Easy);
+                        BossToSpawn = sharedDifficultySettings.WeightsByDifficultyList[3].BossPrefab;
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                float maxPlayerPerformance = 0;
+                DynamicDifficultyType currentDifficulty = DynamicDifficultyType.Easy;
+                
+                foreach (KeyValuePair<DynamicDifficultyType, float> normalizedPlayerPerformanceItem in dynamicDifficultyManager.NormalizedPlayerPerformanceDictionary)
+                {
+                    Debug.Log("key-value pair: " + normalizedPlayerPerformanceItem.Key + " " + normalizedPlayerPerformanceItem.Value);
+                    if (normalizedPlayerPerformanceItem.Value > maxPlayerPerformance)
+                    {
+                        maxPlayerPerformance = normalizedPlayerPerformanceItem.Value;
+                        currentDifficulty = normalizedPlayerPerformanceItem.Key;
+                    }
+                }
 
-            BossEnemy = Instantiate(BossPrefab, position, Quaternion.identity);
-
-            //ObjectiveExtractData.InstantiateKillBossObjective();
-        }
-
-        private void CalculateNormalizedPlayerPerformance()
-        {
-            /*dynamicDifficultyManager.NormalizedMediumToHardDifficultyGaugeTimer =
-                timeSpentInDownload / dynamicDifficultyManager.MediumToHardDifficultyGaugeTimer;*/
+                ChangeBossRoomSetupByDynamicDifficulty(currentDifficulty);
+                
+                int idx = (int) currentDifficulty;
+                Debug.Log("maxPlayerPerformance: " + maxPlayerPerformance);
+                Debug.Log("Current Difficulty: " + currentDifficulty);
+                Debug.Log("Current Difficulty Index: " + idx);
+                BossToSpawn = sharedDifficultySettings.WeightsByDifficultyList[idx].BossPrefab;
+            }
+            Debug.Log("Boss To Spawn: " + BossToSpawn);
+            BossEnemy = Instantiate(BossToSpawn, position, Quaternion.identity);
         }
     }
 }

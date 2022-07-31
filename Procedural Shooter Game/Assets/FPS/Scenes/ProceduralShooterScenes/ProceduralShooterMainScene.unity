@@ -79534,7 +79534,12 @@ PrefabInstance:
     - target: {fileID: 278551198325847878, guid: 32970e92051eb034abac7716569655f5,
         type: 3}
       propertyPath: useDDA
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 278551198325847878, guid: 32970e92051eb034abac7716569655f5,
+        type: 3}
+      propertyPath: difficulty
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 278551198325847878, guid: 32970e92051eb034abac7716569655f5,
         type: 3}
@@ -79827,6 +79832,11 @@ PrefabInstance:
       objectReference: {fileID: 2729281214152228921}
     - target: {fileID: 8404134568642472305, guid: 39ba23b2856e3b542b9fdc6d35c7a488,
         type: 3}
+      propertyPath: maxTime
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8404134568642472305, guid: 39ba23b2856e3b542b9fdc6d35c7a488,
+        type: 3}
       propertyPath: dynamicDifficultyManager
       value: 
       objectReference: {fileID: 594610936}
@@ -79903,7 +79913,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17340
+  m_Name: pb_Mesh17350
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -80113,6 +80123,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 598277302063295018, guid: 012d63212fd1fe646b661cb8446c7bd4,
         type: 3}
+    - target: {fileID: 3280929121857463211, guid: 0251385b299edb147ab2aba3056d161d,
+        type: 3}
+      propertyPath: dynamicDifficultyManager
+      value: 
+      objectReference: {fileID: 594610936}
+    - target: {fileID: 3280929121857463211, guid: 0251385b299edb147ab2aba3056d161d,
+        type: 3}
+      propertyPath: sharedDifficultySettings
+      value: 
+      objectReference: {fileID: 11400000, guid: fc7bd790927dd0b449077ff1bbc770ec,
+        type: 2}
     - target: {fileID: 3280929121857463211, guid: 0251385b299edb147ab2aba3056d161d,
         type: 3}
       propertyPath: CentralComputers.Array.data[0]
