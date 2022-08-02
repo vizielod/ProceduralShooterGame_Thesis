@@ -29,6 +29,7 @@ namespace Unity.FPS.Gameplay
         private float timeLeft;
         private EnemySpawner EnemySpawner;
         private bool downloadCompleted = false;
+        private bool isPlayerInRoom = false;
 
         private bool wasPlayerAccuracyReseted = false;
 
@@ -44,7 +45,6 @@ namespace Unity.FPS.Gameplay
         // Update is called once per frame
         void Update()
         {
-
             if (downloadDataButton.isOn && !downloadCompleted)
             {
                 if (!wasPlayerAccuracyReseted)
@@ -53,8 +53,9 @@ namespace Unity.FPS.Gameplay
                     wasPlayerAccuracyReseted = true;
                 }
 
-                CalculatePlayerDistance();
-                if (playerDistance <= downloadRange)
+                CheckIsPlayerInRoom();
+                //CalculatePlayerDistance();
+                if (/*playerDistance <= downloadRange*/isPlayerInRoom)
                 {
                     if ( /*timeLeft > 0*/timeLeft <= maxTime)
                     {
@@ -77,7 +78,7 @@ namespace Unity.FPS.Gameplay
                     }
                 }
 
-                if (playerDistance > downloadRange)
+                if (/*playerDistance > downloadRange*/!isPlayerInRoom)
                 {
                     downloadDataButton.isPaused = true;
                     downloadDataButton.isOn = false;
@@ -154,6 +155,25 @@ namespace Unity.FPS.Gameplay
         private void CalculatePlayerDistance()
         {
             playerDistance = Vector3.Distance(this.transform.position, Player.transform.position);
+        }
+
+        private void CheckIsPlayerInRoom()
+        {
+            float playerDistance_x = Mathf.Abs(Player.transform.position.x - transform.position.x);
+            float playerDistance_z = Mathf.Abs(Player.transform.position.z - transform.position.z);
+
+            if (playerDistance_x <= 35.5f && playerDistance_z<= 35.5f)
+            {
+                Debug.Log("Player is in Computer Room");
+                isPlayerInRoom = true;
+                //return true;
+            }
+            else
+            {
+                Debug.Log("Player LEFT Computer Room");
+                isPlayerInRoom = false;
+                //return false;
+            }
         }
 
 

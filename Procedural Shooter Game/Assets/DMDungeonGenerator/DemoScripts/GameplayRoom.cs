@@ -28,11 +28,7 @@ public class GameplayRoom : MonoBehaviour {
 
         this.initialized = true;
         this.roomIndex = roomIndex;
-
-        if (navMeshSurface != null)
-        {
-            BuildNavMesh();
-        }
+        
 
         //spawn props randomly in the room based off locators set when buildin the room prefab
         int numSpawn = rand.Next(spawnLocations.Count);
@@ -41,7 +37,7 @@ public class GameplayRoom : MonoBehaviour {
 
         possiblePropLocations.Shuffle(rand);
         for(int i =0; i < numSpawn; i++) {
-            Vector3 spawnLocation = possiblePropLocations[i].position;
+            Vector3 spawnLocation = new Vector3(possiblePropLocations[i].position.x, possiblePropLocations[i].position.y - 0.1f, possiblePropLocations[i].position.z);
             possibleSpawnLocations.Remove(possiblePropLocations[i]);
             float randomAngle = (float)rand.Next(360);
             Quaternion spawnRotation = Quaternion.AngleAxis(randomAngle, Vector3.up);
@@ -51,6 +47,11 @@ public class GameplayRoom : MonoBehaviour {
             GameObject spawned = GameObject.Instantiate(spawnables[spawnableToUse], spawnLocation, spawnRotation, this.transform);
             spawnedRandomProps.Add(spawned);
         }
+        
+        /*if (navMeshSurface != null)
+        {
+            BuildNavMesh();
+        }*/
 
         if (possibleEnemiesToSpawn.Count > 0 && spawnEnemies)
         {

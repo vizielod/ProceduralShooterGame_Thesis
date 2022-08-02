@@ -1058,7 +1058,7 @@ namespace DMDungeonGenerator {
             GenerateFogOfWarPlane();
             SetMapCamera();
             
-            ObjectiveExtractData.SetExtractDataObjectives();
+            //ObjectiveExtractData.SetExtractDataObjectives();
 
             //let the user hook in here once it's all done
             if(OnComplete != null) OnComplete(this);

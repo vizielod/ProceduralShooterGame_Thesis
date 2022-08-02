@@ -104,25 +104,49 @@ namespace Unity.FPS.Gameplay
 
         public void SpawnEnemy(int idx, Vector3 center, float radius)
         {
-            Debug.Log("Spawn Enemy");
-            //int i = Random.Range(0, 100);
-            float angle = Mathf.PI * 2f / 10 * i;
-            i++;
-            Vector3 newPos = center + new Vector3(Mathf.Cos(angle) * radius, 0, Mathf.Sin(angle) * radius);
-            //Debug.Log("Enemy spawn position: " + newPos);
-
-            /*float random = Random.Range(0, 100);
-            Debug.Log("Random enemy: " + random);*/
-
-            if (WeightedEnemies[idx].EnemyPrefab != null)
+            if (WeightedEnemies[idx].EnemyPrefab == null)
             {
-                InstantiateEnemy(WeightedEnemies[idx].EnemyPrefab, newPos);
+                Debug.Log("SPAWNER: NO ENEMY SPAWNED");
+                return;
+            }
+            
+            
+            Debug.Log("Spawn Enemy");
+            /*float angle = Mathf.PI * 2f / 10 * i;
+            i++;
+            Vector3 newPos = center + new Vector3(Mathf.Cos(angle) * radius, 0, Mathf.Sin(angle) * radius);*/
+            Vector3 randomSpawnCoordinate = Vector3.zero;
+            Vector3 randomRange = Vector3.zero;
+            bool isSpawnPositionTooCloseToPlayer = true;
+            do
+            {
+                randomRange = new Vector3(Random.Range(-35f, 35f), 0, Random.Range(-35f, 35f));
+                randomSpawnCoordinate = center + randomRange;
+
+                //Making sure that enemies does not spawn too close to the player right away.
+                if (Vector3.Distance(dynamicDifficultyManager.Player.transform.position, randomSpawnCoordinate) <=
+                    WeightedEnemies[idx].EnemyPrefab.GetComponent<Enemy>().DetectionModule.AttackRange)
+                {
+                    isSpawnPositionTooCloseToPlayer = true;
+                }
+                else
+                {
+                    isSpawnPositionTooCloseToPlayer = false;
+                }
+            } while (isSpawnPositionTooCloseToPlayer);
+
+            InstantiateEnemy(WeightedEnemies[idx].EnemyPrefab, randomSpawnCoordinate);
+            Debug.Log($"SPAWNER: {WeightedEnemies[idx].EnemyPrefab} SPAWNED");
+
+            /*if (WeightedEnemies[idx].EnemyPrefab != null)
+            {
+                InstantiateEnemy(WeightedEnemies[idx].EnemyPrefab, randomSpawnCoordinate);
                 Debug.Log($"SPAWNER: {WeightedEnemies[idx].EnemyPrefab} SPAWNED");
             }
             else
             {
                 Debug.Log("SPAWNER: NO ENEMY SPAWNED");
-            }
+            }*/
         }
 
         public void SpawnEnemyByDynamicDifficulty(Vector3 center, float radius)
@@ -229,7 +253,12 @@ namespace Unity.FPS.Gameplay
         private void InstantiateEnemy(GameObject enemyPrefab, Vector3 position)
         {
             //Debug.Log("Enemy type spawned: " + enemyPrefab);
+            
             GameObject newEnemy = Instantiate(enemyPrefab, position, Quaternion.identity);
+
+            Vector3 dir = (dynamicDifficultyManager.Player.transform.position - newEnemy.transform.position).normalized;
+
+            newEnemy.transform.forward = dir;
 
             EnemyController enemyController = newEnemy.GetComponent<EnemyController>();
             dynamicDifficultyManager.EnemyControllers.Add(enemyController);

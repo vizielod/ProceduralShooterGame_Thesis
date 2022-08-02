@@ -15,7 +15,7 @@ namespace Unity.FPS.Gameplay
         [SerializeField] private Health Health;
         [SerializeField] private NavMeshAgent NavMeshAgent;
 
-        [SerializeField] private DetectionModule DetectionModule;
+        [SerializeField] public DetectionModule DetectionModule;
 
         [SerializeField] private List<WeaponController> WeaponControllers;
 

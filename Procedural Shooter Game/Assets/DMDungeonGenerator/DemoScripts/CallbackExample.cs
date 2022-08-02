@@ -63,7 +63,11 @@ public class CallbackExample : MonoBehaviour
         for(int i = 0; i < generator.DungeonGraph.Count; i++) {
             OnInitRoomCallback(generator.DungeonGraph[i].data.gameObject, generator.rand, i);
         }
-
+        
+        generator.DungeonGraph[0].data.gameObject.GetComponent<GameplayRoom>().BuildNavMesh();
+        
+        generator.ObjectiveExtractData.SetExtractDataObjectives();
+            
         SpawnKeys(); //spawn the gameobjets using the computed data
         
         //spawn the player in the first room somewhere
@@ -71,6 +75,11 @@ public class CallbackExample : MonoBehaviour
         spawnedPlayer = GameObject.Instantiate(PlayerPrefab, spawnRoomPos, Quaternion.identity);*/
 
     }
+    
+    /*public void BuildNavMesh()
+    {
+        navMeshSurface.BuildNavMesh();
+    }*/
 
     /// <summary>
     /// THIS IS JUST AN EXAMPLE THAT CHOOSES ROOMS/DOORS AT RANDOM AND LOCKS THEM.  
