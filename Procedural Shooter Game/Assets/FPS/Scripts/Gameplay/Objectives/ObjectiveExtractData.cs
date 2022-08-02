@@ -198,23 +198,33 @@ namespace Unity.FPS.Gameplay
             //RegisterEnemyController(enemyController);
         }
 
-        public void ChangeBossRoomSetupByStaticDifficulty(StaticDifficultyType currentDifficulty)
+        public void ChangeBossRoomSetup(StaticDifficultyType currentDifficulty)
         {
+            BossRoomManager bossRoomManager = BossRoom.GetComponent<BossRoomManager>();
             switch (currentDifficulty)
             {
                 case StaticDifficultyType.Hard:
                 {
-                    ColorBossRoom(Color.red);
+                    bossRoomManager.ColorBossRoom(Color.red);
+                    bossRoomManager.InternalWalls_Hard.SetActive(true);
+                    bossRoomManager.InternalWalls_Medium.SetActive(false);
+                    bossRoomManager.InternalWalls_Easy.SetActive(false);
                     break;
                 }
                 case StaticDifficultyType.Medium:
                 {
-                    ColorBossRoom(Color.magenta);
+                    bossRoomManager.ColorBossRoom(Color.magenta);
+                    bossRoomManager.InternalWalls_Hard.SetActive(false);
+                    bossRoomManager.InternalWalls_Medium.SetActive(true);
+                    bossRoomManager.InternalWalls_Easy.SetActive(false);
                     break;
                 }
                 case StaticDifficultyType.Easy:
                 {
-                    ColorBossRoom(Color.yellow);
+                    bossRoomManager.ColorBossRoom(Color.yellow);
+                    bossRoomManager.InternalWalls_Hard.SetActive(false);
+                    bossRoomManager.InternalWalls_Medium.SetActive(false);
+                    bossRoomManager.InternalWalls_Easy.SetActive(true);
                     break;
                 }
                 default:
@@ -223,56 +233,65 @@ namespace Unity.FPS.Gameplay
             
         }
 
-        public void ChangeBossRoomSetupByDynamicDifficulty(DynamicDifficultyType currentDifficulty)
+        public void ChangeBossRoomSetup(DynamicDifficultyType currentDifficulty)
         {
+            BossRoomManager bossRoomManager = BossRoom.GetComponent<BossRoomManager>();
+            
             switch (currentDifficulty)
             {
                 case DynamicDifficultyType.Hard:
                 {
-                    ColorBossRoom(Color.red);
+                    bossRoomManager.ColorBossRoom(Color.red);
+                    bossRoomManager.InternalWalls_Hard.SetActive(true);
+                    bossRoomManager.InternalWalls_Medium.SetActive(false);
+                    bossRoomManager.InternalWalls_Easy.SetActive(false);
                     break;
                 }
                 case DynamicDifficultyType.MediumToHard:
                 {
-                    ColorBossRoom(Color.magenta);
+                    bossRoomManager.ColorBossRoom(Color.magenta);
+                    bossRoomManager.InternalWalls_Hard.SetActive(false);
+                    bossRoomManager.InternalWalls_Medium.SetActive(true);
+                    bossRoomManager.InternalWalls_Easy.SetActive(false);
                     break;
                 }
                 case DynamicDifficultyType.EasyToMedium:
                 {
-                    ColorBossRoom(Color.magenta);
+                    bossRoomManager.ColorBossRoom(Color.magenta);
+                    bossRoomManager.InternalWalls_Hard.SetActive(false);
+                    bossRoomManager.InternalWalls_Medium.SetActive(true);
+                    bossRoomManager.InternalWalls_Easy.SetActive(false);
                     break;
                 }
                 case DynamicDifficultyType.Easy:
                 {
-                    ColorBossRoom(Color.yellow);
+                    bossRoomManager.ColorBossRoom(Color.yellow);
+                    bossRoomManager.InternalWalls_Hard.SetActive(false);
+                    bossRoomManager.InternalWalls_Medium.SetActive(false);
+                    bossRoomManager.InternalWalls_Easy.SetActive(true);
                     break;
                 }
                 default:
                     break;
             }
         }
-        
-        public void ColorBossRoom(Color c) {
-            //generator.DungeonGraph[0].data.GetComponent<GameplayRoom>().ColorRoom(Color.green);
-            if (BossRoom == null)
-                return;
-            
-            List<Renderer> childMats = BossRoom.GetComponentsInChildren<Renderer>().ToList();
-            for(int i = 0; i < childMats.Count; i++) {
-                childMats[i].material.color = c;
-            }
-        }
+
         public void SpawnBoss()
         {
-            Vector3 position = new Vector3(BossRoom.transform.position.x, BossRoom.transform.position.y,
-                BossRoom.transform.position.z);
+            /*Vector3 position = new Vector3(BossRoom.transform.position.x, BossRoom.transform.position.y,
+                BossRoom.transform.position.z);*/
+
+            if (BossRoom == null)
+                return;
+
+            Vector3 position = BossRoom.GetComponent<BossRoomManager>().Center.position;
             
             GameObject BossToSpawn = sharedDifficultySettings.WeightsByDifficultyList[3].BossPrefab; //Defaulting the Easy boss
             
             if (!dynamicDifficultyManager.useDDA)
             {
                 StaticDifficultyType currentDifficulty = dynamicDifficultyManager.difficulty;
-                ChangeBossRoomSetupByStaticDifficulty(currentDifficulty);
+                ChangeBossRoomSetup(currentDifficulty);
                 Debug.Log("Current Difficulty: " + currentDifficulty);
                 
                 switch (currentDifficulty)
@@ -326,7 +345,7 @@ namespace Unity.FPS.Gameplay
                     }
                 }
 
-                ChangeBossRoomSetupByDynamicDifficulty(currentDifficulty);
+                ChangeBossRoomSetup(currentDifficulty);
                 
                 int idx = (int) currentDifficulty;
                 Debug.Log("maxPlayerPerformance: " + maxPlayerPerformance);

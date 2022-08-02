@@ -112,7 +112,8 @@ MonoBehaviour:
   Health: {fileID: 6370966072896210225}
   NavMeshAgent: {fileID: 7406548990343174644}
   DetectionModule: {fileID: 6809973363424661249}
-  WeaponController: {fileID: 2104015986810675393}
+  WeaponControllers:
+  - {fileID: 2104015986810675393}
 --- !u!114 &9087143436424816424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,6 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3de939d976a5bb0419ccd8dbd0b6836b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsBoss: 0
   PlayerRange: 0
   isEnemyInPlayerRange: 0
   SelfDestructYHeight: -20
@@ -780,7 +782,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ad90ba0b1477764da373f5ec01a8cb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WeaponName: 
+  WeaponName: Weapon_EyeLazer
   WeaponIcon: {fileID: 0}
   CrosshairDataDefault:
     CrosshairSprite: {fileID: 0}

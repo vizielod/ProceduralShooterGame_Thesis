@@ -18,26 +18,26 @@ MonoBehaviour:
     ComputersToSpawnMax: 10
     RoomsToSpawnMin: 25
     RoomsToSpawnMax: 40
-    BossPrefab: {fileID: 4094116951752829155, guid: 39ef422616f16334f8d6423075cf10c1,
+    BossPrefab: {fileID: 4929251595647183465, guid: 01b6595b315cb234a94fbef2c9161118,
       type: 3}
   - dynamicDifficulty: 1
     ComputersToSpawnMin: 5
     ComputersToSpawnMax: 8
     RoomsToSpawnMin: 20
     RoomsToSpawnMax: 30
-    BossPrefab: {fileID: 4094116951752829155, guid: 340333c285c0686499a16953bdcdee19,
+    BossPrefab: {fileID: 1305249797997701402, guid: 0198ec6cd16999e48983a0a582a49c62,
       type: 3}
   - dynamicDifficulty: 2
     ComputersToSpawnMin: 3
     ComputersToSpawnMax: 6
     RoomsToSpawnMin: 15
     RoomsToSpawnMax: 25
-    BossPrefab: {fileID: 6916665431706123982, guid: 7b07e9392d404744184d222ed91907d4,
+    BossPrefab: {fileID: 1305249797997701402, guid: 0198ec6cd16999e48983a0a582a49c62,
       type: 3}
   - dynamicDifficulty: 3
     ComputersToSpawnMin: 1
     ComputersToSpawnMax: 2
     RoomsToSpawnMin: 10
     RoomsToSpawnMax: 20
-    BossPrefab: {fileID: 7237852932878766899, guid: b803d286bcaf6da49ae3e33a431346b2,
+    BossPrefab: {fileID: 3819836549971019976, guid: cd9d27d07db69de4ea1a8ef48cdd12f4,
       type: 3}

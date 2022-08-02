@@ -110,7 +110,7 @@ MonoBehaviour:
   AmmoReloadRate: 0.5
   AmmoReloadDelay: 0.5
   MaxAmmo: 100
-  AutomaticReleaseOnCharged: 0
+  AutomaticReleaseOnCharged: 1
   MaxChargeDuration: 0.6
   AmmoUsedOnStartCharge: 1
   AmmoUsageRateWhileCharging: 0

@@ -86,6 +86,7 @@ namespace Unity.FPS.Game
             // call OnDie action
             if (CurrentHealth <= 0f)
             {
+                //Removed this so the player can respawn multiple times
                 m_IsDead = true;
                 OnDie?.Invoke();
             }

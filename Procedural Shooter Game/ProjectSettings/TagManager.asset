@@ -18,9 +18,9 @@ TagManager:
   - FirstPersonWeapon
   - FogOfWar
   - Minimap
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - EnemyWalkthroughWall
   - 
   - 
   - 

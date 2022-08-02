@@ -11,6 +11,7 @@ namespace Unity.FPS.Game
         public static AllObjectivesCompletedEvent AllObjectivesCompletedEvent = new AllObjectivesCompletedEvent();
         public static GameOverEvent GameOverEvent = new GameOverEvent();
         public static PlayerDeathEvent PlayerDeathEvent = new PlayerDeathEvent();
+        public static PlayerRespawnEvent PlayerRespawnEvent = new PlayerRespawnEvent();
         public static EnemyKillEvent EnemyKillEvent = new EnemyKillEvent();
         public static ExtractDataEvent ExtractDataEvent = new ExtractDataEvent();
         public static BossKillEvent BossKillEvent = new BossKillEvent();
@@ -37,6 +38,8 @@ namespace Unity.FPS.Game
     }
 
     public class PlayerDeathEvent : GameEvent { }
+    
+    public class PlayerRespawnEvent : GameEvent { }
 
     public class EnemyKillEvent : GameEvent
     {

@@ -79534,12 +79534,12 @@ PrefabInstance:
     - target: {fileID: 278551198325847878, guid: 32970e92051eb034abac7716569655f5,
         type: 3}
       propertyPath: useDDA
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 278551198325847878, guid: 32970e92051eb034abac7716569655f5,
         type: 3}
       propertyPath: difficulty
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 278551198325847878, guid: 32970e92051eb034abac7716569655f5,
         type: 3}
@@ -80435,6 +80435,11 @@ PrefabInstance:
         type: 3}
       propertyPath: gravityDownForce
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1360575517897679518, guid: 761cdc9e4e883334cbdcea062d0befa7,
+        type: 3}
+      propertyPath: MaxHealth
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3122855503829242450, guid: 761cdc9e4e883334cbdcea062d0befa7,
         type: 3}

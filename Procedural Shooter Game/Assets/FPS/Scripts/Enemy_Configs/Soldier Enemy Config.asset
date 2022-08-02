@@ -18,6 +18,8 @@ MonoBehaviour:
   AngularSpeed: 120
   DetectionRange: 40
   AttackRange: 15
-  Damage: 15
-  DelayBetweenShots: 0.6
-  BulletSpreadAngle: 10
+  Weapons:
+  - WeaponName: Weapon_EyeLazer
+    Damage: 15
+    DelayBetweenShots: 0.6
+    BulletSpreadAngle: 10

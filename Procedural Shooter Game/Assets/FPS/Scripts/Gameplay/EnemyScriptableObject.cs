@@ -12,6 +12,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Enemy Configuration", menuName = "ScriptableObject/Enemy Configuration")]
 public class EnemyScriptableObject : ScriptableObject
 {
+    [System.Serializable] public struct WeaponModule
+    {
+        public string WeaponName;
+        public float Damage;
+        public float DelayBetweenShots;
+        public float BulletSpreadAngle;
+    }
     //Enemy base stats
     public float Health;
     public float MovementSpeed;
@@ -19,10 +26,11 @@ public class EnemyScriptableObject : ScriptableObject
     public float AngularSpeed;
     public float DetectionRange;
     public float AttackRange;
-    
+
+    public List<WeaponModule> Weapons;
     //Enemy projectile stats
-    public float Damage;
+    /*public float Damage;
     public float DelayBetweenShots;
-    public float BulletSpreadAngle;
+    public float BulletSpreadAngle;*/
 
 }

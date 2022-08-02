@@ -145,6 +145,16 @@ namespace Unity.FPS.Gameplay
             ActorsManager actorsManager = FindObjectOfType<ActorsManager>();
             if (actorsManager != null)
                 actorsManager.SetPlayer(gameObject);
+            
+            EventManager.AddListener<PlayerRespawnEvent>(OnPlayerDeath);
+        }
+        
+        void OnPlayerDeath(PlayerRespawnEvent evt) => RespawnPlayer();
+
+        private void RespawnPlayer()
+        {
+            this.transform.position = new Vector3(0, 0, 0);
+            m_Health.CurrentHealth = m_Health.MaxHealth;
         }
 
         void Start()
@@ -258,6 +268,7 @@ namespace Unity.FPS.Gameplay
             // Tell the weapons manager to switch to a non-existing weapon in order to lower the weapon
             m_WeaponsManager.SwitchToWeaponIndex(-1, true);
 
+            //EventManager.Broadcast(Events.PlayerRespawnEvent);
             EventManager.Broadcast(Events.PlayerDeathEvent);
         }
 
