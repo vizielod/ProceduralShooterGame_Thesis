@@ -1250,18 +1250,19 @@ namespace DMDungeonGenerator {
             {
                 //Debug.Log("Spawn Central Computer");
                 GameObject centralComputer = GameObject.Instantiate(CentralComputer, pos, Quaternion.identity);
-
-                //Set centralComputer position to center of the room
-                Transform centerTransform = roomObj.transform.Find("Center").transform;
-                Vector3 center = transform.TransformPoint(centerTransform.position);
-                centralComputer.transform.position = center;
-
+                
                 //Make the room the parent of the centralComputer GO
                 GameObject parentGO = roomObj;
                 centralComputer.transform.SetParent(parentGO.transform);
                 
                 centralComputer.GetComponent<CentralComputer>().ParentRoom = roomObj;
+
+                //Set centralComputer position to center of the room
+                Transform centerTransform = roomObj.transform.Find("Center").transform;
+                Vector3 center = transform.TransformPoint(centerTransform.position);
                 
+                centralComputer.transform.position = new Vector3(center.x - 1.5f, center.y, center.z + 1.5f);
+
                 ObjectiveExtractData.CentralComputers.Add(centralComputer);
                 centralComputer.SetActive(true);
                 spawnedComputerCount++;

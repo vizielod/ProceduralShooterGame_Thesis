@@ -159,8 +159,10 @@ namespace Unity.FPS.Gameplay
 
         private void CheckIsPlayerInRoom()
         {
-            float playerDistance_x = Mathf.Abs(Player.transform.position.x - transform.position.x);
-            float playerDistance_z = Mathf.Abs(Player.transform.position.z - transform.position.z);
+            Vector3 position = this.GetComponent<CentralComputer>().ParentRoom.transform.Find("Center").transform.position;
+            
+            float playerDistance_x = Mathf.Abs(Player.transform.position.x - position.x);
+            float playerDistance_z = Mathf.Abs(Player.transform.position.z - position.z);
 
             if (playerDistance_x <= 35.5f && playerDistance_z<= 35.5f)
             {
