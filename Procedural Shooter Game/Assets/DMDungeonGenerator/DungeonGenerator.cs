@@ -1154,6 +1154,7 @@ namespace DMDungeonGenerator {
             fogPlane.GetComponent<MeshRenderer>().material = fogPlaneMaterial;
 
             fogPlane.AddComponent<MeshCollider>();
+            
             //IEnumerable<Face> faces = fogPlaneMesh.faces;
             //fogPlaneMesh.SetMaterial(faces, fogPlaneMaterial);
 

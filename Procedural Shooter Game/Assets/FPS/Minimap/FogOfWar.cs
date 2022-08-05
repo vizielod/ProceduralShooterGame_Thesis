@@ -69,6 +69,7 @@ public class FogOfWar : MonoBehaviour
     public void Initialize()
     {
         m_mapMesh = m_fogOfWarPlane.GetComponent<MeshFilter>().mesh;
+        m_fogOfWarPlane.GetComponent<MeshCollider>();
         m_vertices = m_mapMesh.vertices;
         m_colors = new Color[m_vertices.Length];
         for (int i = 0; i < m_colors.Length; i++)

@@ -22,7 +22,8 @@ namespace Unity.FPS.Gameplay
 
         GameFlowManager m_GameFlowManager;
         PlayerCharacterController m_PlayerCharacterController;
-        bool m_FireInputWasHeld;
+        public bool m_FireInputWasHeld;
+        public bool m_MoveInputWasHeld = false;
 
         void Start()
         {
@@ -55,6 +56,14 @@ namespace Unity.FPS.Gameplay
 
                 // constrain move input to a maximum magnitude of 1, otherwise diagonal movement might exceed the max move speed defined
                 move = Vector3.ClampMagnitude(move, 1);
+                if (move != Vector3.zero)
+                {
+                    m_MoveInputWasHeld = true;
+                }
+                else
+                {
+                    m_MoveInputWasHeld = false;
+                }
 
                 return move;
             }

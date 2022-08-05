@@ -125,7 +125,8 @@ namespace Unity.FPS.Gameplay
         }
 
         Health m_Health;
-        PlayerInputHandler m_InputHandler;
+        public PlayerInputHandler m_InputHandler;
+        public bool isSprinting = false;
         CharacterController m_Controller;
         PlayerWeaponsManager m_WeaponsManager;
         Actor m_Actor;
@@ -333,7 +334,7 @@ namespace Unity.FPS.Gameplay
             }
 
             // character movement handling
-            bool isSprinting = m_InputHandler.GetSprintInputHeld();
+            isSprinting = m_InputHandler.GetSprintInputHeld();
             {
                 if (isSprinting)
                 {

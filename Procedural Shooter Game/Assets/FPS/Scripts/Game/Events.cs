@@ -19,6 +19,11 @@ namespace Unity.FPS.Game
         public static AmmoPickupEvent AmmoPickupEvent = new AmmoPickupEvent();
         public static DamageEvent DamageEvent = new DamageEvent();
         public static DisplayMessageEvent DisplayMessageEvent = new DisplayMessageEvent();
+        
+        public static MoveAroundEvent MoveAroundEvent = new MoveAroundEvent();
+        public static JumpEvent JumpEvent = new JumpEvent();
+        public static SprintEvent SprintEvent = new SprintEvent();
+        public static ShootEvent ShootEvent = new ShootEvent();
     }
 
     public class ObjectiveUpdateEvent : GameEvent
@@ -36,6 +41,11 @@ namespace Unity.FPS.Game
     {
         public bool Win;
     }
+    
+    public class MoveAroundEvent : GameEvent { }
+    public class JumpEvent : GameEvent { }
+    public class SprintEvent : GameEvent { }
+    public class ShootEvent : GameEvent { }
 
     public class PlayerDeathEvent : GameEvent { }
     
