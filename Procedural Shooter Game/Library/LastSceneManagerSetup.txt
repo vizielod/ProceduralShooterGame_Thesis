@@ -19,6 +19,10 @@ sceneSetups:
   isLoaded: 0
   isActive: 0
   isSubScene: 0
+- path: Assets/FPS/Scenes/MainScene.unity
+  isLoaded: 0
+  isActive: 0
+  isSubScene: 0
 - path: Assets/FPS/Scenes/ProceduralShooterScenes/ProceduralShooterIntroScene.unity
   isLoaded: 0
   isActive: 0

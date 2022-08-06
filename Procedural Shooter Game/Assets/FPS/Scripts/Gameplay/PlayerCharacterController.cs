@@ -124,7 +124,7 @@ namespace Unity.FPS.Gameplay
             }
         }
 
-        Health m_Health;
+        public Health m_Health;
         public PlayerInputHandler m_InputHandler;
         public bool isSprinting = false;
         CharacterController m_Controller;

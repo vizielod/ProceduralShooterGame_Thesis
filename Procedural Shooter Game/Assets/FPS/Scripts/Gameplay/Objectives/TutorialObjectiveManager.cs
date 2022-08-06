@@ -9,25 +9,47 @@ namespace Unity.FPS.Gameplay
     public class TutorialObjectiveManager : MonoBehaviour
     {
         public PlayerCharacterController m_PlayerCharacterController;
-        public GameObject LockedDoor;
+        public GameObject LockedDoor_1;
+        public GameObject LockedDoor_2;
+        public GameObject ObjectiveReachPoint;
+        public GameObject CentralComputer;
+        public GameObject HealthPickup;
         
         public ObjectiveTryMoving ObjectiveTryMoving;
         public ObjectiveTrySprinting ObjectiveTrySprinting;
         public ObjectiveTryJumping ObjectiveTryJumping;
         public ObjectiveTryShooting ObjectiveTryShooting;
+        public ObjectivePickupHealth ObjectivePickupHealth;
         public ObjectiveKillTutorialEnemy ObjectiveKillTutorialEnemy;
+        public ObjectiveExtractDataTutorial ObjectiveExtractDataTutorial;
+
+        public bool SpawnReachPointObjective = false;
+        public bool GotHealed = false;
+        public bool OnHealedSetup = false;
+        
 
         //public GameObject ObjectiveKillEnemy;
         // Start is called before the first frame update
         void Start()
         {
             //ObjectiveTryMoving.gameObject.SetActive(true);
+            //m_PlayerCharacterController.m_Health.OnHealed += OnHealed;
             ObjectiveTryMoving.SetMoveAroundObjective();
+        }
+
+        private void OnHealed(float amount)
+        {
+            GotHealed = true;
         }
 
         // Update is called once per frame
         void Update()
         {
+            if (m_PlayerCharacterController.m_Health != null && !OnHealedSetup)
+            {
+                m_PlayerCharacterController.m_Health.OnHealed += OnHealed;
+                OnHealedSetup = true;
+            }
             if (!ObjectiveTryMoving.IsCompleted && ObjectiveTryMoving.IsActive)
             {
                 if (m_PlayerCharacterController.m_InputHandler.m_MoveInputWasHeld)
@@ -66,11 +88,50 @@ namespace Unity.FPS.Gameplay
                 {
                     ShootEvent evt = Events.ShootEvent;
                     EventManager.Broadcast(evt);
-                    ObjectiveKillTutorialEnemy.SetKillEnemyObjective();
+
+                    Destroy(LockedDoor_1);
+                    //StartCoroutine(DamagePlayerCoroutine());
+                    //m_PlayerCharacterController.m_Health.TakeDamage(50f, null);
                     
-                    Destroy(LockedDoor);
+                    //HealthPickup.SetActive(true);
+                    ObjectivePickupHealth.SetPickupHealthObjective();
+
+                    //ObjectiveKillTutorialEnemy.SetKillEnemyObjective();
+                    
+                }
+            }
+
+            if (!ObjectivePickupHealth.IsCompleted && ObjectivePickupHealth.IsActive)
+            {
+                if (GotHealed)
+                {
+                    PickupEvent evt = Events.PickupEvent;
+                    EventManager.Broadcast(evt);
+
+                    GotHealed = false;
                 }
             }
         }
+        
+        IEnumerator DamagePlayerCoroutine()
+        {
+            //Print the time of when the function is first called.
+            Debug.Log("Started Coroutine at timestamp : " + Time.time);
+
+            //yield on a new YieldInstruction that waits for 5 seconds.
+            yield return new WaitForSeconds(3);
+            
+            m_PlayerCharacterController.m_Health.TakeDamage(50f, null);
+            //After we have waited 5 seconds print the time again.
+            Debug.Log("Finished Coroutine at timestamp : " + Time.time);
+        }
+
+        void InstantiateReachPointObjectives()
+        {
+            Vector3 position = CentralComputer.GetComponent<CentralComputer>().ParentRoom.transform.Find("Center").transform.position;
+            GameObject newReachPointObjective = Instantiate(ObjectiveReachPoint, position, Quaternion.identity);
+            newReachPointObjective.GetComponent<ObjectiveReachPoint>().Title = $"Reach Extraction Area";
+        }
+        
     }
 }
