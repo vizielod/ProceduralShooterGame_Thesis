@@ -18,6 +18,7 @@ namespace Unity.FPS.Gameplay
         public ObjectiveTryMoving ObjectiveTryMoving;
         public ObjectiveTrySprinting ObjectiveTrySprinting;
         public ObjectiveTryJumping ObjectiveTryJumping;
+        public ObjectiveTryOpeningMap ObjectiveTryOpeningMap;
         public ObjectiveTryShooting ObjectiveTryShooting;
         public ObjectivePickupHealth ObjectivePickupHealth;
         public ObjectiveKillTutorialEnemy ObjectiveKillTutorialEnemy;
@@ -77,6 +78,16 @@ namespace Unity.FPS.Gameplay
                 if (m_PlayerCharacterController.HasJumpedThisFrame)
                 {
                     JumpEvent evt = Events.JumpEvent;
+                    EventManager.Broadcast(evt);
+                    ObjectiveTryOpeningMap.SetTryOpeningMapObjective();
+                }
+            }
+            
+            if (!ObjectiveTryOpeningMap.IsCompleted && ObjectiveTryOpeningMap.IsActive)
+            {
+                if (m_PlayerCharacterController.MapImage.activeInHierarchy)
+                {
+                    OpenMapEvent evt = Events.OpenMapEvent;
                     EventManager.Broadcast(evt);
                     ObjectiveTryShooting.SetTryShootingObjective();
                 }

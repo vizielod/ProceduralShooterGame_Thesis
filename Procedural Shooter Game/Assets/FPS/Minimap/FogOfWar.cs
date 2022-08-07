@@ -84,4 +84,5 @@ public class FogOfWar : MonoBehaviour
     {
         m_mapMesh.colors = m_colors;
     }
+    
 }

@@ -1,3 +1,4 @@
+using Codice.Client.Common.Threading;
 using UnityEngine;
 
 namespace Unity.FPS.Game
@@ -24,6 +25,7 @@ namespace Unity.FPS.Game
         public static JumpEvent JumpEvent = new JumpEvent();
         public static SprintEvent SprintEvent = new SprintEvent();
         public static ShootEvent ShootEvent = new ShootEvent();
+        public static OpenMapEvent OpenMapEvent = new OpenMapEvent();
     }
 
     public class ObjectiveUpdateEvent : GameEvent
@@ -46,6 +48,7 @@ namespace Unity.FPS.Game
     public class JumpEvent : GameEvent { }
     public class SprintEvent : GameEvent { }
     public class ShootEvent : GameEvent { }
+    public class OpenMapEvent : GameEvent { }
 
     public class PlayerDeathEvent : GameEvent { }
     

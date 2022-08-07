@@ -1,0 +1,41 @@
+using System.Collections;
+using System.Collections.Generic;
+using Unity.FPS.Game;
+using UnityEngine;
+
+namespace Unity.FPS.Gameplay
+{
+    public class ObjectiveTryOpeningMap : Objective
+    {
+        public bool IsActive = false;
+
+        public void SetTryOpeningMapObjective()
+        {
+            base.Start();
+
+            EventManager.AddListener<OpenMapEvent>(OnOpeningMapEvent);
+
+            IsActive = true;
+        }
+
+        void OnOpeningMapEvent(OpenMapEvent evt)
+        {
+            if (IsCompleted)
+                return;
+
+            // this will trigger the objective completion
+            // it works even if the player can't pickup the item (i.e. objective pickup healthpack while at full heath)
+            CompleteObjective(string.Empty, string.Empty, "Objective complete : " + Title);
+
+            if (gameObject)
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        void OnDestroy()
+        {
+            EventManager.RemoveListener<OpenMapEvent>(OnOpeningMapEvent);
+        }
+    }
+}
