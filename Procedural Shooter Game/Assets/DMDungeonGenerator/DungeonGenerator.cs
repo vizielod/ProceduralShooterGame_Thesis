@@ -1215,13 +1215,15 @@ namespace DMDungeonGenerator {
             
             mapCamera.transform.position = new Vector3(dungeonCenter.x, 110, dungeonCenter.z);
             
-            mapCamera.gameObject.SetActive(true);
+            //mapCamera.gameObject.SetActive(true);
 
-            mapCamera.GetComponent<FogOfWar>().m_fogOfWarPlane = fogPlane;
+            mapCamera.GetComponentInParent<FogOfWar>().m_fogOfWarPlane = fogPlane;
             
-            mapCamera.GetComponent<FogOfWar>().Initialize();
+            mapCamera.GetComponentInParent<FogOfWar>().Initialize();
+            
+            mapCamera.GetComponentInParent<FogOfWar>().TransformVerticesFromLocalToWorld();
 
-            mapCamera.GetComponent<FogOfWar>().startUpdate = true;
+            mapCamera.GetComponentInParent<FogOfWar>().startUpdate = true;
 
             //mapCamera.orthographicSize = width_x;
         }

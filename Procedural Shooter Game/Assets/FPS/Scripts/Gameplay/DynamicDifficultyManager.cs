@@ -291,7 +291,7 @@ namespace Unity.FPS.Gameplay
                 }
 
                 timer += Time.deltaTime;
-                if (timer > DiffGaugeRecalcPeriod / 2f)
+                if (timer > DiffGaugeRecalcPeriod / 4f)
                 {
                     CalculateGauge();
                     StartCoroutine(CalculateGaugeCoroutine(_tempDifficultyGauge, newTempDifficultyGauge, 1f / 2f));
@@ -581,7 +581,7 @@ namespace Unity.FPS.Gameplay
         private void AdjustDifficultyGauge()
         {
             float tempGaugeDiff = _tempDifficultyGauge - DifficultyGauge;
-            DifficultyGauge = DifficultyGauge + tempGaugeDiff / 3f;
+            DifficultyGauge = DifficultyGauge + tempGaugeDiff / 2f;
         }
 
         private void ScalePlayerHealth(float minLimit, float maxLimit)

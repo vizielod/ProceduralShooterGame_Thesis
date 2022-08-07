@@ -66,6 +66,8 @@ public class FogOfWarManager : MonoBehaviour
         mapCamera.GetComponent<FogOfWar>().m_fogOfWarPlane = fogPlane;
             
         mapCamera.GetComponent<FogOfWar>().Initialize();
+        
+        mapCamera.GetComponentInParent<FogOfWar>().TransformVerticesFromLocalToWorld();
 
         mapCamera.GetComponent<FogOfWar>().startUpdate = true;
 

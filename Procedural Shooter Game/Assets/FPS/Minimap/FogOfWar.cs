@@ -23,14 +23,21 @@ public class FogOfWar : MonoBehaviour
     }
 
     private Mesh m_mapMesh;
-
+    
     private Vector3[] m_vertices;
 
+    private List<Vector3> vertices = new List<Vector3>();
+
     private Color[] m_colors;
+
+    private bool LocalToWorldTransformed = false;
     // Start is called before the first frame update
     void Start()
     {
-        //Initialize();
+        /*for (int i = 0; i < m_vertices.Length; i++)
+        {
+            vertices[i] = m_fogOfWarPlane.transform.TransformPoint(m_vertices[i]);
+        }*/
     }
 
     // Update is called once per frame
@@ -38,6 +45,16 @@ public class FogOfWar : MonoBehaviour
     {
         if (startUpdate)
         {
+            /*if (!LocalToWorldTransformed)
+            {
+                for (int i = 0; i < m_vertices.Length; i++)
+                {
+                    vertices[i] = m_fogOfWarPlane.transform.TransformPoint(m_vertices[i]);
+                }
+
+                LocalToWorldTransformed = true;
+            }*/
+
             Ray r = new Ray(m_fogOfWarRaycaster.transform.position,
                 m_player.position - m_fogOfWarRaycaster.transform.position);
             RaycastHit hit;
@@ -46,7 +63,8 @@ public class FogOfWar : MonoBehaviour
                 //TODO: Optimize it to not to check collision with all the vertices of the plane
                 for (int i = 0; i < m_vertices.Length; i++)
                 {
-                    Vector3 v = m_fogOfWarPlane.transform.TransformPoint(m_vertices[i]);
+                    //Vector3 v = m_fogOfWarPlane.transform.TransformPoint(m_vertices[i]);
+                    Vector3 v = vertices[i];
                     float dist =
                         Vector3.SqrMagnitude(v - hit.point); //compute distance between intersection point and vertices
                     if (dist < m_radiusSqr)
@@ -63,6 +81,14 @@ public class FogOfWar : MonoBehaviour
                     UpdateColors();
                 }
             }
+        }
+    }
+
+    public void TransformVerticesFromLocalToWorld()
+    {
+        for (int i = 0; i < m_vertices.Length; i++)
+        {
+            vertices.Add(m_fogOfWarPlane.transform.TransformPoint(m_vertices[i]));
         }
     }
 

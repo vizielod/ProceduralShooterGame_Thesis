@@ -250,14 +250,14 @@ namespace Unity.FPS.Gameplay
 
         private void OpenMap()
         {
-            //MapCamera.SetActive(true);
+            MapCamera.SetActive(true);
             MapImage.SetActive(true);
             //Debug.Log("Open Map");
         }
         
         private void CloseMap()
         {
-            //MapCamera.SetActive(false);
+            MapCamera.SetActive(false);
             MapImage.SetActive(false);
             //Debug.Log("Close Map");
         }

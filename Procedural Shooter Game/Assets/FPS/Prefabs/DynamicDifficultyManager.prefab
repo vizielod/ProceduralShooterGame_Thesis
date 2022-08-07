@@ -49,14 +49,14 @@ MonoBehaviour:
   useDDA: 1
   difficulty: 0
   HardDifficultyGaugeTimer: 0
-  NormalizedHardDifficultyGaugeTimer: 0
   MediumToHardDifficultyGaugeTimer: 0
-  NormalizedMediumToHardDifficultyGaugeTimer: 0
   EasyToMediumDifficultyGaugeTimer: 0
-  NormalizedEasyToMediumDifficultyGaugeTimer: 0
   EasyDifficultyGaugeTimer: 0
-  NormalizedEasyDifficultyGaugeTimer: 0
   timeSpentInDownload: 0
+  NormalizedHardDifficultyGaugeTimer: 0
+  NormalizedMediumToHardDifficultyGaugeTimer: 0
+  NormalizedEasyToMediumDifficultyGaugeTimer: 0
+  NormalizedEasyDifficultyGaugeTimer: 0
   EnemyPrefab: {fileID: 2015434656898269652, guid: 25a1b0efadb966e44889fce712c8ff8d,
     type: 3}
   MinEnemySpawnPostion: {fileID: 0}
@@ -66,7 +66,7 @@ MonoBehaviour:
   PlayerAccuracy: 0
   playerTotalShotCount: 0
   playerTotalHitCount: 0
-  range: 20
+  range: 40
   enemyCountInRange: 0
   healthPickupsCountInRange: 0
   EnemyControllers:
