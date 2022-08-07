@@ -13,6 +13,7 @@ namespace Unity.FPS.Gameplay
         public GameObject ObjectiveReachPoint;
         public Transform BossRoomEntrance;
         public GameObject Boss;
+        public ObjectiveKillTutorialBoss ObjectiveKillTutorialBoss;
 
         [Header("References and Prefabs")]
         public DynamicDifficultyManager dynamicDifficultyManager;
@@ -61,6 +62,8 @@ namespace Unity.FPS.Gameplay
                 return;
             
             InstantiateReachPointObjectives(BossRoomEntrance.position, $"Reach Boss Room");
+            ObjectiveKillTutorialBoss.SetKillEnemyObjective();
+            Boss.SetActive(true);
             
             CompleteObjective(string.Empty, string.Empty, "Objective complete : " + Title);
 

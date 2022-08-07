@@ -1,4 +1,5 @@
-﻿using Unity.FPS.Game;
+﻿using Codice.Client.BaseCommands;
+using Unity.FPS.Game;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,11 +31,15 @@ namespace Unity.FPS.UI
         [Tooltip("Duration of the fade in")] public float FadeInDuration = 0.5f;
         [Tooltip("Duration of the fade out")] public float FadeOutDuration = 2f;
 
-        [Header("Sound")] [Tooltip("Sound that will be player on initialization")]
+        [Header("Sound")] 
+        [Tooltip("Sound should not play for Secondary objectives")]
+        public bool IsSecondatyObjective = false;
+        [Tooltip("Sound that will be player on initialization")]
         public AudioClip InitSound;
 
         [Tooltip("Sound that will be player on completion")]
         public AudioClip CompletedSound;
+        
 
         [Header("Movement")] [Tooltip("Time it takes to move in the screen")]
         public float MoveInDuration = 0.5f;
@@ -109,8 +114,9 @@ namespace Unity.FPS.UI
                     CanvasGroup.alpha = 1f;
                     // end the fade in
                     m_IsFadingIn = false;
-
-                    PlaySound(InitSound);
+                    
+                    if(!IsSecondatyObjective)
+                        PlaySound(InitSound);
                 }
             }
 

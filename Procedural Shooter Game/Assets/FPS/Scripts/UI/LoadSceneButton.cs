@@ -19,25 +19,63 @@ namespace Unity.FPS.UI
             }
         }
 
+        public void SimpleLoadTargetScene()
+        {
+            SceneManager.LoadScene(SceneName);
+        }
+
         public void LoadTargetScene()
         {
+            bool useDDA = PlayerPrefs.GetInt("useDDA") == 0 ? false : true;
+            bool DDAUseWasSet = PlayerPrefs.GetInt("DDAUseWasSet") == 0 ? false : true;
+            bool IsFirstTimePlaying = PlayerPrefs.GetInt("IsFirstTimePlaying") == 0 ? false : true;
+            
             int rand = Random.Range(0, 2);
 
-            SceneManager.LoadScene(SceneName);
-            PlayerPrefs.SetInt("difficulty", difficultyIDX);
-            PlayerPrefs.SetInt("useDDA", rand); //0 - false, 1 - true
-            
-            /*if (rand == 0)
+            if (IsFirstTimePlaying)
             {
-                //SceneManager.LoadScene(SceneName);
+                PlayerPrefs.SetInt("IsFirstTimePlaying", 0);
                 PlayerPrefs.SetInt("difficulty", difficultyIDX);
-                PlayerPrefs.SetInt("useDDA", 0); //0 - false, 1 - true
+                PlayerPrefs.SetInt("useDDA", rand); //0 - false, 1 - true
+                if (rand == 1) //Means DDA should be used
+                {
+                    PlayerPrefs.SetInt("DDAUseWasSet", 1);
+                }
+                else
+                {
+                    PlayerPrefs.SetInt("DDAUseWasSet", 0);
+                }
             }
             else
             {
-                PlayerPrefs.SetInt("useDDA", 1);
+                if (DDAUseWasSet)
+                {
+                    PlayerPrefs.SetInt("useDDA", 1);
+                }
+                else
+                {
+                    PlayerPrefs.SetInt("useDDA", 0);
+                    PlayerPrefs.SetInt("difficulty", difficultyIDX);
+                }
+                
             }
-            SceneManager.LoadScene(SceneName);*/
+
+            SceneManager.LoadScene(SceneName);
+            
+        }
+
+        public void LoadTutorialScene()
+        {
+            SceneManager.LoadScene(SceneName);
+        }
+        
+        public void Quit() {
+#if UNITY_STANDALONE
+            Application.Quit();
+#endif
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#endif
         }
     }
 }

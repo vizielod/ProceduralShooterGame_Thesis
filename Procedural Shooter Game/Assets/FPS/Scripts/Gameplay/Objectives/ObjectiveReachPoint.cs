@@ -14,6 +14,8 @@ namespace Unity.FPS.Gameplay
         {
             if (DestroyRoot == null)
                 DestroyRoot = transform;
+
+            IsReachPointObjective = true;
         }
 
         void OnTriggerEnter(Collider other)

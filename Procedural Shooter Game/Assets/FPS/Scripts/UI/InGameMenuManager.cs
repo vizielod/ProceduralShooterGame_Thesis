@@ -2,6 +2,7 @@
 using Unity.FPS.Gameplay;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Unity.FPS.UI
@@ -101,6 +102,12 @@ namespace Unity.FPS.UI
         public void ClosePauseMenu()
         {
             SetPauseMenuActivation(false);
+        }
+        
+        public void BackToMainMenu()
+        {
+            SetPauseMenuActivation(false);
+            SceneManager.LoadScene("ProceduralShooterIntroScene");
         }
 
         void SetPauseMenuActivation(bool active)

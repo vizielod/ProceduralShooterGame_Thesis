@@ -44,22 +44,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55b89d0da3685ae4497868b546f578c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Title: Extract data
+  Title: Extract data from each Computer
   Description: 
   IsOptional: 0
   DelayVisible: 3
-  generator: {fileID: 0}
+  IsReachPointObjective: 0
   MustExtractAllData: 1
   DatapointsToCompleteObjective: 5
   NotificationDatapointsRemainingThreshold: 3
+  targetRemaining: 0
+  playerPerformanceNormalized: 0
   CentralComputers: []
+  dynamicDifficultyManager: {fileID: 0}
+  sharedDifficultySettings: {fileID: 0}
   ObjectiveReachPoint: {fileID: 2707800222142829387, guid: d401b602eddc4e449b385a053f012a4c,
     type: 3}
   ObjectiveKillBoss: {fileID: 598277302063295018, guid: 5cfcac35d2fad2d4796abca7332c8208,
     type: 3}
   CentralComputer: {fileID: 0}
+  GameManager: {fileID: 0}
+  BossPrefab: {fileID: 0}
+  BossRoom: {fileID: 0}
   ExitDoor: {fileID: 0}
-  BossManager: {fileID: 0}
 --- !u!114 &6740569042849264993
 MonoBehaviour:
   m_ObjectHideFlags: 0

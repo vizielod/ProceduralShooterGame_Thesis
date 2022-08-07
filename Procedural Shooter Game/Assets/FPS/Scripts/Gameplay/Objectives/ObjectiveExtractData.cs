@@ -102,6 +102,9 @@ namespace Unity.FPS.Gameplay
                 Vector3 position = centralComputer.GetComponent<CentralComputer>().ParentRoom.transform.Find("Center").transform.position;
 
                 GameObject newReachPointObjective = Instantiate(ObjectiveReachPoint, position, Quaternion.identity);
+                
+                centralComputer.GetComponent<DownloadManager>().ReachPointIndex = i;
+                //centralComputer.GetComponent<DownloadManager>().ObjectiveReachPoint = newReachPointObjective.GetComponent<ObjectiveReachPoint>();
 
                 newReachPointObjective.GetComponent<ObjectiveReachPoint>().Title = $"Reach Extraction Area {i++}";
             }

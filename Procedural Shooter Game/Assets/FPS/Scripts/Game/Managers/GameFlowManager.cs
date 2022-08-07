@@ -5,6 +5,7 @@ namespace Unity.FPS.Game
 {
     public class GameFlowManager : MonoBehaviour
     {
+        public bool IsTutorialScene = false;
         [Header("Parameters")] [Tooltip("Duration of the fade-to-black at the end of the game")]
         public float EndSceneLoadDelay = 3f;
 
@@ -76,6 +77,10 @@ namespace Unity.FPS.Game
             EndGameFadeCanvasGroup.gameObject.SetActive(true);
             if (win)
             {
+                if (IsTutorialScene)
+                {
+                    PlayerPrefs.SetInt("WasTutorialPlayed", 1);
+                }
                 m_SceneToLoad = WinSceneName;
                 m_TimeLoadEndGameScene = Time.time + EndSceneLoadDelay + DelayBeforeFadeToBlack;
 

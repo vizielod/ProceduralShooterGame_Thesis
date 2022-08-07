@@ -122,6 +122,48 @@ namespace DMDungeonGenerator {
 
         public List<GraphNode> DungeonGraph = new List<GraphNode>();
 
+        public StaticDifficultyType difficulty;
+        public bool useDDA;
+        
+
+        private void Awake()
+        {
+            int difficultyIdx = PlayerPrefs.GetInt("difficulty");
+            difficulty = (StaticDifficultyType) difficultyIdx;
+            useDDA = PlayerPrefs.GetInt("useDDA") == 0 ? false : true;
+
+            if (useDDA)
+            {
+                dynamicDifficulty = DynamicDifficultyType.MediumToHard;
+            }
+            else
+            {
+                switch (difficulty)
+                {
+                    case StaticDifficultyType.Hard:
+                    {
+                        //Debug.Log(DynamicDifficultyType.Hard);
+                        dynamicDifficulty = DynamicDifficultyType.Hard;
+                        break;
+                    }
+                    case StaticDifficultyType.Medium:
+                    {
+                        //Debug.Log(DynamicDifficultyType.EasyToMedium);
+                        dynamicDifficulty = DynamicDifficultyType.MediumToHard;
+                        break;
+                    }
+                    case StaticDifficultyType.Easy:
+                    {
+                        //Debug.Log(DynamicDifficultyType.EasyToMedium);
+                        dynamicDifficulty = DynamicDifficultyType.EasyToMedium;
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+        }
+
         public void Start() {
             generationComplete = true; //we set this to true by default so that StartGenerator knows nothing is running already, and sets it to false when it starts.  
             if(randomSeedOnStart) randomSeed = UnityEngine.Random.Range(0, 9999);
@@ -1171,7 +1213,7 @@ namespace DMDungeonGenerator {
             
             //mapCamera.rect = new Rect(0, 0, 5, 5);
             
-            mapCamera.transform.position = new Vector3(dungeonCenter.x, 100, dungeonCenter.z);
+            mapCamera.transform.position = new Vector3(dungeonCenter.x, 110, dungeonCenter.z);
             
             mapCamera.gameObject.SetActive(true);
 

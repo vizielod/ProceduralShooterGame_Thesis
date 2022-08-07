@@ -20,6 +20,7 @@ namespace Unity.FPS.Game
         public bool IsCompleted { get; private set; }
         public bool IsBlocking() => !(IsOptional || IsCompleted);
 
+        public bool IsReachPointObjective = false;
         public static event Action<Objective> OnObjectiveCreated;
         public static event Action<Objective> OnObjectiveCompleted;
 
@@ -27,6 +28,9 @@ namespace Unity.FPS.Game
         {
             OnObjectiveCreated?.Invoke(this);
 
+            if (IsReachPointObjective)
+                return;
+            
             DisplayMessageEvent displayMessage = Events.DisplayMessageEvent;
             displayMessage.Message = Title;
             displayMessage.DelayBeforeDisplay = 0.0f;

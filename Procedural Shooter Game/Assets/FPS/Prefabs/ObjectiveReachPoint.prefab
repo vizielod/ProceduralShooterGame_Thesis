@@ -113,7 +113,8 @@ MonoBehaviour:
   Title: Reach extraction area
   Description: 
   IsOptional: 1
-  DelayVisible: 4
+  DelayVisible: 2
+  IsReachPointObjective: 0
   DestroyRoot: {fileID: 2707800222142829391}
 --- !u!114 &2707800222142829378
 MonoBehaviour:

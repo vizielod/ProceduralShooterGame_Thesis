@@ -33,6 +33,9 @@ namespace Unity.FPS.Gameplay
 
         private bool wasPlayerAccuracyReseted = false;
 
+        public GameObject ObjectiveReachPoint;
+        public int ReachPointIndex;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -173,9 +176,24 @@ namespace Unity.FPS.Gameplay
             else
             {
                 Debug.Log("Player LEFT Computer Room");
+                ReinstantiateReachPointObjectives();
                 isPlayerInRoom = false;
+                DisplayMessageEvent displayMessage = Events.DisplayMessageEvent;
+                displayMessage.Message = "Player LEFT Computer Room. <color=red>Data Extraction on hold.</color> \n " +
+                                         "Go back and Press [E] at Computer to <color=green>Continue Extraction</color>.";
+                displayMessage.DelayBeforeDisplay = 0.0f;
+                EventManager.Broadcast(displayMessage);
                 //return false;
             }
+        }
+        
+        void ReinstantiateReachPointObjectives()
+        {
+            Vector3 position = this.GetComponent<CentralComputer>().ParentRoom.transform.Find("Center").transform.position;
+
+            GameObject newReachPointObjective = Instantiate(ObjectiveReachPoint, position, Quaternion.identity);
+
+            newReachPointObjective.GetComponent<ObjectiveReachPoint>().Title = $"Reach Extraction Area {ReachPointIndex}";
         }
 
 
