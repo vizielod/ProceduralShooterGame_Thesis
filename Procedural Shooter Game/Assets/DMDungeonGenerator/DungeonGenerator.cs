@@ -1186,7 +1186,7 @@ namespace DMDungeonGenerator {
             float width = width_x >= width_z ? width_x : width_z;
             float height = width_x >= width_z ? width_x : width_z;
             
-            ProBuilderMesh fogPlaneMesh = ShapeGenerator.GeneratePlane(PivotLocation.Center, width, height, 30, 30, Axis.Up);
+            ProBuilderMesh fogPlaneMesh = ShapeGenerator.GeneratePlane(PivotLocation.Center, width, height, 10, 10, Axis.Up);
             
             fogPlane = fogPlaneMesh.gameObject;
 

@@ -56,6 +56,7 @@ namespace Unity.FPS.Gameplay
                     wasPlayerAccuracyReseted = true;
                 }
 
+                EnemySpawner.currentDynamicDifficulty = EnemySpawner.GetCurrentDifficulty();
                 CheckIsPlayerInRoom();
                 //CalculatePlayerDistance();
                 if (/*playerDistance <= downloadRange*/isPlayerInRoom)
@@ -169,13 +170,13 @@ namespace Unity.FPS.Gameplay
 
             if (playerDistance_x <= 35.5f && playerDistance_z<= 35.5f)
             {
-                Debug.Log("Player is in Computer Room");
+                //Debug.Log("Player is in Computer Room");
                 isPlayerInRoom = true;
                 //return true;
             }
             else
             {
-                Debug.Log("Player LEFT Computer Room");
+                //Debug.Log("Player LEFT Computer Room");
                 ReinstantiateReachPointObjectives();
                 isPlayerInRoom = false;
                 DisplayMessageEvent displayMessage = Events.DisplayMessageEvent;

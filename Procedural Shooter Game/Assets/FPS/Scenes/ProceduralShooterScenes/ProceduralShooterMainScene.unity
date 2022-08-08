@@ -265,19 +265,19 @@ MonoBehaviour:
     type: 2}
   BossManager: {fileID: 1716151953}
   CentralComputer: {fileID: 6692938883470985466}
-  dynamicDifficulty: 1
+  dynamicDifficulty: 3
   spawnedComputerCount: 0
   computersToSpawnMin: 0
   computersToSpawnMax: 0
   targetComputerCount: 0
   player: {fileID: 2729281214152228921}
   fogPlaneMaterial: {fileID: 2100000, guid: 9cc633ae869b6c741ac9a8c8629b637c, type: 2}
-  mapCamera: {fileID: 1434081183}
+  mapCamera: {fileID: 814913696}
   generateOnStart: 1
   randomSeedOnStart: 1
   randomSeed: 7444
   generationComplete: 0
-  generatorSettings: {fileID: 11400000, guid: bde5149c4e075ab40bfa50846b81d3c0, type: 2}
+  generatorSettings: {fileID: 11400000, guid: 8e3e4519c1edb194583fea6ca066762d, type: 2}
   AllDeadEndDoors: []
   AllDeadEndDoorData: []
   ExitDoorGO: {fileID: 0}
@@ -345,13 +345,87 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &814913695
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 814913697}
+  - component: {fileID: 814913696}
+  m_Layer: 0
+  m_Name: MapCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!20 &814913696
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814913695}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.1
+  far clip plane: 150
+  field of view: 60
+  orthographic: 1
+  orthographic size: 150
+  m_Depth: -1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 6455
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 8400000, guid: f752963a623830d4ca21c2c29f4a7458, type: 2}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 0
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 1
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &814913697
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814913695}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1434081184}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &815840396
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-7405022
+  m_Name: pb_Mesh38044
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -690,7 +764,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh276366
+  m_Name: pb_Mesh38114
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -79203,58 +79277,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1434081184}
-  - component: {fileID: 1434081183}
   - component: {fileID: 1434081185}
   m_Layer: 0
-  m_Name: MapCamera
+  m_Name: MapCameraHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!20 &1434081183
-Camera:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1434081182}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_projectionMatrixMode: 1
-  m_GateFitMode: 2
-  m_FOVAxisMode: 0
-  m_SensorSize: {x: 36, y: 24}
-  m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: 0.1
-  far clip plane: 300
-  field of view: 60
-  orthographic: 1
-  orthographic size: 150
-  m_Depth: -1
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 6455
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: f752963a623830d4ca21c2c29f4a7458, type: 2}
-  m_TargetDisplay: 0
-  m_TargetEye: 3
-  m_HDR: 1
-  m_AllowMSAA: 0
-  m_AllowDynamicResolution: 0
-  m_ForceIntoRT: 1
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: 0.022
+  m_IsActive: 1
 --- !u!4 &1434081184
 Transform:
   m_ObjectHideFlags: 0
@@ -79265,7 +79295,8 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 110, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 814913697}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
@@ -79373,6 +79404,11 @@ PrefabInstance:
       objectReference: {fileID: 1328888004}
     - target: {fileID: 278551198325847878, guid: 32970e92051eb034abac7716569655f5,
         type: 3}
+      propertyPath: AdjustmentTimerFactor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 278551198325847878, guid: 32970e92051eb034abac7716569655f5,
+        type: 3}
       propertyPath: _playerWeaponsManager
       value: 
       objectReference: {fileID: 2729281214152228923}
@@ -79450,7 +79486,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.1
-  far clip plane: 300
+  far clip plane: 50
   field of view: 60
   orthographic: 1
   orthographic size: 30
@@ -79519,7 +79555,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5623502
+  m_Name: pb_Mesh-26860
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -79891,7 +79927,7 @@ PrefabInstance:
         type: 3}
       propertyPath: MapCamera
       value: 
-      objectReference: {fileID: 1434081182}
+      objectReference: {fileID: 814913695}
     - target: {fileID: 814417836257332542, guid: 761cdc9e4e883334cbdcea062d0befa7,
         type: 3}
       propertyPath: HealthText
@@ -80624,6 +80660,16 @@ PrefabInstance:
       propertyPath: Player
       value: 
       objectReference: {fileID: 2729281214152228921}
+    - target: {fileID: 3613785634722965713, guid: 177642d0a2788f34388b7ea443d4375a,
+        type: 3}
+      propertyPath: maxTime
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 3613785634722965713, guid: 177642d0a2788f34388b7ea443d4375a,
+        type: 3}
+      propertyPath: spawnPeriod
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3613785634722965713, guid: 177642d0a2788f34388b7ea443d4375a,
         type: 3}
       propertyPath: dynamicDifficultyManager

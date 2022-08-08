@@ -16,7 +16,7 @@ MonoBehaviour:
   MovementSpeed: 7
   Acceleration: 10
   AngularSpeed: 120
-  DetectionRange: 40
+  DetectionRange: 100
   AttackRange: 35
   Weapons:
   - WeaponName: Weapon_EyeLazer

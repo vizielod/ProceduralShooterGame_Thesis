@@ -508,6 +508,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3de939d976a5bb0419ccd8dbd0b6836b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EnemyType: 3
   IsBoss: 1
   PlayerRange: 0
   isEnemyInPlayerRange: 0

@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96383e9bc776a45238a6500554b2b7f8, type: 3}
+  m_Name: TestDungeonSet_9Scale_2
+  m_EditorClassIdentifier: 
+  name: Default
+  description: Enter any text here
+  TargetRooms: 30
+  minRooms: 20
+  useDeadendRooms: 0
+  spawnRooms:
+  - {fileID: 5502604380908350273, guid: 8d147c9679705004fb78afa7eee28c3d, type: 3}
+  possibleRooms:
+  - {fileID: 190446480701369037, guid: d7f7a12205fa29344912773a8c28f33f, type: 3}
+  - {fileID: 5828614602139139869, guid: 107ff164d6940024d9ede0d2bf2b9edb, type: 3}
+  - {fileID: 4477207809652525571, guid: 54a20f0761f084e459fb080e2fa59d83, type: 3}
+  - {fileID: 4477207809652525571, guid: c90981627ea48aa4483276f744fedb12, type: 3}
+  - {fileID: 4477207809652525571, guid: 56212640d95906741ad0d1d27ae2954d, type: 3}
+  - {fileID: 4477207809652525571, guid: 51825101660437441ba77fa8380fab11, type: 3}
+  - {fileID: 4477207809652525571, guid: 9bc64976d9cf52e4c879643d78d866b2, type: 3}
+  - {fileID: 4477207809652525571, guid: 138e96eb2337a1d4ebebf290f3778980, type: 3}
+  - {fileID: 6695848333846302573, guid: f6ecb5cb517885748b91311a2a56c79b, type: 3}
+  - {fileID: 6695848333846302573, guid: abedfb9defb63d74ab7a95c3fd404f0e, type: 3}
+  - {fileID: 6695848333846302573, guid: 9f1074302fe728345beb028a43e12126, type: 3}
+  - {fileID: 6695848333846302573, guid: 166f2c923cffcca41a6382ba431facb5, type: 3}
+  possibleComputerRooms:
+  - {fileID: 7264955518353853777, guid: 34f1f75f5749c8e40977b08516ed71e8, type: 3}
+  possibleBossFightRooms:
+  - {fileID: 7264955518353853777, guid: 581105ad02ec621478bc8ccfefc9b29f, type: 3}
+  possibleLoopRooms:
+  - {fileID: 190446480701369037, guid: d7f7a12205fa29344912773a8c28f33f, type: 3}
+  - {fileID: 5828614602139139869, guid: 107ff164d6940024d9ede0d2bf2b9edb, type: 3}
+  - {fileID: 4477207809652525571, guid: 9d782a942d1d9824f90327cf9e02e29d, type: 3}
+  - {fileID: 4477207809652525571, guid: 2475060a6e6ecd747aaec8587a13cde0, type: 3}
+  - {fileID: 4477207809652525571, guid: 5ea48652df52dfa49887d7b8c9ebf109, type: 3}
+  - {fileID: 4477207809652525571, guid: 1c5541e51af99db4aa25336dcada9771, type: 3}
+  - {fileID: 4477207809652525571, guid: 39018fe1958c00547905a033b3f5ab65, type: 3}
+  - {fileID: 4477207809652525571, guid: c90981627ea48aa4483276f744fedb12, type: 3}
+  - {fileID: 4477207809652525571, guid: 56212640d95906741ad0d1d27ae2954d, type: 3}
+  - {fileID: 4477207809652525571, guid: 51825101660437441ba77fa8380fab11, type: 3}
+  - {fileID: 4477207809652525571, guid: 9bc64976d9cf52e4c879643d78d866b2, type: 3}
+  - {fileID: 4477207809652525571, guid: 138e96eb2337a1d4ebebf290f3778980, type: 3}
+  - {fileID: 4477207809652525571, guid: 29fe4a3df86bbe14da57c35af03b1916, type: 3}
+  - {fileID: 4477207809652525571, guid: d4f2dd798c203cc4285c8e4a7db56c46, type: 3}
+  - {fileID: 6695848333846302573, guid: f6ecb5cb517885748b91311a2a56c79b, type: 3}
+  - {fileID: 6695848333846302573, guid: abedfb9defb63d74ab7a95c3fd404f0e, type: 3}
+  - {fileID: 6695848333846302573, guid: 9f1074302fe728345beb028a43e12126, type: 3}
+  - {fileID: 6695848333846302573, guid: 166f2c923cffcca41a6382ba431facb5, type: 3}
+  deadendRooms:
+  - {fileID: 936815216931619414, guid: 47c6e5ae703432b44ad769310169a2ea, type: 3}
+  deadendDoors:
+  - {fileID: 8492891138009311223, guid: e927ee14175840644af9ed6639f0860f, type: 3}
+  doors:
+  - {fileID: 5489327080948163911, guid: 98cb093c9127012429f89bb71ced1d76, type: 3}

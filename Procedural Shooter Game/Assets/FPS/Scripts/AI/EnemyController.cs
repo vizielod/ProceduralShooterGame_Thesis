@@ -7,6 +7,13 @@ using UnityEngine.Events;
 
 namespace Unity.FPS.AI
 {
+    public enum EnemyType
+    {
+        Tank = 0,
+        Soldier = 1,
+        Assasin = 2,
+        Boss = 3,
+    }
     [RequireComponent(typeof(Health), typeof(Actor), typeof(NavMeshAgent))]
     public class EnemyController : MonoBehaviour
     {
@@ -31,6 +38,7 @@ namespace Unity.FPS.AI
             }
         }
 
+        public EnemyType EnemyType;
         public bool IsBoss = false;
         [Header("Parameters")] 
         [Tooltip("Player Range defined in DynamicDifficultyManager. Used for adjusting difficulty based on enemy count in Range")]

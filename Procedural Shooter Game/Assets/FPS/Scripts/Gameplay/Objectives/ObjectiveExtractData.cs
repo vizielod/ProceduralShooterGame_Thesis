@@ -238,9 +238,12 @@ namespace Unity.FPS.Gameplay
         {
             BossRoomManager bossRoomManager = BossRoom.GetComponent<BossRoomManager>();
             
+            //Basically if the current difficulty is hard then the Easy enemy and Easy room layout should be set
+            //Since that means the player spent the most time Experiencing the game as being hard so it performed not too good
+            //Thus that player should be challenged by the weak boss
             switch (currentDifficulty)
             {
-                case DynamicDifficultyType.Hard:
+                case DynamicDifficultyType.Easy:
                 {
                     bossRoomManager.ColorBossRoom(Color.red);
                     bossRoomManager.InternalWalls_Hard.SetActive(true);
@@ -264,7 +267,7 @@ namespace Unity.FPS.Gameplay
                     bossRoomManager.InternalWalls_Easy.SetActive(false);
                     break;
                 }
-                case DynamicDifficultyType.Easy:
+                case DynamicDifficultyType.Hard:
                 {
                     bossRoomManager.ColorBossRoom(Color.yellow);
                     bossRoomManager.InternalWalls_Hard.SetActive(false);
@@ -333,10 +336,13 @@ namespace Unity.FPS.Gameplay
             }
             else
             {
-                float maxPlayerPerformance = 0;
+                float maxPlayerPerformance = dynamicDifficultyManager.NormalizedPlayerPerformanceDictionary.Values.Max();
                 DynamicDifficultyType currentDifficulty = DynamicDifficultyType.Easy;
+                currentDifficulty = dynamicDifficultyManager.NormalizedPlayerPerformanceDictionary
+                    .Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
                 
-                foreach (KeyValuePair<DynamicDifficultyType, float> normalizedPlayerPerformanceItem in dynamicDifficultyManager.NormalizedPlayerPerformanceDictionary)
+                
+                /*foreach (KeyValuePair<DynamicDifficultyType, float> normalizedPlayerPerformanceItem in dynamicDifficultyManager.NormalizedPlayerPerformanceDictionary)
                 {
                     Debug.Log("key-value pair: " + normalizedPlayerPerformanceItem.Key + " " + normalizedPlayerPerformanceItem.Value);
                     if (normalizedPlayerPerformanceItem.Value > maxPlayerPerformance)
@@ -344,7 +350,7 @@ namespace Unity.FPS.Gameplay
                         maxPlayerPerformance = normalizedPlayerPerformanceItem.Value;
                         currentDifficulty = normalizedPlayerPerformanceItem.Key;
                     }
-                }
+                }*/
 
                 ChangeBossRoomSetup(currentDifficulty);
                 
@@ -352,7 +358,7 @@ namespace Unity.FPS.Gameplay
                 Debug.Log("maxPlayerPerformance: " + maxPlayerPerformance);
                 Debug.Log("Current Difficulty: " + currentDifficulty);
                 Debug.Log("Current Difficulty Index: " + idx);
-                BossToSpawn = sharedDifficultySettings.WeightsByDifficultyList[idx].BossPrefab;
+                BossToSpawn = sharedDifficultySettings.WeightsByDifficultyList[3 - idx].BossPrefab;
             }
             Debug.Log("Boss To Spawn: " + BossToSpawn);
             BossEnemy = Instantiate(BossToSpawn, position, Quaternion.identity);

@@ -10,12 +10,19 @@ namespace Unity.FPS.UI
         public GameObject StartButton;
 
         public bool _resetPlayerPrefs = false;
+
+        public bool _useDDA;
         // Start is called before the first frame update
         void Start()
         {
             if (_resetPlayerPrefs)
             {
                 ResetPlayerPrefs();
+            }
+
+            if (_useDDA)
+            {
+                SetDDA();
             }
             bool wasTutorialPlayed = PlayerPrefs.GetInt("WasTutorialPlayed") == 0 ? false : true;
             StartButton.GetComponent<Button>().interactable = wasTutorialPlayed;
@@ -38,6 +45,11 @@ namespace Unity.FPS.UI
             PlayerPrefs.SetInt("difficulty", 0);
             PlayerPrefs.SetInt("useDDA", 0); //0 - false, 1 - true
             PlayerPrefs.SetInt("DDAUseWasSet", 0);
+        }
+
+        void SetDDA()
+        {
+            PlayerPrefs.SetInt("useDDA", 1); //0 - false, 1 - true
         }
     }
 }

@@ -151,21 +151,8 @@ namespace Unity.FPS.Gameplay
 
         public void SpawnEnemyByDynamicDifficulty(Vector3 center, float radius)
         {
-            /*float Value = Random.value;
-    
-            for (int i = 0; i < Weights.Length; i++)
-            {
-                if (Value < Weights[i])
-                {
-                    //Call Enemy Spawn method
-                    SpawnEnemy(i, center, radius);
-                    return;
-                }
-    
-                Value -= Weights[i];
-            }*/
 
-            DynamicDifficultyType currentDynamicDifficulty = GetCurrentDifficulty();
+            currentDynamicDifficulty = GetCurrentDifficulty();
 
             switch (currentDynamicDifficulty)
             {
@@ -216,7 +203,7 @@ namespace Unity.FPS.Gameplay
         }
         //SpawnWeightedRandomEnemy
 
-        private DynamicDifficultyType GetCurrentDifficulty()
+        public DynamicDifficultyType GetCurrentDifficulty()
         {
             float currentDifficultyGauge = dynamicDifficultyManager.DifficultyGauge;
             //DynamicDifficultyType currentDynamicDifficulty = DynamicDifficultyType.Easy;

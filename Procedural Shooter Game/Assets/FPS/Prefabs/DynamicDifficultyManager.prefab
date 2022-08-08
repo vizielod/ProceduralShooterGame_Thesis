@@ -66,24 +66,23 @@ MonoBehaviour:
   PlayerAccuracy: 0
   playerTotalShotCount: 0
   playerTotalHitCount: 0
-  range: 40
+  EnemyInRange: 50
+  HealthPickupRange: 6
   enemyCountInRange: 0
+  AssassinMultiplier: 1.5
+  SoldierMultiplier: 1.25
+  TankMultiplier: 1
   healthPickupsCountInRange: 0
   EnemyControllers:
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   HealthPickups: []
+  AdjustmentTimerFactor: 1
   EstimatedDifficulty: 0.5
   DifficultyGauge: 0.5
-  _tempDifficultyGauge: 0
-  MinDifficultyBoundary: 0
-  MaxDifficultyBoundary: 1
   _tempEstimatedReverseDiff: 0
   previousEstimatedReverseDiff: 0
   _tempMinDifficultyBoundary: 0
   _tempMaxDifficultyBoundary: 1
-  testValue: 0
   DiffGaugeRecalcPeriod: 1
   BoundaryStepSize: 0.05
   timer: 0
@@ -99,7 +98,6 @@ MonoBehaviour:
   updateBoundariesPeriod: 2
   updateBoundariesTimer: 0
   originalBoundaryDistance: 0
-  lerpTime: 2.54
 --- !u!114 &278551198325847876
 MonoBehaviour:
   m_ObjectHideFlags: 0

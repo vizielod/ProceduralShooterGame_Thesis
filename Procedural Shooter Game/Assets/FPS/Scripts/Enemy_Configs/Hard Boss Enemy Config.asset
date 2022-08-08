@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f93a3d057fa0474ebbd26dfef86fbb4, type: 3}
   m_Name: Hard Boss Enemy Config
   m_EditorClassIdentifier: 
-  Health: 500
+  Health: 1200
   MovementSpeed: 5
   Acceleration: 10
   AngularSpeed: 120
-  DetectionRange: 40
-  AttackRange: 25
+  DetectionRange: 80
+  AttackRange: 40
   Weapons:
   - WeaponName: Weapon_EyeLazer
     Damage: 10

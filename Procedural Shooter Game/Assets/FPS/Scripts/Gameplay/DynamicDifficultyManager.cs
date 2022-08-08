@@ -55,9 +55,16 @@ namespace Unity.FPS.Gameplay
 
         [SerializeField] private float playerTotalHitCount = .0f; //all the actual enemy hits
 
-        [SerializeField] private float range = 10.0f;
+        [SerializeField] private float EnemyInRange = 10.0f;
+        [SerializeField] private float HealthPickupRange = 10.0f;
 
-        [SerializeField] private int enemyCountInRange = 0;
+        [SerializeField] private float enemyCountInRange = 0;
+        private int AssassinInRange = 0;
+        [SerializeField] private float AssassinMultiplier = 1.5f;
+        private int SoldierInRange = 0;
+        [SerializeField] private float SoldierMultiplier = 1.25f;
+        private int TankInRange = 0;
+        [SerializeField] private float TankMultiplier = 1f;
 
         [SerializeField] private int healthPickupsCountInRange = 0;
 
@@ -66,6 +73,8 @@ namespace Unity.FPS.Gameplay
         public List<EnemyController> EnemyControllers = new List<EnemyController>();
 
         public List<GameObject> HealthPickups = new List<GameObject>();
+        
+        [Range(0, 5)] public float AdjustmentTimerFactor = 1f;
 
         [Tooltip("0 means Easiest, 1 means Hardest, 0.5 means Medium difficulty")] [Range(0, 1)]
         public float EstimatedDifficulty = 0.5f;
@@ -78,21 +87,17 @@ namespace Unity.FPS.Gameplay
          */
         public float DifficultyGauge = 0.5f;
 
-        [Range(0, 1)] public float _tempDifficultyGauge;
-        [Range(0, 1)] public float MinDifficultyBoundary = 0f;
-        [Range(0, 1)] public float MaxDifficultyBoundary = 1f;
+        [Range(0, 1)] private float _tempDifficultyGauge;
+        [Range(0, 1)] private float MinDifficultyBoundary = 0f;
+        [Range(0, 1)] private float MaxDifficultyBoundary = 1f;
         [Range(0, 1)] public float _tempEstimatedReverseDiff, previousEstimatedReverseDiff;
         [Range(0, 1)] public float _tempMinDifficultyBoundary = 0f;
         [Range(0, 1)] public float _tempMaxDifficultyBoundary = 1f;
-        [SerializeField] [Range(0, 1)] private float testValue;
-
 
         public float DiffGaugeRecalcPeriod = 3f; //Calc new Difficulty Gauge after every 3 sec
 
         public float BoundaryStepSize = 0.05f;
-
         public float timer = 0f;
-
         //Difficulty weights of different core variables
         [Header("Difficulty weights of core variables")]
         public float playerHealthDifficultyFactor;
@@ -146,7 +151,7 @@ namespace Unity.FPS.Gameplay
 
             foreach (var enemyController in EnemyControllers)
             {
-                enemyController.PlayerRange = range;
+                enemyController.PlayerRange = EnemyInRange;
 
                 enemyController.onDamaged += OnEnemyHit;
                 enemyController.onDie += OnEnemyDeath;
@@ -162,9 +167,9 @@ namespace Unity.FPS.Gameplay
                 //EXPERIMENTING with DDA
 
                 float difficultyVariableWeight = 1 / difficultyVariableCount;
-                playerHealthDifficultyFactor = difficultyVariableWeight + 0.1f;
+                playerHealthDifficultyFactor = difficultyVariableWeight + 0.2f;
                 enemyCountDifficultyFactor = difficultyVariableWeight + 0.1f;
-                healthPickupsCountDifficultyFactor = difficultyVariableWeight - 0.05f;
+                healthPickupsCountDifficultyFactor = difficultyVariableWeight - 0.15f;
                 playerAccuracyDifficultyFactor = difficultyVariableWeight - 0.15f;
 
                 EstimatedDifficulty = 0.5f;
@@ -218,11 +223,7 @@ namespace Unity.FPS.Gameplay
         }
 
         private float updateTempBoundariesTimer = 0f, catchupTempBoundariesTimer = 0f;
-
         private bool adjustBoundaries = false;
-
-        [SerializeField] [Range(0, 5)] private float lerpTime;
-
         private float maxTargetValue, minTargetValue;
 
         // Update is called once per frame
@@ -237,66 +238,66 @@ namespace Unity.FPS.Gameplay
             {
                 CalculateDifficulty();
                 StartCoroutine(TempEstimatedReverseDifficultyCoroutine(_tempEstimatedReverseDiff,
-                    newTempEstimatedReverseDifficulty, 1.5f / 2f));
+                    newTempEstimatedReverseDifficulty, 1.5f / AdjustmentTimerFactor));
 
                 updateTempBoundariesTimer += Time.deltaTime;
-                if (updateTempBoundariesTimer > 2f / 2f)
+                if (updateTempBoundariesTimer > 2f / AdjustmentTimerFactor)
                 {
                     CalculateTempBoundaries();
                     //AdjustTempBoundaries();
                     if (maxWasAdjusted)
                     {
                         StartCoroutine(TempMaxBoundaryCoroutine(_tempMaxDifficultyBoundary, newTempMaxValue,
-                            1.5f / 2f));
+                            1.5f / AdjustmentTimerFactor));
                     }
 
                     if (minWasAdjusted)
                     {
                         StartCoroutine(TempMinBoundaryCoroutine(_tempMinDifficultyBoundary, newTempMinValue,
-                            1.5f / 2f));
+                            1.5f / AdjustmentTimerFactor));
                     }
 
                     StartCoroutine(PreviousEstimatedReverseDiffCourutine(previousEstimatedReverseDiff,
-                        _tempEstimatedReverseDiff, 1.5f / 2f));
+                        _tempEstimatedReverseDiff, 1.5f / AdjustmentTimerFactor));
                     updateTempBoundariesTimer = 0;
                 }
 
                 catchupTempBoundariesTimer += Time.deltaTime;
-                if (catchupTempBoundariesTimer > 6f / 2f)
+                if (catchupTempBoundariesTimer > 2f / AdjustmentTimerFactor)
                 {
                     AdjustTempBoundaries();
                     //or maybe do something like if !maxWasAdjusted && maxNeedsToBeAdjusted
                     if (maxWasAdjusted)
                     {
                         StartCoroutine(TempMaxBoundaryCoroutine(_tempMaxDifficultyBoundary, newTempMaxValue,
-                            1.5f / 2f));
+                            1.5f / AdjustmentTimerFactor));
                     }
 
                     if (minWasAdjusted)
                     {
                         StartCoroutine(TempMinBoundaryCoroutine(_tempMinDifficultyBoundary, newTempMinValue,
-                            1.5f / 2f));
+                            1.5f / AdjustmentTimerFactor));
                     }
 
                     catchupTempBoundariesTimer = 0;
                 }
 
-                updateBoundariesTimer += Time.deltaTime;
-                if (updateBoundariesTimer > updateBoundariesPeriod / 2f)
+                /*updateBoundariesTimer += Time.deltaTime;
+                if (updateBoundariesTimer > updateBoundariesPeriod / AdjustmentTimerFactor)
                 {
                     AdjustBoundaries();
-                    StartCoroutine(AdjustMaxBoundaryCoroutine(MaxDifficultyBoundary, newMaxValue, 1.5f / 2f));
-                    StartCoroutine(AdjustMinBoundaryCoroutine(MinDifficultyBoundary, newMinValue, 1.5f / 2f));
+                    StartCoroutine(AdjustMaxBoundaryCoroutine(MaxDifficultyBoundary, newMaxValue, 1.5f / AdjustmentTimerFactor));
+                    StartCoroutine(AdjustMinBoundaryCoroutine(MinDifficultyBoundary, newMinValue, 1.5f / AdjustmentTimerFactor));
                     updateBoundariesTimer = 0f;
                 }
 
                 timer += Time.deltaTime;
-                if (timer > DiffGaugeRecalcPeriod / 4f)
+                if (timer > DiffGaugeRecalcPeriod / AdjustmentTimerFactor)
                 {
                     CalculateGauge();
-                    StartCoroutine(CalculateGaugeCoroutine(_tempDifficultyGauge, newTempDifficultyGauge, 1f / 2f));
+                    StartCoroutine(CalculateGaugeCoroutine(_tempDifficultyGauge, newTempDifficultyGauge, 1f / AdjustmentTimerFactor));
                     timer = 0f;
-                }
+                }*/
 
                 AdjustDifficultyGauge();
             }
@@ -319,7 +320,7 @@ namespace Unity.FPS.Gameplay
             
         }
 
-        IEnumerator TestCourutine(float from, float to, float duration)
+        /*IEnumerator TestCourutine(float from, float to, float duration)
         {
             float timeStep = 0;
             while (timeStep <= duration)
@@ -329,13 +330,12 @@ namespace Unity.FPS.Gameplay
                 testValue = Mathf.Lerp(from, to, step);
                 yield return null;
             }
-
-        }
+        }*/
 
         private void CalculateDifficulty()
         {
-            ScalePlayerHealth(0.2f, 0.8f);
-            ScaleEnemyCount(10);
+            ScalePlayerHealth(0.4f, 0.8f);
+            ScaleEnemyCount(5);
             ScaleHealthPickupsCount(10);
             ScalePlayerAccuracy(0.3f, 0.7f);
 
@@ -580,7 +580,8 @@ namespace Unity.FPS.Gameplay
 
         private void AdjustDifficultyGauge()
         {
-            float tempGaugeDiff = _tempDifficultyGauge - DifficultyGauge;
+            //float tempGaugeDiff = _tempDifficultyGauge - DifficultyGauge;
+            float tempGaugeDiff = previousEstimatedReverseDiff - DifficultyGauge;
             DifficultyGauge = DifficultyGauge + tempGaugeDiff / 2f;
         }
 
@@ -626,6 +627,10 @@ namespace Unity.FPS.Gameplay
              * if enemyCountInrange is above 10, the estimated difficulty is set to 1
              * if it is lower than 10, it is scaled proportionately to a [0,1] scale
              */
+
+            enemyCountInRange = AssassinMultiplier * AssassinInRange +
+                                SoldierMultiplier * SoldierInRange +
+                                TankMultiplier * TankInRange;
             if (enemyCountInRange >= maxLimit)
             {
                 enemyCountScaledForEstimatedDifficulty = 1;
@@ -819,13 +824,37 @@ namespace Unity.FPS.Gameplay
 
         public void RegisterEnemyController(EnemyController enemyController)
         {
-            enemyController.PlayerRange = range;
+            enemyController.PlayerRange = EnemyInRange;
 
             enemyController.onDamaged += OnEnemyHit;
             enemyController.onDie += OnEnemyDeath;
             enemyController.onDetectedTarget += OnEnemyDetectedPlayer;
             enemyController.onLostTarget += OnEnemyLostPlayer;
             enemyController.onHealthSpawned += OnHealthSpawned;
+
+            switch (enemyController.EnemyType)
+            {
+                case AI.EnemyType.Assasin:
+                {
+                    enemyController.onDetectedTarget += OnAssassinEnemyDetectedPlayer;
+                    enemyController.onLostTarget += OnAssassinEnemyLostPlayer;
+                    break;
+                }
+                case AI.EnemyType.Soldier:
+                {
+                    enemyController.onDetectedTarget += OnSoldierEnemyDetectedPlayer;
+                    enemyController.onLostTarget += OnSoldierEnemyLostPlayer;
+                    break;
+                }
+                case AI.EnemyType.Tank:
+                {
+                    enemyController.onDetectedTarget += OnTankEnemyDetectedPlayer;
+                    enemyController.onLostTarget += OnTankEnemyLostPlayer;
+                    break;
+                }
+                default:
+                    break;
+            }
         }
 
         private void OnDestroy()
@@ -842,6 +871,31 @@ namespace Unity.FPS.Gameplay
                 enemyController.onDetectedTarget -= OnEnemyDetectedPlayer;
                 enemyController.onLostTarget -= OnEnemyLostPlayer;
                 enemyController.onHealthSpawned -= OnHealthSpawned;
+                
+                switch (enemyController.EnemyType)
+                {
+                    case AI.EnemyType.Assasin:
+                    {
+                        enemyController.onDetectedTarget -= OnAssassinEnemyDetectedPlayer;
+                        enemyController.onLostTarget -= OnAssassinEnemyLostPlayer;
+                        break;
+                    }
+                    case AI.EnemyType.Soldier:
+                    {
+                        enemyController.onDetectedTarget -= OnSoldierEnemyDetectedPlayer;
+                        enemyController.onLostTarget -= OnSoldierEnemyLostPlayer;
+                        break;
+                    }
+                    case AI.EnemyType.Tank:
+                    {
+                        enemyController.onDetectedTarget -= OnTankEnemyDetectedPlayer;
+                        enemyController.onLostTarget -= OnTankEnemyLostPlayer;
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                
             }
 
             foreach (var healthPickup in HealthPickups)
@@ -857,7 +911,7 @@ namespace Unity.FPS.Gameplay
         {
             HealthPickup healthPickupComponent = LootPrefab.GetComponent<HealthPickup>();
             healthPickupComponent.Player = Player;
-            healthPickupComponent.PlayerRange = range;
+            healthPickupComponent.PlayerRange = HealthPickupRange;
             healthPickupComponent.onHealthPicked += OnHealthPicked;
             healthPickupComponent.onOutOfPlayerRange += OnHealthOutOfPlayerRange;
             healthPickupComponent.onInPlayerRange += OnHealthInPlayerRange;
@@ -893,10 +947,38 @@ namespace Unity.FPS.Gameplay
         {
             enemyCountInRange++;
         }
+        
+        private void OnAssassinEnemyDetectedPlayer()
+        {
+            AssassinInRange++;
+        }
+        
+        private void OnSoldierEnemyDetectedPlayer()
+        {
+            SoldierInRange++;
+        }
+        
+        private void OnTankEnemyDetectedPlayer()
+        {
+            TankInRange++;
+        }
 
         private void OnEnemyLostPlayer()
         {
             enemyCountInRange--;
+        }
+        
+        private void OnAssassinEnemyLostPlayer()
+        {
+            AssassinInRange--;
+        }
+        private void OnSoldierEnemyLostPlayer()
+        {
+            SoldierInRange--;
+        }
+        private void OnTankEnemyLostPlayer()
+        {
+            TankInRange--;
         }
 
         private void OnEnemyHit()
@@ -909,6 +991,27 @@ namespace Unity.FPS.Gameplay
             if (enemyController.DetectionModule.HadKnownTarget)
             {
                 enemyCountInRange--;
+                
+                switch (enemyController.EnemyType)
+                {
+                    case AI.EnemyType.Assasin:
+                    {
+                        AssassinInRange--;
+                        break;
+                    }
+                    case AI.EnemyType.Soldier:
+                    {
+                        SoldierInRange--;
+                        break;
+                    }
+                    case AI.EnemyType.Tank:
+                    {
+                        TankInRange--;
+                        break;
+                    }
+                    default:
+                        break;
+                }
             }
 
             if (enemyController != null)
@@ -940,7 +1043,8 @@ namespace Unity.FPS.Gameplay
             Handles.color = Color.green;
             Vector3 _centre = new Vector3(Player.transform.position.x, Player.transform.position.y + 1f,
                 Player.transform.position.z);
-            Handles.DrawWireDisc(_centre, Vector3.up, range);
+            Handles.DrawWireDisc(_centre, Vector3.up, EnemyInRange);
+            Handles.DrawWireDisc(_centre, Vector3.up, HealthPickupRange);
         }
 
         public void SetPlayerAccuracy(float playerAccuracy)
