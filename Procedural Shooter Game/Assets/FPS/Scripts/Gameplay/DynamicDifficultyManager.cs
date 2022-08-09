@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.FPS.AI;
 using Unity.FPS.Game;
 using Unity.FPS.Gameplay;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace Unity.FPS.Gameplay
@@ -14,10 +16,23 @@ namespace Unity.FPS.Gameplay
     public class DynamicDifficultyManager : MonoBehaviour
     {
         public ObjectiveExtractData objectiveExtractData;
+        public DynamicDifficultySettingsSO DynamicDifficultySettings;
+        private DynamicDifficultyType currentDynamicDifficulty = DynamicDifficultyType.Easy;
+
+        [Header("Debug Difficulty Settings")]
+        public GameObject DebugUI;
+        public TextMeshProUGUI DDAText;
+        public TextMeshProUGUI MinDiffBoundaryText;
+        public TextMeshProUGUI MaxDiffBoundaryText;
+        public TextMeshProUGUI DifficultyGaugeText;
+        public TextMeshProUGUI DynamicDifficultyText;
+        public TextMeshProUGUI StaticDifficultyText;
+        private bool isDebugUIActive = false;
         
         [Header("Difficulty Settings")]
         public bool useDDA = true;
         public StaticDifficultyType difficulty;
+        //public DynamicDifficultyType currentDynamicDifficulty = DynamicDifficultyType.Easy;
 
         [Header("Player performance tracking")]
         public float HardDifficultyGaugeTimer = 0f;
@@ -229,6 +244,14 @@ namespace Unity.FPS.Gameplay
         // Update is called once per frame
         void Update()
         {
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                isDebugUIActive = !isDebugUIActive;
+                DebugUI.SetActive(isDebugUIActive);
+            }
+
+            UpdateDebugUI();
+            
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 SpawnEnemyAtRandomLocation(MinEnemySpawnPostion.position, MaxEnemySpawnPostion.position);
@@ -302,7 +325,60 @@ namespace Unity.FPS.Gameplay
                 AdjustDifficultyGauge();
             }
         }
+
+        private void UpdateDebugUI()
+        {
+            if (isDebugUIActive)
+            {
+                DDAText.text = useDDA ? "ON" : "OFF";
+                MinDiffBoundaryText.text = _tempMinDifficultyBoundary.ToString("F2");
+                MaxDiffBoundaryText.text = _tempMaxDifficultyBoundary.ToString("F2");
+                DifficultyGaugeText.text = DifficultyGauge.ToString("F2");
+                DynamicDifficultyText.text = GetCurrentDifficulty().ToString();
+                StaticDifficultyText.text = difficulty.ToString();
+
+            }
+            /*public GameObject DDAText;
+            public Text MinDiffBoundaryText;
+            public Text MaxDiffBoundaryText;
+            public Text DifficultyGaugeText;
+            public Text DynamicDifficultyText;
+            public Text StaticDifficultyText;*/
+        }
         
+        public DynamicDifficultyType GetCurrentDifficulty()
+        {
+            float currentDifficultyGauge = DifficultyGauge;
+
+            for (int j = 0; j < DynamicDifficultySettings.DifficultyTypeByGaugeValueList.Count; j++)
+            {
+                if (j != DynamicDifficultySettings.DifficultyTypeByGaugeValueList.Count - 1)
+                {
+                    if (currentDifficultyGauge >=
+                        DynamicDifficultySettings.DifficultyTypeByGaugeValueList[j].MinDifficultyGauge &&
+                        currentDifficultyGauge < DynamicDifficultySettings.DifficultyTypeByGaugeValueList[j]
+                            .MaxDifficultyGauge)
+                    {
+                        currentDynamicDifficulty = DynamicDifficultySettings.DifficultyTypeByGaugeValueList[j]
+                            .dynamicDifficulty;
+                    }
+                }
+                else //This is needed so if the Gauge is at 1 it also takes it into account
+                {
+                    if (currentDifficultyGauge >=
+                        DynamicDifficultySettings.DifficultyTypeByGaugeValueList[j].MinDifficultyGauge &&
+                        currentDifficultyGauge <= DynamicDifficultySettings.DifficultyTypeByGaugeValueList[j]
+                            .MaxDifficultyGauge)
+                    {
+                        currentDynamicDifficulty = DynamicDifficultySettings.DifficultyTypeByGaugeValueList[j]
+                            .dynamicDifficulty;
+                    }
+                }
+            }
+
+            return currentDynamicDifficulty;
+        }
+
         public void CalculateNormalizedPlayerPerformance()
         {
             NormalizedHardDifficultyGaugeTimer =

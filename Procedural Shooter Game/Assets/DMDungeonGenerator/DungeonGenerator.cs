@@ -261,7 +261,7 @@ namespace DMDungeonGenerator {
                 StartGenerator(randomSeed);
             }
             
-            if (Input.GetKeyDown(KeyCode.B))
+            if (Input.GetKeyDown(KeyCode.L))
             {
                 GenerateBossRoom(ExitDoor);
             }
