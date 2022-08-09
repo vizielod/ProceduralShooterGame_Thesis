@@ -79400,7 +79400,7 @@ PrefabInstance:
     - target: {fileID: 278551198325847878, guid: 32970e92051eb034abac7716569655f5,
         type: 3}
       propertyPath: BoundaryStepSize
-      value: 0.05
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 278551198325847878, guid: 32970e92051eb034abac7716569655f5,
         type: 3}

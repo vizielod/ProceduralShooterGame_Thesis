@@ -439,7 +439,19 @@ namespace Unity.FPS.Gameplay
                 if (maxAdjustedCount >= 2)
                 {
                     //TODO: here I should also check if greater or lover than 0, otherwise newTempMin can be set higher or lower than 0
-                    newTempMinValue = _tempMinDifficultyBoundary + 2 * BoundaryStepSize;
+                    if (_tempMinDifficultyBoundary + 2 * BoundaryStepSize <= 0)
+                    {
+                        newTempMinValue = 0;
+                    }
+                    else if (_tempMinDifficultyBoundary + 2 * BoundaryStepSize >= 1)
+                    {
+                        newTempMinValue = 1;
+                    }
+                    else
+                    {
+                        newTempMinValue = _tempMinDifficultyBoundary + 2 * BoundaryStepSize;
+                    }
+                    //newTempMinValue = _tempMinDifficultyBoundary + 2 * BoundaryStepSize;
                     maxAdjustedCount = 0;
                     minWasAdjusted = true;
                 }
@@ -476,7 +488,19 @@ namespace Unity.FPS.Gameplay
                 if (minAdjustedCount >= 2)
                 {
                     //make a step with max to left
-                    newTempMaxValue = _tempMaxDifficultyBoundary - 2 * BoundaryStepSize;
+                    if (_tempMaxDifficultyBoundary - 2 * BoundaryStepSize <= 0)
+                    {
+                        newTempMaxValue = 0;
+                    }
+                    else if (_tempMaxDifficultyBoundary - 2 * BoundaryStepSize >= 1)
+                    {
+                        newTempMaxValue = 1;
+                    }
+                    else
+                    {
+                        newTempMaxValue = _tempMinDifficultyBoundary + 2 * BoundaryStepSize;
+                    }
+                    //newTempMaxValue = _tempMaxDifficultyBoundary - 2 * BoundaryStepSize;
                     minAdjustedCount = 0;
                     maxWasAdjusted = true;
                 }
