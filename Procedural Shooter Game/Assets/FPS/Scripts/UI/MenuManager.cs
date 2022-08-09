@@ -8,6 +8,7 @@ namespace Unity.FPS.UI
     public class MenuManager : MonoBehaviour
     {
         public GameObject StartButton;
+        public GameObject PlayTutorialFirstText;
 
         public bool _resetPlayerPrefs = false;
 
@@ -26,6 +27,7 @@ namespace Unity.FPS.UI
             }
             bool wasTutorialPlayed = PlayerPrefs.GetInt("WasTutorialPlayed") == 0 ? false : true;
             StartButton.GetComponent<Button>().interactable = wasTutorialPlayed;
+            PlayTutorialFirstText.SetActive(!wasTutorialPlayed);
             /*if (!wasTutorialPlayed)
             {
                 StartButton.GetComponent<Button>().interactable

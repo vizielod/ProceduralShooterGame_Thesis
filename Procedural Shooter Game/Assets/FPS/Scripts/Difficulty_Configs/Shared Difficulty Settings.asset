@@ -35,8 +35,8 @@ MonoBehaviour:
     BossPrefab: {fileID: 1305249797997701402, guid: 0198ec6cd16999e48983a0a582a49c62,
       type: 3}
   - dynamicDifficulty: 3
-    ComputersToSpawnMin: 1
-    ComputersToSpawnMax: 2
+    ComputersToSpawnMin: 2
+    ComputersToSpawnMax: 4
     RoomsToSpawnMin: 10
     RoomsToSpawnMax: 20
     BossPrefab: {fileID: 3819836549971019976, guid: cd9d27d07db69de4ea1a8ef48cdd12f4,

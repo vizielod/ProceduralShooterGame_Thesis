@@ -330,7 +330,7 @@ MonoBehaviour:
   drawKeyLocksLabels: 1
   DungeonGraph: []
   difficulty: 0
-  useDDA: 0
+  useDDA: 1
 --- !u!4 &736231640
 Transform:
   m_ObjectHideFlags: 0
@@ -79396,6 +79396,11 @@ PrefabInstance:
         type: 3}
       propertyPath: difficulty
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 278551198325847878, guid: 32970e92051eb034abac7716569655f5,
+        type: 3}
+      propertyPath: BoundaryStepSize
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 278551198325847878, guid: 32970e92051eb034abac7716569655f5,
         type: 3}

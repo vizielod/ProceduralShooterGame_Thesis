@@ -32,6 +32,7 @@ MonoBehaviour:
   - {fileID: 6695848333846302573, guid: abedfb9defb63d74ab7a95c3fd404f0e, type: 3}
   - {fileID: 6695848333846302573, guid: 9f1074302fe728345beb028a43e12126, type: 3}
   - {fileID: 6695848333846302573, guid: 166f2c923cffcca41a6382ba431facb5, type: 3}
+  - {fileID: 4477207809652525571, guid: 6cfee7166ae481b43968b751fc364811, type: 3}
   possibleComputerRooms:
   - {fileID: 7264955518353853777, guid: 34f1f75f5749c8e40977b08516ed71e8, type: 3}
   possibleBossFightRooms:

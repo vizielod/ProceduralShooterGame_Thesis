@@ -880,7 +880,7 @@ namespace DMDungeonGenerator {
             int remainingComputersToSpawnCount = targetComputerCount - spawnedComputerCount;
             
             //This helps to force the generator to spawn Computer rooms when getting closer to the Target Room count but there are still computers left to be spawned
-            if ((remainingRoomSpotCount / 2 + 1) <= remainingComputersToSpawnCount)
+            if ((remainingRoomSpotCount / 4 + 1) <= remainingComputersToSpawnCount)
             {
                 //Force to spawn a Computer room
                 roomsToTry = new List<GameObject>(generatorSettings.possibleComputerRooms);

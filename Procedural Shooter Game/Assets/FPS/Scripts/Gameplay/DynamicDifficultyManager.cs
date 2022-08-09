@@ -136,9 +136,9 @@ namespace Unity.FPS.Gameplay
 
         private void Awake()
         {
-            int difficultyIdx = PlayerPrefs.GetInt("difficulty");
+            /*int difficultyIdx = PlayerPrefs.GetInt("difficulty");
             difficulty = (StaticDifficultyType) difficultyIdx;
-            useDDA = PlayerPrefs.GetInt("useDDA") == 0 ? false : true;
+            useDDA = PlayerPrefs.GetInt("useDDA") == 0 ? false : true;*/
         }
 
         // Start is called before the first frame update
@@ -414,9 +414,23 @@ namespace Unity.FPS.Gameplay
 
                 //_tempMaxDifficultyBoundary = _tempEstimatedReverseDiff + BoundaryStepSize >= 1 ? 1 : _tempEstimatedReverseDiff + BoundaryStepSize;
 
-                newTempMaxValue = _tempEstimatedReverseDiff + BoundaryStepSize >= 1
-                    ? 1
-                    : _tempEstimatedReverseDiff + BoundaryStepSize;
+                /*newTempMaxValue = _tempEstimatedReverseDiff + BoundaryStepSize >= 1f
+                    ? 1f
+                    : _tempEstimatedReverseDiff + BoundaryStepSize;*/
+                
+                if (_tempEstimatedReverseDiff + BoundaryStepSize <= 0f)
+                {
+                    newTempMaxValue = 0f;
+                }
+                else if (_tempEstimatedReverseDiff + BoundaryStepSize >= 1f)
+                {
+                    newTempMaxValue = 1f;
+                }
+                else
+                {
+                    newTempMaxValue = _tempEstimatedReverseDiff + BoundaryStepSize;
+                }
+                
                 maxWasAdjusted = true;
                 minWasAdjusted = false;
                 maxAdjustedCount++;
@@ -424,6 +438,7 @@ namespace Unity.FPS.Gameplay
 
                 if (maxAdjustedCount >= 2)
                 {
+                    //TODO: here I should also check if greater or lover than 0, otherwise newTempMin can be set higher or lower than 0
                     newTempMinValue = _tempMinDifficultyBoundary + 2 * BoundaryStepSize;
                     maxAdjustedCount = 0;
                     minWasAdjusted = true;
@@ -436,9 +451,23 @@ namespace Unity.FPS.Gameplay
                 //MinDifficultyBoundary = MinDifficultyBoundary - BoundaryStepSize <= 0 ? 0 : MinDifficultyBoundary - BoundaryStepSize;
                 //_tempMinDifficultyBoundary = _tempEstimatedReverseDiff - BoundaryStepSize <= 0 ? 0 : _tempEstimatedReverseDiff - BoundaryStepSize;
 
-                newTempMinValue = _tempEstimatedReverseDiff - BoundaryStepSize <= 0
-                    ? 0
-                    : _tempEstimatedReverseDiff - BoundaryStepSize;
+                
+                /*newTempMinValue = _tempEstimatedReverseDiff - BoundaryStepSize <= 0f
+                    ? 0f
+                    : _tempEstimatedReverseDiff - BoundaryStepSize;*/
+
+                if (_tempEstimatedReverseDiff - BoundaryStepSize <= 0f)
+                {
+                    newTempMinValue = 0f;
+                }
+                else if (_tempEstimatedReverseDiff - BoundaryStepSize >= 1f)
+                {
+                    newTempMinValue = 1f;
+                }
+                else
+                {
+                    newTempMinValue = _tempEstimatedReverseDiff - BoundaryStepSize;
+                }
                 minWasAdjusted = true;
                 maxWasAdjusted = false;
                 minAdjustedCount++;
