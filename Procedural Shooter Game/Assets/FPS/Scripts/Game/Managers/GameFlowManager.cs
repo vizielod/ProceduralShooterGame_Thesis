@@ -5,6 +5,7 @@ namespace Unity.FPS.Game
 {
     public class GameFlowManager : MonoBehaviour
     {
+        //public DynamicDifficultyManager DynamicDifficultyManager;
         public bool IsTutorialScene = false;
         [Header("Parameters")] [Tooltip("Duration of the fade-to-black at the end of the game")]
         public float EndSceneLoadDelay = 3f;

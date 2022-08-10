@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.FPS.Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,8 +20,11 @@ namespace Unity.FPS.UI
             if (_resetPlayerPrefs)
             {
                 ResetPlayerPrefs();
+                return;
             }
 
+            Telemetry.GenerateNewPlayerID();
+            
             if (_useDDA)
             {
                 SetDDA();
@@ -47,6 +51,7 @@ namespace Unity.FPS.UI
             PlayerPrefs.SetInt("difficulty", 0);
             PlayerPrefs.SetInt("useDDA", 0); //0 - false, 1 - true
             PlayerPrefs.SetInt("DDAUseWasSet", 0);
+            PlayerPrefs.SetString("playerID", "");
         }
 
         void SetDDA()

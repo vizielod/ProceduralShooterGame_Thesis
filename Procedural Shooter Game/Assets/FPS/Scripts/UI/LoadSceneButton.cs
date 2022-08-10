@@ -51,6 +51,7 @@ namespace Unity.FPS.UI
                 if (DDAUseWasSet)
                 {
                     PlayerPrefs.SetInt("useDDA", 1);
+                    PlayerPrefs.SetInt("difficulty", difficultyIDX);
                 }
                 else
                 {

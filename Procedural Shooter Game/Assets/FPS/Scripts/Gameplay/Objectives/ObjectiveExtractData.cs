@@ -359,6 +359,14 @@ namespace Unity.FPS.Gameplay
                 Debug.Log("Current Difficulty: " + currentDifficulty);
                 Debug.Log("Current Difficulty Index: " + idx);
                 BossToSpawn = sharedDifficultySettings.WeightsByDifficultyList[3 - idx].BossPrefab;
+
+                /*
+                 * If this is hard it means the player avarage performance was really bad
+                 * so it spent most of the time perceiving the game as being on Hard difficulty
+                 * if is easy it means the player avarage performance was really good
+                 * so it spent most of the time perceiving the game as being relatively easy cuz the player played very well.
+                 */
+                dynamicDifficultyManager.bestAvaragePlayerPerformance = currentDifficulty;
             }
             Debug.Log("Boss To Spawn: " + BossToSpawn);
             BossEnemy = Instantiate(BossToSpawn, position, Quaternion.identity);

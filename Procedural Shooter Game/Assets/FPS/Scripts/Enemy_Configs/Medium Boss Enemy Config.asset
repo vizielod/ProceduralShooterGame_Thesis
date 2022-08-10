@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f93a3d057fa0474ebbd26dfef86fbb4, type: 3}
   m_Name: Medium Boss Enemy Config
   m_EditorClassIdentifier: 
-  Health: 800
+  Health: 750
   MovementSpeed: 5
   Acceleration: 10
   AngularSpeed: 120

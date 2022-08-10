@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.FPS.AI;
 using Unity.FPS.Game;
@@ -15,6 +16,14 @@ namespace Unity.FPS.Gameplay
 {
     public class DynamicDifficultyManager : MonoBehaviour
     {
+        [Header("Telemetry")]
+        public Telemetry.DungeonData dungeonData;
+        private int killedEnemyAmount = 0;
+        private int healthPickedAmount = 0;
+        private float timeSpentInRun = 0f;
+        void OnAllObjectivesCompleted(AllObjectivesCompletedEvent evt) => SaveTelemetryData(true);
+        void OnPlayerDeath(PlayerDeathEvent evt) => SaveTelemetryData(false);
+        
         public ObjectiveExtractData objectiveExtractData;
         public DynamicDifficultySettingsSO DynamicDifficultySettings;
         private DynamicDifficultyType currentDynamicDifficulty = DynamicDifficultyType.Easy;
@@ -47,9 +56,8 @@ namespace Unity.FPS.Gameplay
         public float NormalizedEasyDifficultyGaugeTimer = 0f;
 
         public Dictionary<DynamicDifficultyType, float> NormalizedPlayerPerformanceDictionary = new Dictionary<DynamicDifficultyType, float>();
+        public DynamicDifficultyType bestAvaragePlayerPerformance;
         
-
-
         [Header("Enemy types")]
         /*[SerializeField] private GameObject TankPrefab;
         [SerializeField] private GameObject SoldierPrefab;
@@ -128,7 +136,6 @@ namespace Unity.FPS.Gameplay
         public float enemyCountScaledForEstimatedDifficulty;
         public float healthPickupsCountScaledForEstimatedDifficulty;
 
-
         public float updateBoundariesPeriod = 2f, updateBoundariesTimer;
 
         public float originalBoundaryDistance;
@@ -142,6 +149,7 @@ namespace Unity.FPS.Gameplay
         private float newTempDifficultyGauge;
         private float newTempEstimatedReverseDifficulty;
 
+        
         private enum EnemyType
         {
             Tank = 0,
@@ -151,9 +159,38 @@ namespace Unity.FPS.Gameplay
 
         private void Awake()
         {
-            /*int difficultyIdx = PlayerPrefs.GetInt("difficulty");
+            EventManager.AddListener<AllObjectivesCompletedEvent>(OnAllObjectivesCompleted);
+            EventManager.AddListener<PlayerDeathEvent>(OnPlayerDeath);
+            
+            int difficultyIdx = PlayerPrefs.GetInt("difficulty");
             difficulty = (StaticDifficultyType) difficultyIdx;
-            useDDA = PlayerPrefs.GetInt("useDDA") == 0 ? false : true;*/
+            useDDA = PlayerPrefs.GetInt("useDDA") == 0 ? false : true;
+            
+            //dungeonData.difficultyIDX = difficultyIdx;
+
+            Telemetry.GenerateNewRunID();
+            ClearTelemetryData();
+            
+            dungeonData.difficultyIDX = difficultyIdx;
+        }
+
+        public void SaveTelemetryData(bool won)
+        {
+            bestAvaragePlayerPerformance = CalculateMaxPlayerPerformance();
+            Debug.Log("SaveTelemetryData method called");
+            dungeonData.useDDA = useDDA;
+            dungeonData.selectedStaticDifficulty = difficulty; //StaticDifficultyType
+            dungeonData.timeSpentInEasyDifficulty = EasyDifficultyGaugeTimer;
+            dungeonData.timeSpentInEasyToMediumDifficulty = EasyToMediumDifficultyGaugeTimer;
+            dungeonData.timeSpentInMediumToHardDifficulty = MediumToHardDifficultyGaugeTimer;
+            dungeonData.timeSpentInHardDifficulty = HardDifficultyGaugeTimer;
+            dungeonData.bestAvaragePlayerPerformance = bestAvaragePlayerPerformance; //DynamicDifficultyType
+            dungeonData.killedEnemyAmount = killedEnemyAmount;
+            dungeonData.healthPickedAmount = healthPickedAmount;
+            dungeonData.won = won;
+            dungeonData.timeSpentInRun = timeSpentInRun;
+
+            StartCoroutine(Telemetry.SubmitGoogleForm(dungeonData));
         }
 
         // Start is called before the first frame update
@@ -161,6 +198,7 @@ namespace Unity.FPS.Gameplay
         {
 
             timer = 0f;
+            timeSpentInRun = 0f;
 
             _playerWeaponsManager.OnAddedWeapon += OnAddedWeapon;
 
@@ -244,6 +282,8 @@ namespace Unity.FPS.Gameplay
         // Update is called once per frame
         void Update()
         {
+            timeSpentInRun += Time.deltaTime;
+                
             if (Input.GetKeyDown(KeyCode.B))
             {
                 isDebugUIActive = !isDebugUIActive;
@@ -394,6 +434,30 @@ namespace Unity.FPS.Gameplay
                 EasyDifficultyGaugeTimer / timeSpentInDownload;
             NormalizedPlayerPerformanceDictionary.Add(DynamicDifficultyType.Easy, NormalizedEasyDifficultyGaugeTimer);
             
+        }
+
+        public DynamicDifficultyType CalculateMaxPlayerPerformance()
+        {
+            Dictionary<DynamicDifficultyType, float> _playerPerformanceDictionary =
+                new Dictionary<DynamicDifficultyType, float>();
+            _playerPerformanceDictionary.Add(DynamicDifficultyType.Hard, HardDifficultyGaugeTimer);
+            _playerPerformanceDictionary.Add(DynamicDifficultyType.MediumToHard, MediumToHardDifficultyGaugeTimer);
+            _playerPerformanceDictionary.Add(DynamicDifficultyType.EasyToMedium, EasyToMediumDifficultyGaugeTimer);
+            _playerPerformanceDictionary.Add(DynamicDifficultyType.Easy, EasyDifficultyGaugeTimer);
+            
+            bestAvaragePlayerPerformance = _playerPerformanceDictionary
+                .Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
+
+            return bestAvaragePlayerPerformance;
+        }
+
+        public DynamicDifficultyType GetBestAvaragePlayerPerformance()
+        {
+            CalculateNormalizedPlayerPerformance();
+            //DynamicDifficultyType currentDifficulty = DynamicDifficultyType.Easy;
+            bestAvaragePlayerPerformance = NormalizedPlayerPerformanceDictionary
+                .Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
+            return bestAvaragePlayerPerformance;
         }
 
         /*IEnumerator TestCourutine(float from, float to, float duration)
@@ -988,52 +1052,58 @@ namespace Unity.FPS.Gameplay
 
         private void OnDestroy()
         {
-            if (_weaponController == null) return;
-
-            _weaponController.OnShoot -= OnShoot;
-            _weaponController = null;
-
-            foreach (var enemyController in EnemyControllers)
+            if (gameObject)
             {
-                enemyController.onDamaged -= OnEnemyHit;
-                enemyController.onDie -= OnEnemyDeath;
-                enemyController.onDetectedTarget -= OnEnemyDetectedPlayer;
-                enemyController.onLostTarget -= OnEnemyLostPlayer;
-                enemyController.onHealthSpawned -= OnHealthSpawned;
-                
-                switch (enemyController.EnemyType)
+                EventManager.RemoveListener<AllObjectivesCompletedEvent>(OnAllObjectivesCompleted);
+                EventManager.RemoveListener<PlayerDeathEvent>(OnPlayerDeath);
+
+                //if (_weaponController == null) return;
+
+                _weaponController.OnShoot -= OnShoot;
+                _weaponController = null;
+
+                foreach (var enemyController in EnemyControllers)
                 {
-                    case AI.EnemyType.Assasin:
+                    enemyController.onDamaged -= OnEnemyHit;
+                    enemyController.onDie -= OnEnemyDeath;
+                    enemyController.onDetectedTarget -= OnEnemyDetectedPlayer;
+                    enemyController.onLostTarget -= OnEnemyLostPlayer;
+                    enemyController.onHealthSpawned -= OnHealthSpawned;
+
+                    switch (enemyController.EnemyType)
                     {
-                        enemyController.onDetectedTarget -= OnAssassinEnemyDetectedPlayer;
-                        enemyController.onLostTarget -= OnAssassinEnemyLostPlayer;
-                        break;
+                        case AI.EnemyType.Assasin:
+                        {
+                            enemyController.onDetectedTarget -= OnAssassinEnemyDetectedPlayer;
+                            enemyController.onLostTarget -= OnAssassinEnemyLostPlayer;
+                            break;
+                        }
+                        case AI.EnemyType.Soldier:
+                        {
+                            enemyController.onDetectedTarget -= OnSoldierEnemyDetectedPlayer;
+                            enemyController.onLostTarget -= OnSoldierEnemyLostPlayer;
+                            break;
+                        }
+                        case AI.EnemyType.Tank:
+                        {
+                            enemyController.onDetectedTarget -= OnTankEnemyDetectedPlayer;
+                            enemyController.onLostTarget -= OnTankEnemyLostPlayer;
+                            break;
+                        }
+                        default:
+                            break;
                     }
-                    case AI.EnemyType.Soldier:
-                    {
-                        enemyController.onDetectedTarget -= OnSoldierEnemyDetectedPlayer;
-                        enemyController.onLostTarget -= OnSoldierEnemyLostPlayer;
-                        break;
-                    }
-                    case AI.EnemyType.Tank:
-                    {
-                        enemyController.onDetectedTarget -= OnTankEnemyDetectedPlayer;
-                        enemyController.onLostTarget -= OnTankEnemyLostPlayer;
-                        break;
-                    }
-                    default:
-                        break;
+
                 }
-                
-            }
 
-            foreach (var healthPickup in HealthPickups)
-            {
-                healthPickup.GetComponent<HealthPickup>().onHealthPicked -= OnHealthPicked;
-            }
+                foreach (var healthPickup in HealthPickups)
+                {
+                    healthPickup.GetComponent<HealthPickup>().onHealthPicked -= OnHealthPicked;
+                }
 
-            EnemyControllers.Clear();
-            HealthPickups.Clear();
+                EnemyControllers.Clear();
+                HealthPickups.Clear();
+            }
         }
 
         private void OnHealthSpawned(GameObject LootPrefab)
@@ -1069,6 +1139,7 @@ namespace Unity.FPS.Gameplay
             healthPickupComponent.onHealthPicked -= OnHealthPicked;
             HealthPickups.Remove(LootPrefab);
             healthPickupsCountInRange--;
+            healthPickedAmount++;
             //Debug.Log("On health picked fired");
         }
 
@@ -1117,6 +1188,8 @@ namespace Unity.FPS.Gameplay
 
         private void OnEnemyDeath(EnemyController enemyController)
         {
+            killedEnemyAmount++;
+            
             if (enemyController.DetectionModule.HadKnownTarget)
             {
                 enemyCountInRange--;
@@ -1179,6 +1252,23 @@ namespace Unity.FPS.Gameplay
         public void SetPlayerAccuracy(float playerAccuracy)
         {
             PlayerAccuracy = playerAccuracy;
+        }
+        
+        //This function make sure to clear all the data. 
+        public void ClearTelemetryData()
+        {
+            dungeonData.useDDA = false;
+            dungeonData.difficultyIDX = 0;
+            dungeonData.selectedStaticDifficulty = 0; //StaticDifficultyType
+            dungeonData.timeSpentInEasyDifficulty = 0f;
+            dungeonData.timeSpentInEasyToMediumDifficulty = 0f;
+            dungeonData.timeSpentInMediumToHardDifficulty = 0f;
+            dungeonData.timeSpentInHardDifficulty = 0f;
+            dungeonData.bestAvaragePlayerPerformance = 0; //DynamicDifficultyType
+            dungeonData.killedEnemyAmount = 0;
+            dungeonData.healthPickedAmount = 0;
+            dungeonData.won = false;
+            dungeonData.timeSpentInRun = 0f;
         }
     }
 }
