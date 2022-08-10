@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using System.Linq;
 using DMDungeonGenerator;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [RequireComponent(typeof(RoomData))]
 [CustomEditor(typeof(RoomData))]

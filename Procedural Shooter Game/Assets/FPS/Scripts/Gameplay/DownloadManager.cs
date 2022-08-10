@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.FPS;
 using Unity.FPS.Game;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
 
 namespace Unity.FPS.Gameplay
 {
@@ -197,14 +199,15 @@ namespace Unity.FPS.Gameplay
             newReachPointObjective.GetComponent<ObjectiveReachPoint>().Title = $"Reach Extraction Area {ReachPointIndex}";
         }
 
-
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             // Draw DDA area around player. This range is used to calculate enemy count for adjusting difficulty
-            Handles.color = Color.blue;
+            UnityEditor.Handles.color = Color.blue;
             Vector3 _centre = new Vector3(transform.position.x, transform.position.y,
                 transform.position.z);
-            Handles.DrawWireDisc(_centre, Vector3.up, downloadRange);
+            UnityEditor.Handles.DrawWireDisc(_centre, Vector3.up, downloadRange);
         }
+#endif
     }
 }

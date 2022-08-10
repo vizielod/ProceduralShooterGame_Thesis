@@ -23,8 +23,11 @@ namespace Unity.FPS.UI
                 return;
             }
 
-            Telemetry.GenerateNewPlayerID();
-            
+            if (!Telemetry.playerIDWasSet)
+            {
+                Telemetry.GenerateNewPlayerID();
+            }
+
             if (_useDDA)
             {
                 SetDDA();

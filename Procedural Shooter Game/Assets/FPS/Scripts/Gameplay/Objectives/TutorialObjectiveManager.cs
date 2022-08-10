@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Codice.Client.Common.Servers;
 using Unity.FPS.Game;
 using UnityEngine;
 
@@ -93,7 +92,7 @@ namespace Unity.FPS.Gameplay
                 }
             }
             
-            if (!ObjectiveTryShooting.IsCompleted && ObjectiveTryJumping.IsActive)
+            if (!ObjectiveTryShooting.IsCompleted && ObjectiveTryShooting.IsActive)
             {
                 if (m_PlayerCharacterController.m_InputHandler.m_FireInputWasHeld)
                 {

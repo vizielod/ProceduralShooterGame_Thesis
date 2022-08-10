@@ -6,15 +6,24 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/FPS/Scenes/IntroMenu.unity
-    guid: 56e3faabc5bb30f49a68bb8f1292f988
+    path: Assets/FPS/Scenes/ProceduralShooterScenes/ProceduralShooterIntroScene.unity
+    guid: 69a2b03491ea09e4f9ad8408d3258592
   - enabled: 1
-    path: Assets/FPS/Scenes/WinScene.unity
-    guid: 037d06fbede2b4041a843d9ee6fe750c
+    path: Assets/FPS/Scenes/ProceduralShooterScenes/ProceduralShooterTutorialScene.unity
+    guid: ffcec84226440fd449a6ea1a7cf17a64
   - enabled: 1
-    path: Assets/FPS/Scenes/LoseScene.unity
-    guid: 72e5c65a45893714484002914e3fd521
+    path: Assets/FPS/Scenes/ProceduralShooterScenes/ProceduralShooterTutorialLoseScene.unity
+    guid: c58d3668198fc5c47906ef7e2785304e
   - enabled: 1
-    path: Assets/FPS/Scenes/MainScene.unity
-    guid: d794a2ef8ba31d847ad3c19d03e2ddb9
+    path: Assets/FPS/Scenes/ProceduralShooterScenes/DifficultySelectionScene.unity
+    guid: 1611ab193a43b6e45a23b534918f1bfd
+  - enabled: 1
+    path: Assets/FPS/Scenes/ProceduralShooterScenes/ProceduralShooterMainScene.unity
+    guid: b9438819b237c364faf50e5eeb95224e
+  - enabled: 1
+    path: Assets/FPS/Scenes/ProceduralShooterScenes/ProceduralShooterWinScene.unity
+    guid: 8a45ad98b9c0a8845a7ee1b03b416fa5
+  - enabled: 1
+    path: Assets/FPS/Scenes/ProceduralShooterScenes/ProceduralShooterLoseScene.unity
+    guid: d5c1bd211d1c9a143b5c302ce244ce60
   m_configObjects: {}

@@ -24,6 +24,8 @@ namespace Unity.FPS.Gameplay
             public int healthPickedAmount;
             public bool won;
             public float timeSpentInRun;
+            public bool mainMenuButtonWasClicked;
+            public int computerCount;
         }
         
         /*Telemetry form link*/ //Remember to remove the last part of the link *viewform...*
@@ -45,8 +47,11 @@ namespace Unity.FPS.Gameplay
         private const string _gform_healthPickedAmount = "entry.986572018";
         private const string _gform_won = "entry.1176019219";
         private const string _gform_timeSpentInRun = "entry.1306073109";
+        private const string _gform_mainMenuButtonWasClicked = "entry.911324179";
+        private const string _gform_computerCount = "entry.142891279";
         public static Guid playerID = Guid.NewGuid();
         public static Guid runID;
+        public static bool playerIDWasSet = false;
         
         public static IEnumerator SubmitGoogleForm(DungeonData dungeonData)
         {
@@ -73,6 +78,8 @@ namespace Unity.FPS.Gameplay
             form.AddField(_gform_healthPickedAmount, dungeonData.healthPickedAmount);
             form.AddField(_gform_won, dungeonData.won.ToString());
             form.AddField(_gform_timeSpentInRun, dungeonData.timeSpentInRun.ToString("F2"));
+            form.AddField(_gform_mainMenuButtonWasClicked, dungeonData.mainMenuButtonWasClicked.ToString());
+            form.AddField(_gform_computerCount, dungeonData.computerCount);
 
             using (UnityWebRequest www = UnityWebRequest.Post(urlGoogleFormResponse, form))
             {
@@ -94,7 +101,7 @@ namespace Unity.FPS.Gameplay
     
         public static void GenerateNewPlayerID()
         {
-            
+            playerIDWasSet = true;
             playerID = Guid.NewGuid();
             PlayerPrefs.SetString("playerID", playerID.ToString());
         }

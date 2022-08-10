@@ -1563,7 +1563,9 @@ namespace DMDungeonGenerator {
                             GUIStyle style = new GUIStyle();
                             style.fontSize = 15;
                             style.normal.textColor = Color.red;
+                            #if UNITY_EDITOR
                             UnityEditor.Handles.Label(pos + new Vector3(0f, 0.4f, 0f), keyLabel, style);
+                            #endif
                         }
                     }
 
@@ -1588,7 +1590,9 @@ namespace DMDungeonGenerator {
                                 style.fontSize = 15;
                                 style.normal.textColor = Color.black;
                                 if(c.keyID != -1) {
+#if UNITY_EDITOR
                                     UnityEditor.Handles.Label(dPos + new Vector3(0f, 0.4f, 0f), "Lock: " + c.keyID.ToString(), style);
+                                    #endif
                                 }
                             }
                         }

@@ -390,8 +390,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8824232397177945069}
-        m_TargetAssemblyTypeName: Unity.FPS.UI.InGameMenuManager, fps.UI
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: Unity.FPS.Gameplay.DynamicDifficultyManager, fps.Gameplay
         m_MethodName: BackToMainMenu
         m_Mode: 1
         m_Arguments:

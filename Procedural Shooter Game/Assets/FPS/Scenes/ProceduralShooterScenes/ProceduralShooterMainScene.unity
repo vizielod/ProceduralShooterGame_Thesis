@@ -209,7 +209,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17504
+  m_Name: pb_Mesh105696
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -79655,7 +79655,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-2200
+  m_Name: pb_Mesh-92304
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -80449,6 +80449,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1567544279954943050, guid: c996b53e9f849234393d1e90f68d1679,
+        type: 3}
+      propertyPath: dynamicDifficultyManager
+      value: 
+      objectReference: {fileID: 594610936}
     - target: {fileID: 1567544280016421711, guid: c996b53e9f849234393d1e90f68d1679,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -80867,7 +80872,7 @@ PrefabInstance:
     - target: {fileID: 3613785634722965713, guid: 177642d0a2788f34388b7ea443d4375a,
         type: 3}
       propertyPath: spawnPeriod
-      value: 3
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3613785634722965713, guid: 177642d0a2788f34388b7ea443d4375a,
         type: 3}

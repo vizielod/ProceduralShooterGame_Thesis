@@ -1,5 +1,4 @@
-﻿using Codice.Client.BaseCommands;
-using Unity.FPS.Game;
+﻿using Unity.FPS.Game;
 using UnityEngine;
 using UnityEngine.UI;
 

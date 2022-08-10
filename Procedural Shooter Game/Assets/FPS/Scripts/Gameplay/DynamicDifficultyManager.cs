@@ -6,17 +6,25 @@ using TMPro;
 using Unity.FPS.AI;
 using Unity.FPS.Game;
 using Unity.FPS.Gameplay;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Unity.FPS.Gameplay
 {
     public class DynamicDifficultyManager : MonoBehaviour
     {
-        [Header("Telemetry")]
+        [Header("Telemetry")] 
+        public bool IsTutorial = false;
+
+        public int computerCount = 0;
+        private bool MainManuButtonWasClicked = false;
         public Telemetry.DungeonData dungeonData;
         private int killedEnemyAmount = 0;
         private int healthPickedAmount = 0;
@@ -149,7 +157,7 @@ namespace Unity.FPS.Gameplay
         private float newTempDifficultyGauge;
         private float newTempEstimatedReverseDifficulty;
 
-        
+
         private enum EnemyType
         {
             Tank = 0,
@@ -159,8 +167,8 @@ namespace Unity.FPS.Gameplay
 
         private void Awake()
         {
-            EventManager.AddListener<AllObjectivesCompletedEvent>(OnAllObjectivesCompleted);
-            EventManager.AddListener<PlayerDeathEvent>(OnPlayerDeath);
+            //EventManager.AddListener<AllObjectivesCompletedEvent>(OnAllObjectivesCompleted);
+            //EventManager.AddListener<PlayerDeathEvent>(OnPlayerDeath);
             
             int difficultyIdx = PlayerPrefs.GetInt("difficulty");
             difficulty = (StaticDifficultyType) difficultyIdx;
@@ -168,10 +176,16 @@ namespace Unity.FPS.Gameplay
             
             //dungeonData.difficultyIDX = difficultyIdx;
 
-            Telemetry.GenerateNewRunID();
-            ClearTelemetryData();
-            
-            dungeonData.difficultyIDX = difficultyIdx;
+            if (!IsTutorial)
+            {
+                EventManager.AddListener<AllObjectivesCompletedEvent>(OnAllObjectivesCompleted);
+                EventManager.AddListener<PlayerDeathEvent>(OnPlayerDeath);
+
+                Telemetry.GenerateNewRunID();
+                ClearTelemetryData();
+
+                dungeonData.difficultyIDX = difficultyIdx;
+            }
         }
 
         public void SaveTelemetryData(bool won)
@@ -189,8 +203,21 @@ namespace Unity.FPS.Gameplay
             dungeonData.healthPickedAmount = healthPickedAmount;
             dungeonData.won = won;
             dungeonData.timeSpentInRun = timeSpentInRun;
+            dungeonData.mainMenuButtonWasClicked = MainManuButtonWasClicked;
+            dungeonData.computerCount = computerCount;
 
             StartCoroutine(Telemetry.SubmitGoogleForm(dungeonData));
+        }
+
+        public void BackToMainMenu()
+        {
+            if (!IsTutorial)
+            {
+                //SetPauseMenuActivation(false);
+                SceneManager.LoadScene("ProceduralShooterIntroScene");
+                MainManuButtonWasClicked = true;
+                SaveTelemetryData(false);
+            }
         }
 
         // Start is called before the first frame update
@@ -1054,8 +1081,11 @@ namespace Unity.FPS.Gameplay
         {
             if (gameObject)
             {
-                EventManager.RemoveListener<AllObjectivesCompletedEvent>(OnAllObjectivesCompleted);
-                EventManager.RemoveListener<PlayerDeathEvent>(OnPlayerDeath);
+                if (!IsTutorial)
+                {
+                    EventManager.RemoveListener<AllObjectivesCompletedEvent>(OnAllObjectivesCompleted);
+                    EventManager.RemoveListener<PlayerDeathEvent>(OnPlayerDeath);
+                }
 
                 //if (_weaponController == null) return;
 
@@ -1098,7 +1128,10 @@ namespace Unity.FPS.Gameplay
 
                 foreach (var healthPickup in HealthPickups)
                 {
-                    healthPickup.GetComponent<HealthPickup>().onHealthPicked -= OnHealthPicked;
+                    if (healthPickup != null)
+                    {
+                        healthPickup.GetComponent<HealthPickup>().onHealthPicked -= OnHealthPicked;
+                    }
                 }
 
                 EnemyControllers.Clear();
@@ -1239,16 +1272,6 @@ namespace Unity.FPS.Gameplay
             //Debug.Log("Player Accuracy: " + PlayerAccuracy);
         }
 
-        private void OnDrawGizmos()
-        {
-            // Draw DDA area around player. This range is used to calculate enemy count for adjusting difficulty
-            Handles.color = Color.green;
-            Vector3 _centre = new Vector3(Player.transform.position.x, Player.transform.position.y + 1f,
-                Player.transform.position.z);
-            Handles.DrawWireDisc(_centre, Vector3.up, EnemyInRange);
-            Handles.DrawWireDisc(_centre, Vector3.up, HealthPickupRange);
-        }
-
         public void SetPlayerAccuracy(float playerAccuracy)
         {
             PlayerAccuracy = playerAccuracy;
@@ -1269,6 +1292,20 @@ namespace Unity.FPS.Gameplay
             dungeonData.healthPickedAmount = 0;
             dungeonData.won = false;
             dungeonData.timeSpentInRun = 0f;
+            dungeonData.mainMenuButtonWasClicked = false;
+            dungeonData.computerCount = 0;
         }
+        
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            // Draw DDA area around player. This range is used to calculate enemy count for adjusting difficulty
+            UnityEditor.Handles.color = Color.green;
+            Vector3 _centre = new Vector3(Player.transform.position.x, Player.transform.position.y + 1f,
+                Player.transform.position.z);
+            UnityEditor.Handles.DrawWireDisc(_centre, Vector3.up, EnemyInRange);
+            UnityEditor.Handles.DrawWireDisc(_centre, Vector3.up, HealthPickupRange);
+        }
+#endif
     }
 }

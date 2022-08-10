@@ -88585,6 +88585,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 278551198325847878, guid: 32970e92051eb034abac7716569655f5,
         type: 3}
+      propertyPath: IsTutorial
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 278551198325847878, guid: 32970e92051eb034abac7716569655f5,
+        type: 3}
       propertyPath: MaxEnemySpawnPostion
       value: 
       objectReference: {fileID: 813685280}
@@ -94881,6 +94886,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 1567544279954943050, guid: c996b53e9f849234393d1e90f68d1679,
+        type: 3}
+      propertyPath: dynamicDifficultyManager
+      value: 
+      objectReference: {fileID: 1224495279}
     - target: {fileID: 1826386070391163904, guid: c996b53e9f849234393d1e90f68d1679,
         type: 3}
       propertyPath: m_textInfo.lineCount
@@ -94900,6 +94910,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.characterCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867280228662914342, guid: c996b53e9f849234393d1e90f68d1679,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1224495279}
+    - target: {fileID: 1867280228662914342, guid: c996b53e9f849234393d1e90f68d1679,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BackToMainMenu
       objectReference: {fileID: 0}
     - target: {fileID: 1958601101662326530, guid: c996b53e9f849234393d1e90f68d1679,
         type: 3}

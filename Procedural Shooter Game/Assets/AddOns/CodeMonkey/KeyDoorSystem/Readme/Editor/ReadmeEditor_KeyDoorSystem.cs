@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using System;
 using System.IO;
 using System.Reflection; 
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [CustomEditor(typeof(Readme_KeyDoorSystem))]
 [InitializeOnLoad]
@@ -120,11 +123,11 @@ public class ReadmeEditor_KeyDoorSystem : Editor {
 	{
 		var position = GUILayoutUtility.GetRect(label, LinkStyle, options);
 
-		Handles.BeginGUI ();
-		Handles.color = LinkStyle.normal.textColor;
-		Handles.DrawLine (new Vector3(position.xMin, position.yMax), new Vector3(position.xMax, position.yMax));
-		Handles.color = Color.white;
-		Handles.EndGUI ();
+		UnityEditor.Handles.BeginGUI ();
+		UnityEditor.Handles.color = LinkStyle.normal.textColor;
+		UnityEditor.Handles.DrawLine (new Vector3(position.xMin, position.yMax), new Vector3(position.xMax, position.yMax));
+		UnityEditor.Handles.color = Color.white;
+		UnityEditor.Handles.EndGUI ();
 
 		EditorGUIUtility.AddCursorRect (position, MouseCursor.Link);
 

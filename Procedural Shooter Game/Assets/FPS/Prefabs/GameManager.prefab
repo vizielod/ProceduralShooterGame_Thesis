@@ -242,9 +242,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eb1c9cedca562f44a6595c114dec3dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BossPrefab: {fileID: 7237852932878766899, guid: b803d286bcaf6da49ae3e33a431346b2,
-    type: 3}
-  BossRoom: {fileID: 0}
 --- !u!114 &1315839542190839936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,6 +254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e1fea5cb3ddbc249bd0181e6766db68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsTutorialScene: 0
   EndSceneLoadDelay: 3
   EndGameFadeCanvasGroup: {fileID: 6089522275397732777}
   WinSceneName: WinScene
@@ -962,6 +960,16 @@ PrefabInstance:
       propertyPath: m_textInfo.characterCount
       value: 13
       objectReference: {fileID: 0}
+    - target: {fileID: 8529000563368540801, guid: 08dec1e68a552c649889571e90fa7b2d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1567544279954943050}
+    - target: {fileID: 8529000563368540801, guid: 08dec1e68a552c649889571e90fa7b2d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Unity.FPS.UI.InGameMenuManager, fps.UI
+      objectReference: {fileID: 0}
     - target: {fileID: 8824232396625668155, guid: 08dec1e68a552c649889571e90fa7b2d,
         type: 3}
       propertyPath: m_MinValue
@@ -976,6 +984,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 22.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 8824232396959351909, guid: 08dec1e68a552c649889571e90fa7b2d,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8824232397177945068, guid: 08dec1e68a552c649889571e90fa7b2d,
         type: 3}
@@ -1072,7 +1085,8 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -59.38
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4161492257036939302, guid: 08dec1e68a552c649889571e90fa7b2d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 08dec1e68a552c649889571e90fa7b2d, type: 3}
 --- !u!4 &1567544279954943051 stripped
 Transform:

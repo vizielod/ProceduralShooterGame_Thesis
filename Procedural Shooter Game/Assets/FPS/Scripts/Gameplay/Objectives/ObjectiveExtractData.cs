@@ -79,6 +79,7 @@ namespace Unity.FPS.Gameplay
                                  " Datapoints";
             
             DatapointsToCompleteObjective = CentralComputers.Count;
+            dynamicDifficultyManager.computerCount = CentralComputers.Count;
 
             UpdateObjective(description, GetUpdatedCounterAmount(), string.Empty);
 

@@ -2,7 +2,9 @@
 using Unity.FPS.Game;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEditor;
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
 
 namespace Unity.FPS.AI
 {
@@ -139,15 +141,17 @@ namespace Unity.FPS.AI
             }
         }
         
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             // Draw DDA area around player. This range is used to calculate enemy count for adjusting difficulty
-            Handles.color = Color.red;
+            UnityEditor.Handles.color = Color.red;
             Vector3 _centre = new Vector3(transform.position.x, transform.position.y + 1f,
                 transform.position.z);
-            Handles.DrawWireDisc(_centre, Vector3.up, AttackRange);
-            Handles.color = Color.blue;
-            Handles.DrawWireDisc(_centre, Vector3.up, DetectionRange);
+            UnityEditor.Handles.DrawWireDisc(_centre, Vector3.up, AttackRange);
+            UnityEditor.Handles.color = Color.blue;
+            UnityEditor.Handles.DrawWireDisc(_centre, Vector3.up, DetectionRange);
         }
+#endif
     }
 }

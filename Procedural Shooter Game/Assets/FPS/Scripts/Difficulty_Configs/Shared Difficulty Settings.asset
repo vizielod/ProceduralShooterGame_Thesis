@@ -14,22 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeightsByDifficultyList:
   - dynamicDifficulty: 0
-    ComputersToSpawnMin: 7
-    ComputersToSpawnMax: 10
+    ComputersToSpawnMin: 5
+    ComputersToSpawnMax: 7
     RoomsToSpawnMin: 25
     RoomsToSpawnMax: 40
     BossPrefab: {fileID: 4929251595647183465, guid: 01b6595b315cb234a94fbef2c9161118,
       type: 3}
   - dynamicDifficulty: 1
-    ComputersToSpawnMin: 5
-    ComputersToSpawnMax: 8
+    ComputersToSpawnMin: 4
+    ComputersToSpawnMax: 6
     RoomsToSpawnMin: 20
     RoomsToSpawnMax: 30
     BossPrefab: {fileID: 1305249797997701402, guid: 0198ec6cd16999e48983a0a582a49c62,
       type: 3}
   - dynamicDifficulty: 2
     ComputersToSpawnMin: 3
-    ComputersToSpawnMax: 6
+    ComputersToSpawnMax: 5
     RoomsToSpawnMin: 15
     RoomsToSpawnMax: 25
     BossPrefab: {fileID: 1305249797997701402, guid: 0198ec6cd16999e48983a0a582a49c62,

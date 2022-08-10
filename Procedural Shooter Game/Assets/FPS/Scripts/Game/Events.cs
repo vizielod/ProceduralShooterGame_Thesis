@@ -1,4 +1,3 @@
-using Codice.Client.Common.Threading;
 using UnityEngine;
 
 namespace Unity.FPS.Game

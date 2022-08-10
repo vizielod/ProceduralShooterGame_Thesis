@@ -9,6 +9,7 @@ namespace Unity.FPS.UI
 {
     public class InGameMenuManager : MonoBehaviour
     {
+        public DynamicDifficultyManager dynamicDifficultyManager;
         [Tooltip("Root GameObject of the menu used to toggle its activation")]
         public GameObject MenuRoot;
 
@@ -107,10 +108,11 @@ namespace Unity.FPS.UI
         public void BackToMainMenu()
         {
             SetPauseMenuActivation(false);
-            SceneManager.LoadScene("ProceduralShooterIntroScene");
+            dynamicDifficultyManager.BackToMainMenu();
+            //SceneManager.LoadScene("ProceduralShooterIntroScene");
         }
 
-        void SetPauseMenuActivation(bool active)
+        public void SetPauseMenuActivation(bool active)
         {
             MenuRoot.SetActive(active);
 
