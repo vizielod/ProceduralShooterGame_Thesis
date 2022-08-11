@@ -218,6 +218,10 @@ namespace Unity.FPS.Gameplay
                 MainManuButtonWasClicked = true;
                 SaveTelemetryData(false);
             }
+            else
+            {
+                SceneManager.LoadScene("ProceduralShooterIntroScene");
+            }
         }
 
         // Start is called before the first frame update

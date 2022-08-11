@@ -1,4 +1,5 @@
 ﻿using Unity.FPS.Game;
+using Unity.FPS.Gameplay;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -68,6 +69,14 @@ namespace Unity.FPS.UI
         public void LoadTutorialScene()
         {
             SceneManager.LoadScene(SceneName);
+        }
+
+        public void OpenSurvey()
+        {
+            Application.OpenURL($"https://docs.google.com/forms/d/e/1FAIpQLSel3UWkBO2uG6V08bfXczNfC17dz17y0tUQ-G7PVoIyUAQgAA/viewform?&entry.2019003164={Telemetry.GUIDToShortString(Telemetry.playerID)}");
+            https://docs.google.com/forms/d/e/1FAIpQLSel3UWkBO2uG6V08bfXczNfC17dz17y0tUQ-G7PVoIyUAQgAA/viewform?usp=sf_link
+            //Application.OpenURL($"https://docs.google.com/forms/d/e/1FAIpQLSexfioAw0GMWuFcRcdXovB5emO7rI9aQoArBw9pvpoKNHAHrA/viewform?&entry.2082216164={Telemetry.GUIDToShortString(Telemetry.playerID)}");
+            Quit();
         }
         
         public void Quit() {

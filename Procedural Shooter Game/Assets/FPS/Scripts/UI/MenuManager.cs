@@ -9,6 +9,7 @@ namespace Unity.FPS.UI
     public class MenuManager : MonoBehaviour
     {
         public GameObject StartButton;
+        public GameObject SurveyButton;
         public GameObject PlayTutorialFirstText;
 
         public bool _resetPlayerPrefs = false;
@@ -20,25 +21,28 @@ namespace Unity.FPS.UI
             if (_resetPlayerPrefs)
             {
                 ResetPlayerPrefs();
-                return;
+                //return;
             }
+            else
+            {
+                if (!Telemetry.playerIDWasSet)
+                {
+                    Telemetry.GenerateNewPlayerID();
+                }
 
-            if (!Telemetry.playerIDWasSet)
-            {
-                Telemetry.GenerateNewPlayerID();
-            }
+                if (_useDDA)
+                {
+                    SetDDA();
+                }
 
-            if (_useDDA)
-            {
-                SetDDA();
+                bool wasTutorialPlayed = PlayerPrefs.GetInt("WasTutorialPlayed") == 0 ? false : true;
+                StartButton.GetComponent<Button>().interactable = wasTutorialPlayed;
+                PlayTutorialFirstText.SetActive(!wasTutorialPlayed);
+
+                bool IsFirstTimePlaying = PlayerPrefs.GetInt("IsFirstTimePlaying") == 0 ? false : true;
+
+                SurveyButton.GetComponent<Button>().interactable = !IsFirstTimePlaying;
             }
-            bool wasTutorialPlayed = PlayerPrefs.GetInt("WasTutorialPlayed") == 0 ? false : true;
-            StartButton.GetComponent<Button>().interactable = wasTutorialPlayed;
-            PlayTutorialFirstText.SetActive(!wasTutorialPlayed);
-            /*if (!wasTutorialPlayed)
-            {
-                StartButton.GetComponent<Button>().interactable
-            }*/
         }
 
         // Update is called once per frame
